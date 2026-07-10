@@ -86,15 +86,15 @@ def load_history(years: list[int]) -> dict[str, list[dict]]:
     for year in years:
         path = download_year(year)
         for row in _read_rows(path):
-            name = row.get("Market_and_Exchange_Names", "").strip()
+            name = row.get("Market and Exchange Names", "").strip()
             key = CONTRACT_MAP.get(name)
             if not key:
                 continue
             try:
-                date = datetime.strptime(row["Report_Date_as_YYYY-MM-DD"], "%Y-%m-%d")
-                long_ = float(row["NonComm_Positions_Long_All"])
-                short_ = float(row["NonComm_Positions_Short_All"])
-                oi = float(row["Open_Interest_All"])
+                date = datetime.strptime(row["As of Date in Form YYYY-MM-DD"], "%Y-%m-%d")
+                long_ = float(row["Noncommercial Positions-Long (All)"])
+                short_ = float(row["Noncommercial Positions-Short (All)"])
+                oi = float(row["Open Interest (All)"])
             except (KeyError, ValueError):
                 continue
             series[key].append({"date": date, "long": long_, "short": short_, "oi": oi})
