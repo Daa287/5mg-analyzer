@@ -2,28 +2,28 @@
   "report": "2026-06-30",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-10T11:06:28+00:00",
+  "generiert": "2026-07-10T11:15:28+00:00",
   "setups": [
     {
-      "pair": "USD/NZD",
-      "dir": "LONG",
+      "pair": "NZD/USD",
+      "dir": "SHORT",
       "cot": 100.0,
       "stark": "NZD Index 0",
       "saison": {
-        "score": 50.0,
+        "score": 53.2,
         "label": "NEUTRAL",
-        "hist": "kein Ticker hinterlegt"
+        "hist": "historisch fallend"
       },
-      "zwischen": 100.0,
+      "zwischen": 101.2,
       "bond": {
-        "base": "USD",
-        "quote": "NZD",
-        "yBase": 4.57,
-        "yQuote": 4.6
+        "base": "NZD",
+        "quote": "USD",
+        "yBase": 4.6,
+        "yQuote": 4.57
       },
       "_bond_score": 50.0,
-      "_bond_expl": "Die 10-Jahres-Renditen von USD und NZD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
-      "_bond_spread": -0.03,
+      "_bond_expl": "Die 10-Jahres-Renditen von NZD und USD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
+      "_bond_spread": 0.03,
       "events": {
         "vola": 3,
         "lage": "BEOBACHTEN",
@@ -37,8 +37,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 75.0,
-        "final": 73.0,
+        "roh": 75.64,
+        "final": 73.6,
         "kategorie": "GUT"
       }
     },
@@ -81,25 +81,25 @@
       }
     },
     {
-      "pair": "USD/GBP",
-      "dir": "LONG",
+      "pair": "GBP/USD",
+      "dir": "SHORT",
       "cot": 95.4,
       "stark": "GBP Index 2",
       "saison": {
-        "score": 50.0,
+        "score": 50.5,
         "label": "NEUTRAL",
-        "hist": "kein Ticker hinterlegt"
+        "hist": "historisch unklar"
       },
-      "zwischen": 95.4,
+      "zwischen": 95.6,
       "bond": {
-        "base": "USD",
-        "quote": "GBP",
-        "yBase": 4.57,
-        "yQuote": 4.42
+        "base": "GBP",
+        "quote": "USD",
+        "yBase": 4.42,
+        "yQuote": 4.57
       },
       "_bond_score": 50.0,
-      "_bond_expl": "Die 10-Jahres-Renditen von USD und GBP liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
-      "_bond_spread": 0.15,
+      "_bond_expl": "Die 10-Jahres-Renditen von GBP und USD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
+      "_bond_spread": -0.15,
       "events": {
         "vola": 3,
         "lage": "BEOBACHTEN",
@@ -113,8 +113,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 72.7,
-        "final": 70.7,
+        "roh": 72.8,
+        "final": 70.8,
         "kategorie": "GUT"
       }
     }
