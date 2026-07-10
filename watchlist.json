@@ -1,8 +1,8 @@
 {
   "report": "2026-06-30",
-  "maerkte": 10,
+  "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-10T06:53:20+00:00",
+  "generiert": "2026-07-10T06:54:33+00:00",
   "setups": [
     {
       "pair": "USD/CAD",
@@ -134,6 +134,11 @@
       "name": "Silber",
       "dir": "LONG",
       "score": 53.9
+    },
+    {
+      "name": "Nasdaq 100",
+      "dir": "SHORT",
+      "score": 6.7
     },
     {
       "name": "S&P 500",
