@@ -99,7 +99,7 @@ def run() -> dict:
 
     top3 = build_pairs(scores)
     zusatz = build_zusatz(scores)
-    yields = bond_loader.load_yields()
+    yields = bond_loader.refresh_config()  # holt Live-Renditen, faellt sonst auf Config zurueck
 
     setups_out = []
     for s in top3:

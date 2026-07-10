@@ -60,6 +60,54 @@ def ensure_config_exists(config_path: Path = DEFAULT_CONFIG) -> None:
 NEUTRAL_BAND = 0.25  # Prozentpunkte; |spread| darunter => kein Rueckenwind
 
 
+
+# --- Live-Abruf über FRED (optional, automatisch mit Fallback) -----------
+FRED_SERIES = {
+    "USD": "DGS10", "CHF": "IRLTLT01CHM156N", "CAD": "IRLTLT01CAM156N",
+    "NZD": "IRLTLT01NZM156N", "GBP": "IRLTLT01GBM156N", "JPY": "IRLTLT01JPM156N",
+    "AUD": "IRLTLT01AUM156N", "EUR": "IRLTLT01EZM156N",
+}
+
+def _fred_latest(series_id, api_key):
+    import urllib.request as _ur, json as _json
+    url = (f"https://api.stlouisfed.org/fred/series/observations"
+           f"?series_id={series_id}&api_key={api_key}&file_type=json&sort_order=desc&limit=5")
+    with _ur.urlopen(url, timeout=15) as resp:
+        data = _json.loads(resp.read())
+    for obs in data.get("observations", []):
+        val = obs.get("value")
+        if val not in (None, ".", ""):
+            return float(val)
+    return None
+
+def fetch_live_yields(api_key=None):
+    if api_key is None:
+        import os
+        api_key = os.environ.get("FRED_API_KEY")
+    current = load_yields()
+    if not api_key:
+        return current
+    updated = dict(current)
+    for ccy, series in FRED_SERIES.items():
+        try:
+            val = _fred_latest(series, api_key)
+            if val is not None:
+                updated[ccy] = round(val, 2)
+        except Exception:
+            continue
+    return updated
+
+def refresh_config(config_path=DEFAULT_CONFIG):
+    from datetime import datetime, timezone
+    yields = fetch_live_yields()
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(json.dumps({
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "yields": yields,
+        "hinweis": "Automatisch via FRED aktualisiert, sofern FRED_API_KEY gesetzt ist."
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    return yields
+
 def bond_score(base_ccy: str, quote_ccy: str, richtung: str, yields: dict) -> dict:
     """
     Spread = Basiswährung - Gegenwährung. Positiver Spread stützt die Basis.
