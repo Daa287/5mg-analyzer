@@ -47,8 +47,14 @@ ZUSATZ_MAERKTE = ["GOLD", "SILVER", "NASDAQ100", "SP500"]
 DISPLAY_NAME = {"GOLD": "Gold", "SILVER": "Silber", "NASDAQ100": "Nasdaq 100", "SP500": "S&P 500"}
 
 
+# Waehrungen, die als XXX/USD notiert werden (Fremdwaehrung ist Basis).
+# Alle anderen werden als USD/XXX notiert (USD ist Basis) - Marktkonvention.
+XXX_USD_STYLE = {"EUR", "GBP", "AUD", "NZD"}
+
+
 def build_pairs(cot_scores: dict) -> list[dict]:
-    """Bildet USD-Paare aus den stärksten/schwächsten COT-Scores."""
+    """Bildet USD-Paare aus den staerksten/schwaechsten COT-Scores,
+    unter Beachtung der echten Marktnotation je Waehrung."""
     kandidaten = []
     for ccy in PAIR_WHITELIST:
         info = cot_scores.get(ccy)
@@ -56,11 +62,14 @@ def build_pairs(cot_scores: dict) -> list[dict]:
             continue
         staerke = info["score"]
         fut = info["richtung"]
-        # Score hoch -> Specs long Fremdwährung -> Fremdwährung stark -> Paar XXX/USD LONG
-        if fut == "LONG":
-            pair, richtung = f"{ccy}/USD", "LONG"
+
+        if ccy in XXX_USD_STYLE:
+            pair = f"{ccy}/USD"
+            richtung = fut
         else:
-            pair, richtung = f"USD/{ccy}", "LONG"
+            pair = f"USD/{ccy}"
+            richtung = "SHORT" if fut == "LONG" else "LONG"
+
         kandidaten.append({
             "pair": pair, "dir": richtung, "cot": staerke, "staerke": staerke,
             "base": pair.split("/")[0], "quote": pair.split("/")[1], "stark": f"{ccy} Index {info['index']:.0f}",
