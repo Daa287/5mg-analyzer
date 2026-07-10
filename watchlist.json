@@ -1,0 +1,144 @@
+{
+  "report": "2026-06-30",
+  "maerkte": 10,
+  "quelle": "CFTC historische Reports, lokal zwischengespeichert",
+  "generiert": "2026-07-10T06:53:20+00:00",
+  "setups": [
+    {
+      "pair": "USD/CAD",
+      "dir": "SHORT",
+      "cot": 0.0,
+      "stark": "CAD (+0)",
+      "saison": {
+        "score": 49.3,
+        "label": "NEUTRAL",
+        "hist": "historisch steigend"
+      },
+      "zwischen": -0.3,
+      "bond": {
+        "base": "USD",
+        "quote": "CAD",
+        "yBase": 4.57,
+        "yQuote": 3.57
+      },
+      "_bond_score": 5.0,
+      "_bond_expl": "Der Renditevorteil liegt aktuell auf Seiten von USD. Das liefert makroökonomischen Gegenwind zum SHORT-Bias in USD/CAD.",
+      "_bond_spread": 1.0,
+      "events": {
+        "vola": 6,
+        "lage": "ERHÖHT",
+        "termine": [
+          {
+            "dt": "2026-07-10 12:30",
+            "txt": "CAD: Arbeitslosenquote",
+            "impact": "high"
+          },
+          {
+            "dt": "2026-07-10 12:30",
+            "txt": "CAD: Employment Change",
+            "impact": "high"
+          }
+        ],
+        "weitere": 1
+      },
+      "final": {
+        "roh": 11.36,
+        "final": 7.3,
+        "kategorie": "SCHWACH"
+      }
+    },
+    {
+      "pair": "USD/NZD",
+      "dir": "SHORT",
+      "cot": 0.0,
+      "stark": "NZD (+0)",
+      "saison": {
+        "score": 50.0,
+        "label": "NEUTRAL",
+        "hist": "kein Ticker hinterlegt"
+      },
+      "zwischen": 0.0,
+      "bond": {
+        "base": "USD",
+        "quote": "NZD",
+        "yBase": 4.57,
+        "yQuote": 4.6
+      },
+      "_bond_score": 50.0,
+      "_bond_expl": "Die 10-Jahres-Renditen von USD und NZD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
+      "_bond_spread": -0.03,
+      "events": {
+        "vola": 3,
+        "lage": "BEOBACHTEN",
+        "termine": [
+          {
+            "dt": "2026-07-10 15:00",
+            "txt": "USD: Fed Monetary Policy Report",
+            "impact": "high"
+          }
+        ],
+        "weitere": 0
+      },
+      "final": {
+        "roh": 25.0,
+        "final": 23.0,
+        "kategorie": "SCHWACH"
+      }
+    },
+    {
+      "pair": "USD/JPY",
+      "dir": "SHORT",
+      "cot": 0.0,
+      "stark": "JPY (+0)",
+      "saison": {
+        "score": 52.3,
+        "label": "NEUTRAL",
+        "hist": "historisch fallend"
+      },
+      "zwischen": 0.9,
+      "bond": {
+        "base": "USD",
+        "quote": "JPY",
+        "yBase": 4.57,
+        "yQuote": 1.15
+      },
+      "_bond_score": 5.0,
+      "_bond_expl": "Der Renditevorteil liegt aktuell auf Seiten von USD. Das liefert makroökonomischen Gegenwind zum SHORT-Bias in USD/JPY.",
+      "_bond_spread": 3.42,
+      "events": {
+        "vola": 3,
+        "lage": "BEOBACHTEN",
+        "termine": [
+          {
+            "dt": "2026-07-10 15:00",
+            "txt": "USD: Fed Monetary Policy Report",
+            "impact": "high"
+          }
+        ],
+        "weitere": 0
+      },
+      "final": {
+        "roh": 11.96,
+        "final": 10.0,
+        "kategorie": "SCHWACH"
+      }
+    }
+  ],
+  "zusatz": [
+    {
+      "name": "Gold",
+      "dir": "SHORT",
+      "score": 41.0
+    },
+    {
+      "name": "Silber",
+      "dir": "LONG",
+      "score": 53.9
+    },
+    {
+      "name": "S&P 500",
+      "dir": "LONG",
+      "score": 98.8
+    }
+  ]
+}
