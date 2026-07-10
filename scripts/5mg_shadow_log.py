@@ -40,13 +40,16 @@ def _price(pair: str) -> float | None:
     ticker = YF_TICKERS.get(pair)
     if not ticker:
         return None
-    try:
-        hist = yf.Ticker(ticker).history(period="5d", interval="1d")
-        if hist.empty:
-            return None
-        return float(hist["Close"].iloc[-1])
-    except Exception:
-        return None
+    import time
+    for versuch in range(3):
+        try:
+            hist = yf.Ticker(ticker).history(period="5d", interval="1d")
+            if not hist.empty:
+                return float(hist["Close"].iloc[-1])
+        except Exception:
+            pass
+        time.sleep(2)  # kurze Pause gegen Yahoo Rate-Limiting bei schnellen Folgeanfragen
+    return None
 
 
 def log_current():
