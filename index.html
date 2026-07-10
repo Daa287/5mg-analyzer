@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5MG Analyzer Pro — Web Dashboard</title>
+<style>
+  :root{
+    --bg:#0a1220; --panel:#0e1a2b; --panel2:#0c1626; --line:#1c2f47;
+    --txt:#dce7f5; --dim:#8fa5c0; --cyan:#4db8ff; --gold:#f0b94a;
+    --green:#22dd7a; --red:#ff5470; --blue:#5aa9ff; --star-off:#3a4d66;
+    --mono:ui-monospace,'Cascadia Code','JetBrains Mono',Consolas,monospace;
+    --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);padding:14px;min-height:100vh}
+  .wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 22px}
+
+  /* ---------- HEADER ---------- */
+  header.panel{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .brand .eyebrow{color:var(--cyan);font-weight:700;letter-spacing:.12em;font-size:.8rem}
+  .brand h1{font-size:2.6rem;font-weight:800;letter-spacing:.01em;margin-top:6px}
+  .brand h1 small{color:var(--gold);font-size:1.05rem;font-weight:700;margin-left:10px;letter-spacing:.05em}
+  .brand .sub{color:var(--dim);font-size:.85rem;margin-top:8px}
+  .controls{display:flex;flex-direction:column;gap:9px;min-width:320px}
+  .status-flag{text-align:right;font-weight:800;font-size:1.05rem;color:var(--txt)}
+  .status-flag.done{color:var(--green)}
+  .wf-btn{border:none;border-radius:6px;padding:13px 18px;font-weight:800;font-size:.95rem;
+    letter-spacing:.03em;cursor:pointer;font-family:var(--sans);transition:filter .15s,transform .05s;
+    background:#16263c;color:#5c7391}
+  .wf-btn:not(:disabled):hover{filter:brightness(1.15)}
+  .wf-btn:not(:disabled):active{transform:translateY(1px)}
+  .wf-btn:disabled{cursor:not-allowed}
+  .wf-btn.ready{background:var(--green);color:#04220f}
+  .wf-btn.doneStage{background:#1db368;color:#04220f}
+  .wf-btn.active3{background:var(--blue);color:#031a33}
+  .checkup{color:var(--dim);font-size:.78rem;text-align:right}
+
+  /* ---------- STATUS / ENGINE CHECK ---------- */
+  .engine-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .engine-head h2{font-size:1.25rem;font-weight:800;letter-spacing:.02em}
+  .health{font-weight:800;color:var(--gold)}
+  .health.ok{color:var(--green)}
+  .engine-meta{display:flex;justify-content:space-between;color:var(--dim);font-size:.85rem;margin-top:6px;flex-wrap:wrap;gap:8px}
+  .stage-label{font-weight:700;font-size:.9rem;margin:12px 0 6px}
+  .progress{height:16px;background:#091120;border:1px solid var(--line);border-radius:4px;overflow:hidden;position:relative}
+  .progress .bar{height:100%;width:0%;background:linear-gradient(90deg,#14b866,#22dd7a);transition:width .25s}
+  .progress .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:.72rem;font-weight:700;color:#eafff3;text-shadow:0 0 4px #000}
+
+  /* ---------- TOP 3 CARDS ---------- */
+  .top3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .setup-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 20px;min-height:190px}
+  .setup-card .rank{color:var(--dim);font-size:.8rem;font-weight:800;letter-spacing:.08em}
+  .setup-card .pair{font-size:2.3rem;font-weight:800;margin-top:8px;font-family:var(--mono);letter-spacing:-.02em}
+  .setup-card .pair.waiting{color:#4d6480}
+  .setup-card .dir{font-weight:800;font-size:1.15rem;margin-top:2px;letter-spacing:.04em}
+  .dir.SHORT{color:var(--red)} .dir.LONG{color:var(--green)}
+  .setup-card .score-line{font-size:1.45rem;font-weight:800;margin-top:10px}
+  .score-line .val{font-family:var(--mono)}
+  .score-line.q-green{color:var(--green)} .score-line.q-gold{color:var(--gold)}
+  .setup-card .meta{color:var(--dim);font-size:.8rem;margin-top:10px;line-height:1.5}
+  .setup-card .meta b{color:var(--txt)}
+  .setup-card.waitstate .pair{color:#4d6480}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:800;letter-spacing:.05em}
+  .badge.pos{background:#0d3a24;color:var(--green)} .badge.neu{background:#3a300d;color:var(--gold)}
+
+  /* ---------- ZUSATZMÄRKTE ---------- */
+  .extras{display:grid;grid-template-columns:170px repeat(4,1fr);gap:12px;align-items:stretch}
+  .extras .label-cell{padding:16px 4px}
+  .extras .label-cell .t{color:var(--gold);font-weight:800;letter-spacing:.06em;font-size:.9rem}
+  .extras .label-cell .s{color:var(--dim);font-size:.75rem;margin-top:4px}
+  .mini-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+  .mini-card .name{font-weight:800;font-size:1.05rem}
+  .mini-card .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+  .mini-card .d{font-weight:800;font-size:1rem}
+  .mini-card .v{font-family:var(--mono);font-weight:800;font-size:1.15rem}
+  .mini-card .src{color:var(--dim);font-size:.72rem;margin-top:6px}
+
+  /* ---------- FINALE MARKTPRÜFUNG ---------- */
+  #finalSection{display:none}
+  .final-title{color:var(--cyan);font-size:1.9rem;font-weight:800;letter-spacing:.01em}
+  .final-sub{color:var(--dim);font-size:.85rem;margin-top:6px;max-width:1100px;line-height:1.5}
+  .macro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .macro-box{border-radius:8px;padding:16px 18px;background:var(--panel2)}
+  .macro-box.bond{border:1px solid #2a6ea8}
+  .macro-box.events{border:1px solid #a8762a}
+  .macro-box h3{font-size:1.25rem;font-weight:800;letter-spacing:.03em}
+  .macro-box.bond h3{color:var(--blue)} .macro-box.events h3{color:var(--gold)}
+  .macro-box .desc{color:var(--dim);font-size:.78rem;margin:8px 0 12px;line-height:1.5}
+  .bond-item,.event-item{background:#0a1424;border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin-top:10px}
+  .bond-item .head{display:flex;justify-content:space-between;align-items:center}
+  .bond-item .head .t{font-weight:800;font-size:.95rem}
+  .bond-item .yields{font-family:var(--mono);font-size:.82rem;margin-top:6px;color:var(--txt)}
+  .bond-item .expl{color:var(--dim);font-size:.76rem;margin-top:6px;line-height:1.45}
+  .stars{letter-spacing:2px;font-size:.95rem}
+  .stars .on{color:var(--gold)} .stars.bad .on{color:var(--red)} .stars .off{color:var(--star-off)}
+  .bscore{font-family:var(--mono);font-weight:800;margin-left:8px}
+  .bscore.bad{color:var(--red)} .bscore.mid{color:var(--gold)} .bscore.good{color:var(--green)}
+  .event-item .head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  .event-item .head .t{font-weight:800}
+  .event-item .head .t .lage{color:var(--gold)}
+  .event-item .vola{font-weight:800;color:var(--gold);font-size:.85rem}
+  .event-item .termin{font-size:.8rem;margin-top:6px;font-family:var(--mono)}
+  .event-item .hint{color:var(--dim);font-size:.74rem;margin-top:8px;line-height:1.45}
+
+  /* ---------- FINALE WATCHLIST ---------- */
+  .fw-title{color:var(--green);font-size:1.6rem;font-weight:800;margin-top:22px}
+  .fw-sub{color:var(--dim);font-size:.8rem;margin-top:6px;line-height:1.5}
+  .final-card{border:1px solid #a8762a;border-radius:8px;background:var(--panel2);padding:16px 20px;margin-top:14px}
+  .final-card .fc-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .final-card .fc-head .name{font-weight:800;font-size:1.2rem;font-family:var(--mono)}
+  .final-card .fc-head .qual{font-weight:800;font-size:1.1rem}
+  .qual.GUT{color:var(--gold)} .qual.GEMISCHT{color:var(--gold)} .qual.SCHWACH{color:var(--red)}
+  .qual .qv{font-family:var(--mono);margin-left:10px}
+  .fc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+  .fc-col .h{color:var(--dim);font-size:.78rem;font-weight:700}
+  .fc-col .st{margin-top:6px}
+  .fc-col .sc{font-family:var(--mono);font-size:.8rem;font-weight:800;margin-top:4px}
+  .sc.green{color:var(--green)} .sc.gold{color:var(--gold)} .sc.red{color:var(--red)}
+  .fc-fazit{color:var(--txt);font-size:.82rem;margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+  .fc-fazit b{color:var(--gold)}
+
+  .datasrc{color:var(--dim);font-size:.75rem;text-align:right}
+  .datasrc .live{color:var(--green);font-weight:700}
+
+  @media(max-width:980px){
+    .top3{grid-template-columns:1fr}
+    .extras{grid-template-columns:1fr 1fr}
+    .extras .label-cell{grid-column:1/-1;padding:4px}
+    .macro-grid{grid-template-columns:1fr}
+    .fc-grid{grid-template-columns:repeat(2,1fr)}
+    .brand h1{font-size:1.9rem}
+    header.panel{flex-direction:column}
+    .controls{min-width:0}
+    .status-flag,.checkup{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="panel">
+    <div class="brand">
+      <div class="eyebrow">◉ TRADINGWELT</div>
+      <h1>5MG ANALYZER <small>WEB DASHBOARD V1.0</small></h1>
+      <div class="sub">COT · Seasonality · Bond-Makro — Wochen-Watchlist</div>
+    </div>
+    <div class="controls">
+      <div class="status-flag" id="statusFlag">Bereit</div>
+      <button class="wf-btn ready" id="btn1" onclick="runStage(1)">1. COT ANALYSE STARTEN</button>
+      <button class="wf-btn" id="btn2" disabled onclick="runStage(2)">2. SEASONALITY NACH COT</button>
+      <button class="wf-btn" id="btn3" disabled onclick="runStage(3)">3. MAKROS NACH SEASONALITY</button>
+      <div class="checkup" id="checkup">Engine Checkup: noch nicht erstellt</div>
+    </div>
+  </header>
+
+  <!-- ENGINE CHECK -->
+  <section class="panel">
+    <div class="engine-head">
+      <h2>DATEN UND WEEKLY ENGINE CHECK</h2>
+      <div class="health" id="health">Noch nicht geprüft</div>
+    </div>
+    <div class="engine-meta">
+      <span id="quelle">Quelle: CFTC historische Reports</span>
+      <span id="reportMeta">Historie: noch nicht geladen</span>
+    </div>
+    <div class="stage-label" id="stageLabel">Bereit für aktuelle COT Wochenanalyse</div>
+    <div class="progress"><div class="bar" id="bar"></div><div class="pct" id="pct"></div></div>
+  </section>
+
+  <!-- TOP 3 -->
+  <section class="top3" id="top3"></section>
+
+  <!-- ZUSATZMÄRKTE -->
+  <section class="extras" id="extras">
+    <div class="label-cell">
+      <div class="t">ZUSATZMÄRKTE</div>
+      <div class="s">Metalle und Indizes</div>
+    </div>
+  </section>
+
+  <!-- FINALE MARKTPRÜFUNG -->
+  <section class="panel" id="finalSection">
+    <div class="final-title">FINALE MARKTPRÜFUNG</div>
+    <div class="final-sub">Abschlussfolie nach COT und Seasonality. Bonds prüfen den Renditevorteil,
+      High Impact Events zeigen mögliche Impulsgeber der nächsten 14 Tage. Unten steht die finale Watchlist Qualität.</div>
+
+    <div class="macro-grid">
+      <div class="macro-box bond">
+        <h3>BOND YIELD SPREAD</h3>
+        <div class="desc">10 Jahres Staatsanleihen. Spread = Basiswährung minus Gegenwährung.
+          Positiver Spread stützt die Basiswährung, negativer Spread stützt die Gegenwährung.</div>
+        <div id="bondList"></div>
+      </div>
+      <div class="macro-box events">
+        <h3>HIGH IMPACT EVENTS</h3>
+        <div class="desc">Nur die wichtigsten Termine der nächsten 14 Tage. Das ist kein Handelssignal,
+          sondern ein Timing- und Volatilitätshinweis.</div>
+        <div id="eventList"></div>
+      </div>
+    </div>
+
+    <div class="fw-title">FINALE WATCHLIST QUALITÄT</div>
+    <div class="fw-sub">Abschlussqualität = COT 50 Prozent, Seasonality 20 Prozent, Bond Makro 30 Prozent,
+      mit kleinem Volatilitätsabschlag bei wichtigen Terminen (0.67 Punkte pro Vola-Punkt).
+      High Impact News sind kein Richtungssignal, sondern ein Timing- und Risikohinweis.</div>
+    <div id="finalCards"></div>
+  </section>
+
+  <div class="datasrc" id="datasrc">Datenquelle: eingebettete Demo-Daten (Report 2026-06-30) — legt eine watchlist.json daneben, um Live-Daten zu laden</div>
+</div>
+
+<script>
+/* =========================================================================
+   5MG ANALYZER — ENGINE (rekonstruiert)
+   Formeln:
+     COT-Index (extern berechnet, hier als Input)
+     Stufe 2:  zwischen = cot + 0.375 * (saison - 50)
+     Stufe 3:  roh   = 0.50*cot + 0.20*saison + 0.30*bond
+               final = roh - 0.67 * erwartete_volatilitaet
+     Kategorien: >=60 GUT | 40-59.9 GEMISCHT | <40 SCHWACH
+   Datenanbindung:
+     Versucht zuerst fetch('watchlist.json') (gleicher Ordner / GitHub Pages /
+     Pi-Export). Fällt sonst auf die eingebetteten DEMO-Daten zurück.
+     JSON-Schema = exakt das DEMO-Objekt unten.
+   ========================================================================= */
+
+const W = { cot: 0.50, saison: 0.20, bond: 0.30 };
+const VOLA_FAKTOR = 0.67;
+const SAISON_RERANK = 0.375;
+
+const DEMO = {
+  report: "2026-06-30",
+  maerkte: 12,
+  quelle: "CFTC historische Reports, lokal zwischengespeichert",
+  setups: [
+    { pair:"USD/CHF", dir:"SHORT", cot:89.4, stark:"CHF (+89)",
+      saison:{ score:58.2, label:"LEICHT_POSITIV", hist:"historisch fallend" },
+      bond:{ base:"USD", quote:"CHF", yBase:4.57, yQuote:0.38 },
+      events:{ vola:3, lage:"BEOBACHTEN",
+        termine:[ {dt:"2026-07-10 15:00", txt:"USD: Fed Monetary Policy Report"} ], weitere:0 } },
+    { pair:"NZD/USD", dir:"LONG", cot:88.4, stark:"NZD (+84)",
+      saison:{ score:45.0, label:"NEUTRAL", hist:"historisch unklar" },
+      bond:{ base:"NZD", quote:"USD", yBase:4.60, yQuote:4.57 },
+      events:{ vola:3, lage:"BEOBACHTEN",
+        termine:[ {dt:"2026-07-10 15:00", txt:"USD: Fed Monetary Policy Report"} ], weitere:0 } },
+    { pair:"USD/CAD", dir:"SHORT", cot:88.3, stark:"CAD (+84)",
+      saison:{ score:50.7, label:"NEUTRAL", hist:"historisch unklar" },
+      bond:{ base:"USD", quote:"CAD", yBase:4.57, yQuote:3.57 },
+      events:{ vola:6, lage:"ERHÖHT",
+        termine:[ {dt:"2026-07-10 12:30", txt:"CAD: Arbeitslosenquote"},
+                  {dt:"2026-07-10 12:30", txt:"CAD: Employment Change"} ], weitere:1 } }
+  ],
+  zusatz: [
+    { name:"Gold",       dir:"SHORT", score:66.1 },
+    { name:"Silber",     dir:"SHORT", score:63.3 },
+    { name:"Nasdaq 100", dir:"LONG",  score:55.4 },
+    { name:"S&P 500",    dir:"SHORT", score:57.2 }
+  ]
+};
+
+let DATA = null;
+let stage = 0;
+
+/* ---------------- Engine-Funktionen ---------------- */
+
+function bondScore(s){
+  // Spread = Basis - Gegenwährung. Positiver Spread stützt die Basiswährung.
+  const spread = +(s.bond.yBase - s.bond.yQuote).toFixed(2);
+  const NEUTRAL_BAND = 0.25; // |spread| unter Schwelle => kein Rückenwind
+  let score, expl;
+  const stuetztBasis = spread > 0;
+  const biasBasisLong = s.dir === "LONG" ? true : false; // LONG = Basiswährung soll steigen
+  if (Math.abs(spread) < NEUTRAL_BAND){
+    score = 50.0;
+    expl = `Die 10 Jahres Renditen von ${s.bond.base} und ${s.bond.quote} liegen nahezu gleichauf. Aus Bond Sicht entsteht aktuell kein klarer Rückenwind.`;
+  } else if (stuetztBasis === biasBasisLong){
+    score = 95.0;
+    expl = `Der Renditevorteil stützt den ${s.dir} Bias in ${s.pair}. Makroökonomischer Rückenwind.`;
+  } else {
+    score = 5.0;
+    expl = `Der Renditevorteil liegt aktuell auf Seiten von ${stuetztBasis ? s.bond.base : s.bond.quote}. Das liefert makroökonomischen Gegenwind zum ${s.dir} Bias in ${s.pair}.`;
+  }
+  return { spread, score, expl };
+}
+
+function zwischenScore(s){ return s.cot + SAISON_RERANK * (s.saison.score - 50); }
+
+function finalScore(s){
+  const roh = W.cot*s.cot + W.saison*s.saison.score + W.bond*s._bond.score;
+  const fin = roh - VOLA_FAKTOR * s.events.vola;
+  const kat = fin >= 60 ? "GUT" : fin >= 40 ? "GEMISCHT" : "SCHWACH";
+  return { roh:+roh.toFixed(2), fin:+fin.toFixed(1), kat };
+}
+
+/* ---------------- Rendering-Helfer ---------------- */
+
+function stars(score, bad){
+  const n = Math.max(0, Math.min(5, Math.round(score/20)));
+  let h = `<span class="stars${bad?' bad':''}">`;
+  for (let i=0;i<5;i++) h += `<span class="${i<n?'on':'off'}">★</span>`;
+  return h + `</span>`;
+}
+function el(id){ return document.getElementById(id); }
+function fmt(x,d=1){ return x.toFixed(d); }
+
+/* ---------------- Stufen-Rendering ---------------- */
+
+function renderWaiting(){
+  el('top3').innerHTML = [1,2,3].map(i => `
+    <div class="setup-card waitstate">
+      <div class="rank">#${i} TOP SETUP</div>
+      <div class="pair">WARTET</div>
+      <div class="meta">Klicke auf COT Analyse starten</div>
+    </div>`).join('');
+  DEMO.zusatz.forEach(z => {
+    el('extras').insertAdjacentHTML('beforeend', `
+      <div class="mini-card" data-z="${z.name}">
+        <div class="name">${z.name}</div>
+        <div class="row"><span class="d" style="color:var(--dim)">WARTET</span><span class="v"></span></div>
+        <div class="src">nach COT Analyse</div>
+      </div>`);
+  });
+}
+
+function renderStage1(){
+  el('top3').innerHTML = DATA.setups.map((s,i) => `
+    <div class="setup-card">
+      <div class="rank">#${i+1} TOP SETUP</div>
+      <div class="pair">${s.pair}</div>
+      <div class="dir ${s.dir}">${s.dir}</div>
+      <div class="score-line q-green"><span class="val">${fmt(s.cot)}</span> 5MG Qualität</div>
+      <div class="meta">Kategorie: <b>${s.cot>=88?'A+ Premium Setup':'A Setup'}</b> &nbsp;|&nbsp; Stark: <b>${s.stark}</b></div>
+    </div>`).join('');
+  DATA.zusatz.forEach(z => {
+    const card = document.querySelector(`[data-z="${z.name}"]`);
+    if (card) card.innerHTML = `
+      <div class="name">${z.name}</div>
+      <div class="row"><span class="d ${z.dir==='SHORT'?'dir SHORT':'dir LONG'}" style="color:${z.dir==='SHORT'?'var(--red)':'var(--green)'}">${z.dir}</span>
+      <span class="v">${fmt(z.score)}</span></div>
+      <div class="src">COT Signalstärke</div>`;
+  });
+}
+
+function renderStage2(){
+  // Re-Ranking nach Zwischenscore
+  DATA.setups.forEach(s => s._zw = +zwischenScore(s).toFixed(1));
+  DATA.setups.sort((a,b) => b._zw - a._zw);
+  el('top3').innerHTML = DATA.setups.map((s,i) => `
+    <div class="setup-card">
+      <div class="rank">#${i+1} FINAL SETUP</div>
+      <div class="pair">${s.pair}</div>
+      <div class="dir ${s.dir}">${s.dir}</div>
+      <div class="score-line ${s._zw>=90?'q-green':'q-gold'}"><span class="val">${fmt(s._zw)}</span> 5MG Qualität</div>
+      <div class="meta">
+        <span class="badge ${s.saison.label==='NEUTRAL'?'neu':'pos'}">● ${s.saison.label}</span><br>
+        COT ${fmt(s.cot)} &nbsp;|&nbsp; Saison: ${s.saison.label}, ${s.saison.hist}
+      </div>
+    </div>`).join('');
+}
+
+function renderStage3(){
+  // Bond + Final berechnen
+  DATA.setups.forEach(s => { s._bond = bondScore(s); s._final = finalScore(s); });
+
+  el('bondList').innerHTML = DATA.setups.map(s => {
+    const b = s._bond;
+    const cls = b.score<=10?'bad':(b.score<60?'mid':'good');
+    return `
+    <div class="bond-item">
+      <div class="head">
+        <span class="t">${s.pair} ${s.dir}</span>
+        <span>${stars(b.score, b.score<=10)}<span class="bscore ${cls}">${fmt(b.score)}</span></span>
+      </div>
+      <div class="yields">${s.bond.base}: ${fmt(s.bond.yBase,2)} % &nbsp;&nbsp; ${s.bond.quote}: ${fmt(s.bond.yQuote,2)} % &nbsp;&nbsp; Spread: ${b.spread>=0?'+':''}${fmt(b.spread,2)} %</div>
+      <div class="expl">${b.expl}</div>
+    </div>`;
+  }).join('');
+
+  el('eventList').innerHTML = DATA.setups.map(s => `
+    <div class="event-item">
+      <div class="head">
+        <span class="t">${s.pair} &nbsp;Eventlage: <span class="lage">${s.events.lage}</span></span>
+        <span class="vola">Erwartete Volatilität ${s.events.vola}/10</span>
+      </div>
+      ${s.events.termine.map(t => `<div class="termin"><b>${t.dt}</b> &nbsp; ${t.txt}</div>`).join('')}
+      ${s.events.weitere ? `<div class="termin" style="color:var(--dim)">+ ${s.events.weitere} weiterer relevanter Termin im 14 Tage Fenster</div>` : ''}
+      <div class="hint">Hinweis: Termine heben den COT Bias nicht auf. Sie zeigen nur mögliche Volatilitätsfenster für Timing und Risikomanagement.</div>
+    </div>`).join('');
+
+  el('finalCards').innerHTML = DATA.setups.map((s,i) => {
+    const f = s._final, b = s._bond;
+    return `
+    <div class="final-card">
+      <div class="fc-head">
+        <span class="name">#${i+1} ${s.pair} ${s.dir}</span>
+        <span class="qual ${f.kat}">QUALITÄT: ${f.kat} &nbsp;${stars(f.fin)}<span class="qv">${fmt(f.fin)}</span></span>
+      </div>
+      <div class="fc-grid">
+        <div class="fc-col"><div class="h">COT</div><div class="st">${stars(s.cot)}</div><div class="sc green">Score ${fmt(s.cot)}</div></div>
+        <div class="fc-col"><div class="h">Saison</div><div class="st">${stars(s.saison.score)}</div><div class="sc gold">Score ${fmt(s.saison.score)}</div></div>
+        <div class="fc-col"><div class="h">Bond Makro</div><div class="st">${stars(b.score, b.score<=10)}</div><div class="sc ${b.score<=10?'red':(b.score<60?'gold':'green')}">Score ${fmt(b.score)}</div></div>
+        <div class="fc-col"><div class="h">Erwartete Volatilität</div><div class="st" style="color:var(--gold);font-weight:800">${s.events.vola}/10</div><div class="sc green">Abschlag −${fmt(VOLA_FAKTOR*s.events.vola,1)}</div></div>
+        <div class="fc-col"><div class="h">Finale Qualität</div><div class="st">${stars(f.fin)}</div><div class="sc gold">Score ${fmt(f.fin)}</div></div>
+      </div>
+      <div class="fc-fazit">Fazit: ${b.score<=10?'Deutlicher Gegenwind aus Bond Sicht':(b.score<60?'Kein klarer Rückenwind aus Bond Sicht':'Rückenwind aus Bond Sicht')},
+        Eventlage <b>${s.events.lage}</b>, finale Watchlist Qualität <b>${f.kat}</b>.
+        &nbsp;<span style="color:var(--dim)">(${fmt(W.cot*100,0)}% · ${fmt(s.cot)} + ${fmt(W.saison*100,0)}% · ${fmt(s.saison.score)} + ${fmt(W.bond*100,0)}% · ${fmt(b.score)} − ${fmt(VOLA_FAKTOR,2)} · ${s.events.vola} = ${fmt(f.fin)})</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  el('finalSection').style.display = 'block';
+  el('finalSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---------------- State Machine ---------------- */
+
+const STAGE_TEXT = {
+  1: { run:"COT Reports werden geladen und ausgewertet …", done:"Top 3 Watchlist für kommende Woche fertig" },
+  2: { run:"Seasonality wird gegen den COT Bias geprüft …", done:"Finale 5MG Watchlist fertig" },
+  3: { run:"Bond Spreads und High Impact Events werden geprüft …", done:"Makros geprüft und finale Watchlist aktualisiert" }
+};
+
+function setProgress(p){ el('bar').style.width = p+'%'; el('pct').textContent = p>4 ? p+' %' : ''; }
+
+function animate(cb){
+  let p = 0; setProgress(0);
+  const iv = setInterval(() => {
+    p = Math.min(100, p + 7 + Math.random()*10);
+    setProgress(Math.round(p));
+    if (p >= 100){ clearInterval(iv); cb(); }
+  }, 90);
+}
+
+function runStage(n){
+  if (n !== stage + 1 && !(n === 1)) return;
+  if (n === 1){ stage = 0; el('finalSection').style.display='none'; el('btn2').disabled=true; el('btn3').disabled=true;
+    el('btn2').className='wf-btn'; el('btn3').className='wf-btn';
+    el('btn2').textContent='2. SEASONALITY NACH COT'; el('btn3').textContent='3. MAKROS NACH SEASONALITY';
+    DATA = JSON.parse(JSON.stringify(window._SRC || DEMO)); }
+  el('statusFlag').textContent = 'Läuft …'; el('statusFlag').classList.remove('done');
+  el('stageLabel').textContent = STAGE_TEXT[n].run;
+  [el('btn1'),el('btn2'),el('btn3')].forEach(b => b.disabled = true);
+
+  animate(() => {
+    stage = n;
+    el('stageLabel').textContent = STAGE_TEXT[n].done;
+    el('statusFlag').textContent = 'Fertig'; el('statusFlag').classList.add('done');
+    el('health').textContent = 'RESEARCH HEALTH OK'; el('health').classList.add('ok');
+    el('quelle').textContent = 'Quelle: ' + (DATA.quelle || DEMO.quelle);
+    el('reportMeta').textContent = `Report: ${DATA.report}   ·   Märkte: ${DATA.maerkte}`;
+    el('checkup').textContent = n < 3 ? 'Engine Checkup: bei Bedarf per Button erstellen'
+                                      : 'Engine Checkup: finale Daten bereit, bei Bedarf per Button erstellen';
+    if (n === 1){
+      renderStage1();
+      el('btn1').textContent = '1. COT ANALYSE NEU STARTEN'; el('btn1').className = 'wf-btn doneStage';
+      el('btn2').className = 'wf-btn ready'; el('btn2').disabled = false;
+      el('btn2').textContent = '2. SEASONALITY PRÜFEN';
+      el('btn1').disabled = false;
+    }
+    if (n === 2){
+      renderStage2();
+      el('btn2').textContent = 'SEASONALITY ERNEUT PRÜFEN'; el('btn2').className = 'wf-btn doneStage';
+      el('btn3').className = 'wf-btn active3'; el('btn3').disabled = false;
+      el('btn3').textContent = '3. MAKROS PRÜFEN';
+      el('btn1').disabled = false; el('btn2').disabled = false;
+    }
+    if (n === 3){
+      renderStage3();
+      el('btn1').disabled = false; el('btn2').disabled = false;
+      el('btn3').disabled = false; el('btn3').textContent = 'AUSWERTUNG ERNEUT STARTEN';
+      el('btn3').className = 'wf-btn ready';
+      el('btn3').onclick = () => runStage(1);
+    }
+  });
+}
+
+/* ---------------- Datenanbindung ---------------- */
+
+async function init(){
+  renderWaiting();
+  try {
+    const r = await fetch('watchlist.json', {cache:'no-store'});
+    if (r.ok){
+      window._SRC = await r.json();
+      el('datasrc').innerHTML = 'Datenquelle: <span class="live">watchlist.json (live)</span> — Report ' + window._SRC.report;
+      return;
+    }
+  } catch(e){ /* kein watchlist.json vorhanden -> Demo */ }
+  window._SRC = DEMO;
+}
+init();
+</script>
+</body>
+</html>
