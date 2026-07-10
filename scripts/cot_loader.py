@@ -55,7 +55,13 @@ def download_year(year: int, force: bool = False) -> Path:
     if dest.exists() and not force:
         return dest
     url = f"https://www.cftc.gov/files/dea/history/deacot{year}.zip"
-    with urllib.request.urlopen(url, timeout=30) as resp:
+    req = urllib.request.Request(url, headers={
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/124.0.0.0 Safari/537.36"),
+        "Accept": "*/*",
+    })
+    with urllib.request.urlopen(req, timeout=30) as resp:
         raw = resp.read()
     with zipfile.ZipFile(io.BytesIO(raw)) as zf:
         name = zf.namelist()[0]
