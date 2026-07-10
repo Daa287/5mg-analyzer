@@ -41,7 +41,7 @@ CONTRACT_MAP = {
 }
 
 DEFAULT_CACHE_DIR = Path.home() / "hermes2" / "data" / "cot_cache"
-LOOKBACK_WEEKS = 26  # Standard COT-Index Fenster; bei Bedarf auf 156 (3J) testen
+LOOKBACK_WEEKS = 156  # 3 Jahre, klassischer COT-Index (Briese-Standard), eigene transparente Formel
 
 
 def _cache_dir() -> Path:
@@ -119,6 +119,17 @@ def cot_index(rows: list[dict], lookback_weeks: int = LOOKBACK_WEEKS) -> float |
     return round((current - lo) / (hi - lo) * 100, 1)
 
 
+def signal(rows, lookback_weeks=LOOKBACK_WEEKS):
+    """Richtung + Signalstaerke getrennt. staerke = Abstand des COT-Index
+    von der Mitte (0-100). richtung = LONG wenn Index >= 50, sonst SHORT,
+    bezogen auf den Futures-Kontrakt (= die Fremdwaehrung)."""
+    idx = cot_index(rows, lookback_weeks)
+    if idx is None:
+        return None
+    return {"index": idx, "staerke": round(abs(idx - 50) * 2, 1),
+            "richtung": "LONG" if idx >= 50 else "SHORT"}
+
+
 def latest_scores(years: list[int], lookback_weeks: int = LOOKBACK_WEEKS) -> dict:
     """
     Hauptfunktion für den Export: liefert pro Kürzel Score + Report-Datum.
@@ -129,8 +140,12 @@ def latest_scores(years: list[int], lookback_weeks: int = LOOKBACK_WEEKS) -> dic
     for key, rows in series.items():
         if not rows:
             continue
-        idx = cot_index(rows, lookback_weeks)
-        out[key] = {"score": idx, "net": rows[-1]["long"] - rows[-1]["short"]}
+        sig = signal(rows, lookback_weeks)
+        if sig is None:
+            continue
+        out[key] = {"score": sig["staerke"], "index": sig["index"],
+                    "richtung": sig["richtung"],
+                    "net": rows[-1]["long"] - rows[-1]["short"]}
         report_date = rows[-1]["date"].strftime("%Y-%m-%d")
     return {"report_date": report_date, "scores": out, "markets": len(out)}
 

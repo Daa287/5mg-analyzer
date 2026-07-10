@@ -54,16 +54,16 @@ def build_pairs(cot_scores: dict) -> list[dict]:
         info = cot_scores.get(ccy)
         if not info or info["score"] is None:
             continue
-        score = info["score"]
-        staerke = abs(score - 50)
+        staerke = info["score"]
+        fut = info["richtung"]
         # Score hoch -> Specs long Fremdwährung -> Fremdwährung stark -> Paar XXX/USD LONG
-        if score >= 50:
+        if fut == "LONG":
             pair, richtung = f"{ccy}/USD", "LONG"
         else:
-            pair, richtung = f"USD/{ccy}", "SHORT"
+            pair, richtung = f"USD/{ccy}", "LONG"
         kandidaten.append({
-            "pair": pair, "dir": richtung, "cot": score, "staerke": staerke,
-            "base": pair.split("/")[0], "quote": pair.split("/")[1], "stark": f"{ccy} ({score:+.0f})",
+            "pair": pair, "dir": richtung, "cot": staerke, "staerke": staerke,
+            "base": pair.split("/")[0], "quote": pair.split("/")[1], "stark": f"{ccy} Index {info['index']:.0f}",
         })
     kandidaten.sort(key=lambda x: x["staerke"], reverse=True)
     return kandidaten[:3]
@@ -75,9 +75,8 @@ def build_zusatz(cot_scores: dict) -> list[dict]:
         info = cot_scores.get(key)
         if not info or info["score"] is None:
             continue
-        score = info["score"]
-        richtung = "LONG" if score >= 50 else "SHORT"
-        out.append({"name": DISPLAY_NAME[key], "dir": richtung, "score": score})
+        out.append({"name": DISPLAY_NAME[key], "dir": info["richtung"],
+                    "score": info["score"]})
     return out
 
 
