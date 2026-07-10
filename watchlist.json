@@ -2,62 +2,19 @@
   "report": "2026-06-30",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-10T06:54:33+00:00",
+  "generiert": "2026-07-10T11:06:28+00:00",
   "setups": [
     {
-      "pair": "USD/CAD",
-      "dir": "SHORT",
-      "cot": 0.0,
-      "stark": "CAD (+0)",
-      "saison": {
-        "score": 49.3,
-        "label": "NEUTRAL",
-        "hist": "historisch steigend"
-      },
-      "zwischen": -0.3,
-      "bond": {
-        "base": "USD",
-        "quote": "CAD",
-        "yBase": 4.57,
-        "yQuote": 3.57
-      },
-      "_bond_score": 5.0,
-      "_bond_expl": "Der Renditevorteil liegt aktuell auf Seiten von USD. Das liefert makroökonomischen Gegenwind zum SHORT-Bias in USD/CAD.",
-      "_bond_spread": 1.0,
-      "events": {
-        "vola": 6,
-        "lage": "ERHÖHT",
-        "termine": [
-          {
-            "dt": "2026-07-10 12:30",
-            "txt": "CAD: Arbeitslosenquote",
-            "impact": "high"
-          },
-          {
-            "dt": "2026-07-10 12:30",
-            "txt": "CAD: Employment Change",
-            "impact": "high"
-          }
-        ],
-        "weitere": 1
-      },
-      "final": {
-        "roh": 11.36,
-        "final": 7.3,
-        "kategorie": "SCHWACH"
-      }
-    },
-    {
       "pair": "USD/NZD",
-      "dir": "SHORT",
-      "cot": 0.0,
-      "stark": "NZD (+0)",
+      "dir": "LONG",
+      "cot": 100.0,
+      "stark": "NZD Index 0",
       "saison": {
         "score": 50.0,
         "label": "NEUTRAL",
         "hist": "kein Ticker hinterlegt"
       },
-      "zwischen": 0.0,
+      "zwischen": 100.0,
       "bond": {
         "base": "USD",
         "quote": "NZD",
@@ -80,30 +37,30 @@
         "weitere": 0
       },
       "final": {
-        "roh": 25.0,
-        "final": 23.0,
-        "kategorie": "SCHWACH"
+        "roh": 75.0,
+        "final": 73.0,
+        "kategorie": "GUT"
       }
     },
     {
       "pair": "USD/JPY",
-      "dir": "SHORT",
-      "cot": 0.0,
-      "stark": "JPY (+0)",
+      "dir": "LONG",
+      "cot": 100.0,
+      "stark": "JPY Index 0",
       "saison": {
-        "score": 52.3,
+        "score": 47.7,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 0.9,
+      "zwischen": 99.1,
       "bond": {
         "base": "USD",
         "quote": "JPY",
         "yBase": 4.57,
         "yQuote": 1.15
       },
-      "_bond_score": 5.0,
-      "_bond_expl": "Der Renditevorteil liegt aktuell auf Seiten von USD. Das liefert makroökonomischen Gegenwind zum SHORT-Bias in USD/JPY.",
+      "_bond_score": 95.0,
+      "_bond_expl": "Der Renditevorteil stützt den LONG-Bias in USD/JPY.",
       "_bond_spread": 3.42,
       "events": {
         "vola": 3,
@@ -118,9 +75,47 @@
         "weitere": 0
       },
       "final": {
-        "roh": 11.96,
-        "final": 10.0,
-        "kategorie": "SCHWACH"
+        "roh": 88.04,
+        "final": 86.0,
+        "kategorie": "GUT"
+      }
+    },
+    {
+      "pair": "USD/GBP",
+      "dir": "LONG",
+      "cot": 95.4,
+      "stark": "GBP Index 2",
+      "saison": {
+        "score": 50.0,
+        "label": "NEUTRAL",
+        "hist": "kein Ticker hinterlegt"
+      },
+      "zwischen": 95.4,
+      "bond": {
+        "base": "USD",
+        "quote": "GBP",
+        "yBase": 4.57,
+        "yQuote": 4.42
+      },
+      "_bond_score": 50.0,
+      "_bond_expl": "Die 10-Jahres-Renditen von USD und GBP liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
+      "_bond_spread": 0.15,
+      "events": {
+        "vola": 3,
+        "lage": "BEOBACHTEN",
+        "termine": [
+          {
+            "dt": "2026-07-10 15:00",
+            "txt": "USD: Fed Monetary Policy Report",
+            "impact": "high"
+          }
+        ],
+        "weitere": 0
+      },
+      "final": {
+        "roh": 72.7,
+        "final": 70.7,
+        "kategorie": "GUT"
       }
     }
   ],
@@ -128,22 +123,22 @@
     {
       "name": "Gold",
       "dir": "SHORT",
-      "score": 41.0
+      "score": 46.4
     },
     {
       "name": "Silber",
-      "dir": "LONG",
-      "score": 53.9
+      "dir": "SHORT",
+      "score": 75.8
     },
     {
       "name": "Nasdaq 100",
       "dir": "SHORT",
-      "score": 6.7
+      "score": 89.6
     },
     {
       "name": "S&P 500",
       "dir": "LONG",
-      "score": 98.8
+      "score": 22.6
     }
   ]
 }
