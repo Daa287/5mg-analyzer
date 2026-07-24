@@ -2,7 +2,7 @@
   "report": "2026-06-30",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-17T21:00:15+00:00",
+  "generiert": "2026-07-24T21:00:11+00:00",
   "setups": [
     {
       "pair": "NZD/USD",
@@ -10,11 +10,11 @@
       "cot": 100.0,
       "stark": "NZD Index 0",
       "saison": {
-        "score": 53.3,
+        "score": 52.7,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 101.2,
+      "zwischen": 101.0,
       "bond": {
         "base": "NZD",
         "quote": "USD",
@@ -29,7 +29,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-17 15:00",
+            "dt": "2026-07-24 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -37,8 +37,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 75.66,
-        "final": 73.6,
+        "roh": 75.54,
+        "final": 73.5,
         "kategorie": "GUT"
       }
     },
@@ -48,11 +48,11 @@
       "cot": 100.0,
       "stark": "JPY Index 0",
       "saison": {
-        "score": 45.6,
+        "score": 48.1,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 98.3,
+      "zwischen": 99.3,
       "bond": {
         "base": "USD",
         "quote": "JPY",
@@ -67,7 +67,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-17 15:00",
+            "dt": "2026-07-24 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -75,8 +75,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 87.62,
-        "final": 85.6,
+        "roh": 88.12,
+        "final": 86.1,
         "kategorie": "GUT"
       }
     },
@@ -86,11 +86,11 @@
       "cot": 95.4,
       "stark": "GBP Index 2",
       "saison": {
-        "score": 51.0,
+        "score": 51.2,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 95.8,
+      "zwischen": 95.9,
       "bond": {
         "base": "GBP",
         "quote": "USD",
@@ -105,7 +105,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-17 15:00",
+            "dt": "2026-07-24 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -113,7 +113,7 @@
         "weitere": 0
       },
       "final": {
-        "roh": 72.9,
+        "roh": 72.94,
         "final": 70.9,
         "kategorie": "GUT"
       }
