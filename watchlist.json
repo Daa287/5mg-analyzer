@@ -2,7 +2,7 @@
   "report": "2026-06-30",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-24T21:00:11+00:00",
+  "generiert": "2026-07-31T21:00:12+00:00",
   "setups": [
     {
       "pair": "NZD/USD",
@@ -29,7 +29,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-24 15:00",
+            "dt": "2026-07-31 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -48,11 +48,11 @@
       "cot": 100.0,
       "stark": "JPY Index 0",
       "saison": {
-        "score": 48.1,
+        "score": 48.7,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 99.3,
+      "zwischen": 99.5,
       "bond": {
         "base": "USD",
         "quote": "JPY",
@@ -67,7 +67,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-24 15:00",
+            "dt": "2026-07-31 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -75,8 +75,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 88.12,
-        "final": 86.1,
+        "roh": 88.24,
+        "final": 86.2,
         "kategorie": "GUT"
       }
     },
@@ -86,11 +86,11 @@
       "cot": 95.4,
       "stark": "GBP Index 2",
       "saison": {
-        "score": 51.2,
+        "score": 50.9,
         "label": "NEUTRAL",
         "hist": "historisch fallend"
       },
-      "zwischen": 95.9,
+      "zwischen": 95.7,
       "bond": {
         "base": "GBP",
         "quote": "USD",
@@ -105,7 +105,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-24 15:00",
+            "dt": "2026-07-31 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -113,7 +113,7 @@
         "weitere": 0
       },
       "final": {
-        "roh": 72.94,
+        "roh": 72.88,
         "final": 70.9,
         "kategorie": "GUT"
       }
