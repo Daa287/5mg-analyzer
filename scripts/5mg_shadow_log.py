@@ -70,6 +70,14 @@ def log_current():
                 "final": s.get("final", {}).get("final"),
                 "kategorie": s.get("final", {}).get("kategorie"),
                 "entry_price": _price(s["pair"]),
+                # Teilwerte fuer spaetere Formel-Vergleiche (Ergaenzung, bestehende
+                # Felder oben unveraendert - alte Zeilen bleiben lesbar, nur ohne diese)
+                "saison": s.get("saison", {}).get("score"),
+                "saison_label": s.get("saison", {}).get("label"),
+                "zwischen": s.get("zwischen"),
+                "bond_score": s.get("_bond_score"),
+                "bond_spread": s.get("_bond_spread"),
+                "vola": s.get("events", {}).get("vola"),
             }
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
             n += 1
