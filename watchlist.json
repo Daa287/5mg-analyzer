@@ -1,35 +1,35 @@
 {
-  "report": "2026-06-30",
+  "report": "2026-07-28",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-07-31T21:00:12+00:00",
+  "generiert": "2026-08-01T07:23:48+00:00",
   "setups": [
     {
-      "pair": "NZD/USD",
+      "pair": "EUR/USD",
       "dir": "SHORT",
       "cot": 100.0,
-      "stark": "NZD Index 0",
+      "stark": "EUR Index 0",
       "saison": {
-        "score": 52.7,
+        "score": 50.2,
         "label": "NEUTRAL",
-        "hist": "historisch fallend"
+        "hist": "historisch unklar"
       },
-      "zwischen": 101.0,
+      "zwischen": 100.1,
       "bond": {
-        "base": "NZD",
+        "base": "EUR",
         "quote": "USD",
-        "yBase": 4.6,
+        "yBase": 2.61,
         "yQuote": 4.57
       },
-      "_bond_score": 50.0,
-      "_bond_expl": "Die 10-Jahres-Renditen von NZD und USD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
-      "_bond_spread": 0.03,
+      "_bond_score": 95.0,
+      "_bond_expl": "Der Renditevorteil stützt den SHORT-Bias in EUR/USD.",
+      "_bond_spread": -1.96,
       "events": {
         "vola": 3,
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-31 15:00",
+            "dt": "2026-08-01 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -37,8 +37,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 75.54,
-        "final": 73.5,
+        "roh": 88.54,
+        "final": 86.5,
         "kategorie": "GUT"
       }
     },
@@ -48,11 +48,11 @@
       "cot": 100.0,
       "stark": "JPY Index 0",
       "saison": {
-        "score": 48.7,
+        "score": 51.7,
         "label": "NEUTRAL",
-        "hist": "historisch fallend"
+        "hist": "historisch steigend"
       },
-      "zwischen": 99.5,
+      "zwischen": 100.6,
       "bond": {
         "base": "USD",
         "quote": "JPY",
@@ -67,7 +67,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-07-31 15:00",
+            "dt": "2026-08-01 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -75,46 +75,51 @@
         "weitere": 0
       },
       "final": {
-        "roh": 88.24,
-        "final": 86.2,
+        "roh": 88.84,
+        "final": 86.8,
         "kategorie": "GUT"
       }
     },
     {
-      "pair": "GBP/USD",
-      "dir": "SHORT",
-      "cot": 95.4,
-      "stark": "GBP Index 2",
+      "pair": "USD/CAD",
+      "dir": "LONG",
+      "cot": 97.8,
+      "stark": "CAD Index 1",
       "saison": {
-        "score": 50.9,
+        "score": 50.1,
         "label": "NEUTRAL",
-        "hist": "historisch fallend"
+        "hist": "historisch steigend"
       },
-      "zwischen": 95.7,
+      "zwischen": 97.8,
       "bond": {
-        "base": "GBP",
-        "quote": "USD",
-        "yBase": 4.42,
-        "yQuote": 4.57
+        "base": "USD",
+        "quote": "CAD",
+        "yBase": 4.57,
+        "yQuote": 3.57
       },
-      "_bond_score": 50.0,
-      "_bond_expl": "Die 10-Jahres-Renditen von GBP und USD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
-      "_bond_spread": -0.15,
+      "_bond_score": 95.0,
+      "_bond_expl": "Der Renditevorteil stützt den LONG-Bias in USD/CAD.",
+      "_bond_spread": 1.0,
       "events": {
-        "vola": 3,
-        "lage": "BEOBACHTEN",
+        "vola": 6,
+        "lage": "ERHÖHT",
         "termine": [
           {
-            "dt": "2026-07-31 15:00",
-            "txt": "USD: Fed Monetary Policy Report",
+            "dt": "2026-08-01 12:30",
+            "txt": "CAD: Arbeitslosenquote",
+            "impact": "high"
+          },
+          {
+            "dt": "2026-08-01 12:30",
+            "txt": "CAD: Employment Change",
             "impact": "high"
           }
         ],
-        "weitere": 0
+        "weitere": 1
       },
       "final": {
-        "roh": 72.88,
-        "final": 70.9,
+        "roh": 87.42,
+        "final": 83.4,
         "kategorie": "GUT"
       }
     }
@@ -123,22 +128,22 @@
     {
       "name": "Gold",
       "dir": "SHORT",
-      "score": 46.4
+      "score": 62.4
     },
     {
       "name": "Silber",
       "dir": "SHORT",
-      "score": 75.8
+      "score": 98.6
     },
     {
       "name": "Nasdaq 100",
       "dir": "SHORT",
-      "score": 89.6
+      "score": 67.0
     },
     {
       "name": "S&P 500",
       "dir": "LONG",
-      "score": 22.6
+      "score": 36.0
     }
   ]
 }
