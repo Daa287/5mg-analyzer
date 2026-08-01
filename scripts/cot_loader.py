@@ -19,10 +19,13 @@ from __future__ import annotations
 import csv
 import io
 import json
+import time
 import zipfile
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+
+MAX_CACHE_AGE_DAYS = 7
 
 # CFTC-Kontraktnamen -> unsere Kürzel (Legacy "Futures Only" Report)
 CONTRACT_MAP = {
@@ -50,10 +53,15 @@ def _cache_dir() -> Path:
 
 
 def download_year(year: int, force: bool = False) -> Path:
-    """Lädt/aktualisiert den Jahres-Report als CSV im lokalen Cache."""
+    """Lädt/aktualisiert den Jahres-Report als CSV im lokalen Cache.
+    Lädt neu, wenn die Datei fehlt ODER älter als MAX_CACHE_AGE_DAYS ist -
+    reine Existenzprüfung ließ den Cache seit 10.07. einfrieren, obwohl
+    CFTC wöchentlich neue Reports veröffentlicht."""
     dest = _cache_dir() / f"deacot{year}.csv"
     if dest.exists() and not force:
-        return dest
+        age_days = (time.time() - dest.stat().st_mtime) / 86400
+        if age_days < MAX_CACHE_AGE_DAYS:
+            return dest
     url = f"https://www.cftc.gov/files/dea/history/deacot{year}.zip"
     req = urllib.request.Request(url, headers={
         "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
