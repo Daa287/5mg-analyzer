@@ -2,7 +2,7 @@
   "report": "2026-07-28",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-08-01T07:23:48+00:00",
+  "generiert": "2026-08-07T21:00:12+00:00",
   "setups": [
     {
       "pair": "EUR/USD",
@@ -10,11 +10,11 @@
       "cot": 100.0,
       "stark": "EUR Index 0",
       "saison": {
-        "score": 50.2,
+        "score": 49.6,
         "label": "NEUTRAL",
-        "hist": "historisch unklar"
+        "hist": "historisch steigend"
       },
-      "zwischen": 100.1,
+      "zwischen": 99.8,
       "bond": {
         "base": "EUR",
         "quote": "USD",
@@ -29,7 +29,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-08-01 15:00",
+            "dt": "2026-08-07 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -37,8 +37,8 @@
         "weitere": 0
       },
       "final": {
-        "roh": 88.54,
-        "final": 86.5,
+        "roh": 88.42,
+        "final": 86.4,
         "kategorie": "GUT"
       }
     },
@@ -48,11 +48,11 @@
       "cot": 100.0,
       "stark": "JPY Index 0",
       "saison": {
-        "score": 51.7,
+        "score": 51.8,
         "label": "NEUTRAL",
         "hist": "historisch steigend"
       },
-      "zwischen": 100.6,
+      "zwischen": 100.7,
       "bond": {
         "base": "USD",
         "quote": "JPY",
@@ -67,7 +67,7 @@
         "lage": "BEOBACHTEN",
         "termine": [
           {
-            "dt": "2026-08-01 15:00",
+            "dt": "2026-08-07 15:00",
             "txt": "USD: Fed Monetary Policy Report",
             "impact": "high"
           }
@@ -75,7 +75,7 @@
         "weitere": 0
       },
       "final": {
-        "roh": 88.84,
+        "roh": 88.86,
         "final": 86.8,
         "kategorie": "GUT"
       }
@@ -86,9 +86,9 @@
       "cot": 97.8,
       "stark": "CAD Index 1",
       "saison": {
-        "score": 50.1,
+        "score": 49.9,
         "label": "NEUTRAL",
-        "hist": "historisch steigend"
+        "hist": "historisch unklar"
       },
       "zwischen": 97.8,
       "bond": {
@@ -105,12 +105,12 @@
         "lage": "ERHÖHT",
         "termine": [
           {
-            "dt": "2026-08-01 12:30",
+            "dt": "2026-08-07 12:30",
             "txt": "CAD: Arbeitslosenquote",
             "impact": "high"
           },
           {
-            "dt": "2026-08-01 12:30",
+            "dt": "2026-08-07 12:30",
             "txt": "CAD: Employment Change",
             "impact": "high"
           }
@@ -118,7 +118,7 @@
         "weitere": 1
       },
       "final": {
-        "roh": 87.42,
+        "roh": 87.38,
         "final": 83.4,
         "kategorie": "GUT"
       }
