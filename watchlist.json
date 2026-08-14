@@ -1,20 +1,20 @@
 {
-  "report": "2026-07-28",
+  "report": "2026-08-04",
   "maerkte": 12,
   "quelle": "CFTC historische Reports, lokal zwischengespeichert",
-  "generiert": "2026-08-07T21:00:12+00:00",
+  "generiert": "2026-08-14T21:00:32+00:00",
   "setups": [
     {
       "pair": "EUR/USD",
       "dir": "SHORT",
-      "cot": 100.0,
-      "stark": "EUR Index 0",
+      "cot": 86.4,
+      "stark": "EUR Index 7",
       "saison": {
-        "score": 49.6,
+        "score": 50.1,
         "label": "NEUTRAL",
-        "hist": "historisch steigend"
+        "hist": "historisch unklar"
       },
-      "zwischen": 99.8,
+      "zwischen": 86.4,
       "bond": {
         "base": "EUR",
         "quote": "USD",
@@ -25,72 +25,28 @@
       "_bond_expl": "Der Renditevorteil stützt den SHORT-Bias in EUR/USD.",
       "_bond_spread": -1.96,
       "events": {
-        "vola": 3,
-        "lage": "BEOBACHTEN",
-        "termine": [
-          {
-            "dt": "2026-08-07 15:00",
-            "txt": "USD: Fed Monetary Policy Report",
-            "impact": "high"
-          }
-        ],
+        "vola": 0,
+        "lage": "RUHIG",
+        "termine": [],
         "weitere": 0
       },
       "final": {
-        "roh": 88.42,
-        "final": 86.4,
-        "kategorie": "GUT"
-      }
-    },
-    {
-      "pair": "USD/JPY",
-      "dir": "LONG",
-      "cot": 100.0,
-      "stark": "JPY Index 0",
-      "saison": {
-        "score": 51.8,
-        "label": "NEUTRAL",
-        "hist": "historisch steigend"
-      },
-      "zwischen": 100.7,
-      "bond": {
-        "base": "USD",
-        "quote": "JPY",
-        "yBase": 4.57,
-        "yQuote": 1.15
-      },
-      "_bond_score": 95.0,
-      "_bond_expl": "Der Renditevorteil stützt den LONG-Bias in USD/JPY.",
-      "_bond_spread": 3.42,
-      "events": {
-        "vola": 3,
-        "lage": "BEOBACHTEN",
-        "termine": [
-          {
-            "dt": "2026-08-07 15:00",
-            "txt": "USD: Fed Monetary Policy Report",
-            "impact": "high"
-          }
-        ],
-        "weitere": 0
-      },
-      "final": {
-        "roh": 88.86,
-        "final": 86.8,
+        "roh": 81.72,
+        "final": 81.7,
         "kategorie": "GUT"
       }
     },
     {
       "pair": "USD/CAD",
       "dir": "LONG",
-      "cot": 97.8,
-      "stark": "CAD Index 1",
+      "cot": 85.2,
+      "stark": "CAD Index 7",
       "saison": {
-        "score": 49.9,
+        "score": 50.9,
         "label": "NEUTRAL",
-        "hist": "historisch unklar"
+        "hist": "historisch steigend"
       },
-      "zwischen": 97.8,
+      "zwischen": 85.5,
       "bond": {
         "base": "USD",
         "quote": "CAD",
@@ -101,26 +57,47 @@
       "_bond_expl": "Der Renditevorteil stützt den LONG-Bias in USD/CAD.",
       "_bond_spread": 1.0,
       "events": {
-        "vola": 6,
-        "lage": "ERHÖHT",
-        "termine": [
-          {
-            "dt": "2026-08-07 12:30",
-            "txt": "CAD: Arbeitslosenquote",
-            "impact": "high"
-          },
-          {
-            "dt": "2026-08-07 12:30",
-            "txt": "CAD: Employment Change",
-            "impact": "high"
-          }
-        ],
-        "weitere": 1
+        "vola": 0,
+        "lage": "RUHIG",
+        "termine": [],
+        "weitere": 0
       },
       "final": {
-        "roh": 87.38,
-        "final": 83.4,
+        "roh": 81.28,
+        "final": 81.3,
         "kategorie": "GUT"
+      }
+    },
+    {
+      "pair": "GBP/USD",
+      "dir": "SHORT",
+      "cot": 61.4,
+      "stark": "GBP Index 19",
+      "saison": {
+        "score": 49.9,
+        "label": "NEUTRAL",
+        "hist": "historisch unklar"
+      },
+      "zwischen": 61.4,
+      "bond": {
+        "base": "GBP",
+        "quote": "USD",
+        "yBase": 4.42,
+        "yQuote": 4.57
+      },
+      "_bond_score": 50.0,
+      "_bond_expl": "Die 10-Jahres-Renditen von GBP und USD liegen nahezu gleichauf. Aus Bond-Sicht entsteht aktuell kein klarer Rückenwind.",
+      "_bond_spread": -0.15,
+      "events": {
+        "vola": 0,
+        "lage": "RUHIG",
+        "termine": [],
+        "weitere": 0
+      },
+      "final": {
+        "roh": 55.68,
+        "final": 55.7,
+        "kategorie": "GEMISCHT"
       }
     }
   ],
@@ -128,22 +105,22 @@
     {
       "name": "Gold",
       "dir": "SHORT",
-      "score": 62.4
+      "score": 27.8
     },
     {
       "name": "Silber",
       "dir": "SHORT",
-      "score": 98.6
+      "score": 64.0
     },
     {
       "name": "Nasdaq 100",
       "dir": "SHORT",
-      "score": 67.0
+      "score": 100.0
     },
     {
       "name": "S&P 500",
       "dir": "LONG",
-      "score": 36.0
+      "score": 20.4
     }
   ]
 }
