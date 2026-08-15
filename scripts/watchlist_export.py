@@ -10,14 +10,25 @@ Ablauf:
   3. Seasonality je Setup (season_engine) + Re-Ranking
   4. Bond-Score (bond_loader) + Event-Check (calendar_check)
   5. Finale Formel: 0.5*COT + 0.2*Saison + 0.3*Bond - 0.67*Vola
-  6. watchlist.json schreiben, git add/commit/push
+  6. watchlist.json schreiben (weiterhin lokal, u.a. fuer 5mg_shadow_log.py)
+
+GITHUB-PAGES-PUSH DEAKTIVIERT (2026-08-15): write_and_push() schrieb bisher
+zusaetzlich index.html/watchlist.json via git add/commit/push ins
+GitHub-Pages-Repo. Das ist jetzt Aufgabe von publish_pages.py (neue
+Wochen-Engines-Uebersicht aus weekly_engine_signals, laeuft nach dem
+Telegram-Versand im 23:15-Freitagscron von weekly_engine_report.py). Die
+alte build_pairs()/finale_qualitaet()-Ausgabe hier wuerde die neue Seite
+sonst 15 Minuten lang wieder ueberschreiben. write_and_push() schreibt
+watchlist.json weiterhin lokal (5mg_shadow_log.py braucht die Datei),
+pusht aber nicht mehr - siehe push=False in __main__.
 
 Cron-Empfehlung (crontab -e auf hermes2):
   # CFTC published freitags ca. 15:30 ET (~21:30/22:30 MESZ je nach DST)
   0 23 * * 5   /home/pi/hermes2/venv/bin/python3 /home/pi/hermes2/scripts/5mg/watchlist_export.py >> /home/pi/hermes2/logs/5mg_export.log 2>&1
 
 Aufruf manuell:
-  /home/pi/hermes2/venv/bin/python3 watchlist_export.py [--no-push]
+  /home/pi/hermes2/venv/bin/python3 watchlist_export.py
+  (kein --no-push-Flag mehr noetig - Push ist fest deaktiviert, siehe oben)
 """
 
 from __future__ import annotations
@@ -26,6 +37,15 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+# load_dotenv() ZUERST (sonst Tokens/API-Keys im Cron-Kontext leer) -
+# Pflicht-Robustheitspattern aus CLAUDE.md. Fehlte hier bisher (erstmals
+# am 2026-08-12 aufgefallen, dann am 2026-08-14 tatsaechlich die Ursache
+# fuer fehlende USD-Zinsdaten im Freitags-Lauf - FRED_API_KEY war ohne
+# das nie in der Prozessumgebung).
+load_dotenv(Path.home() / "hermes2" / ".env")
 
 sys.path.insert(0, str(Path(__file__).parent))
 import cot_loader
@@ -102,7 +122,10 @@ def finale_qualitaet(cot: float, saison: float, bond: float, vola: int) -> dict:
 
 def run() -> dict:
     this_year = datetime.now(timezone.utc).year
-    cot_result = cot_loader.latest_scores([this_year - 1, this_year])
+    # 3 Kalenderjahre statt 2, damit der Hybrid-104-Wochen-Kontext ganzjaehrig
+    # zuverlaessig abgedeckt ist (2 Jahre reichen je nach Zeitpunkt im
+    # Kalenderjahr nur fuer ~52-105 Wochen, siehe cot_loader.py LOOKBACK_WEEKS=156).
+    cot_result = cot_loader.latest_scores([this_year - 2, this_year - 1, this_year])
     scores = cot_result["scores"]
 
     top3 = build_pairs(scores)
@@ -140,7 +163,7 @@ def run() -> dict:
     return payload
 
 
-def write_and_push(payload: dict, push: bool = True) -> None:
+def write_and_push(payload: dict, push: bool = False) -> None:
     REPO_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_JSON.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Geschrieben: {OUTPUT_JSON}")
@@ -168,5 +191,6 @@ def write_and_push(payload: dict, push: bool = True) -> None:
 if __name__ == "__main__":
     bond_loader.ensure_config_exists()
     payload = run()
-    push = "--no-push" not in sys.argv
-    write_and_push(payload, push=push)
+    # Push fest deaktiviert (2026-08-15) - siehe Modul-Docstring oben.
+    # publish_pages.py uebernimmt die GitHub-Pages-Veroeffentlichung.
+    write_and_push(payload, push=False)

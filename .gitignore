@@ -1,0 +1,15 @@
+# Sicherheitsnetz gegen versehentliches "git add ." / "git add -A":
+# Diese Dateien enthalten die rekonstruierte COT-Engine-/Final-Quality-
+# Formel inkl. Gewichten und ESTIMATED-Konstanten. Repo ist oeffentlich
+# (GitHub Pages) - diese Dateien bleiben bewusst lokal/uncommitted.
+# Siehe reports/git_expose_audit_20260815.md fuer den Audit-Stand.
+scripts/weekly_engine_report.py
+scripts/cot_engines.py
+scripts/final_quality.py
+scripts/entry_signal.py
+scripts/entry_monitor.py
+scripts/run_daily_yield_fetch.py
+
+# Backups/Cache, die ohnehin nicht committet werden sollen.
+*.bak_*
+scripts/__pycache__/
