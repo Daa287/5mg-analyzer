@@ -9,6 +9,7 @@ scripts/final_quality.py
 scripts/entry_signal.py
 scripts/entry_monitor.py
 scripts/run_daily_yield_fetch.py
+scripts/evaluate_signals.py
 
 # Backups/Cache, die ohnehin nicht committet werden sollen.
 *.bak_*
