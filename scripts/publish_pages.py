@@ -27,6 +27,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path.home() / "hermes2" / "scripts"))
 import db  # zentrales hermes.db (weekly_engine_signals)
 
+import evaluate_signals  # signal_performance-Status/Trefferquote (Fix 29.08.2026,
+                          # siehe reports/signal_performance_stand_2026-08-29.md) -
+                          # load_stored_results() liest nur die DB, KEIN live yfinance-
+                          # Abruf; kein Zirkelimport, da evaluate_signals.py
+                          # publish_pages nur lokal in main() importiert, nicht auf
+                          # Modulebene.
+
 REPO_DIR = Path.home() / "hermes2" / "scripts" / "5mg_analyzer_repo"
 OUTPUT_HTML = REPO_DIR / "index.html"
 PREVIEW_PATH = Path.home() / "hermes2" / "reports" / "index_preview.html"
@@ -77,13 +84,37 @@ def load_recent_weeks(limit: int = MAX_WEEKS) -> list[dict]:
     return result
 
 
-def _week_table(week: dict) -> str:
+def _status_badge(status: str | None, correct) -> str:
+    """WIN/LOSS/OPEN/kein-Entry-Kennzeichnung fuer eine Ebene (sig_* oder
+    entry_*). status=None (noch keine signal_performance-Zeile fuer dieses
+    Signal, z.B. frisch aus dem Freitagslauf, evaluate_signals noch nicht
+    gelaufen) wird wie OPEN behandelt - faktisch korrekt: zu frueh fuer
+    eine Aussage."""
+    if status == "DONE":
+        return "✅ WIN" if correct == 1 else "❌ LOSS"
+    if status == "NO_ENTRY":
+        return "– kein Entry"
+    if status == "ERROR":
+        return "⚠️ Fehler"
+    return "⏳ OPEN"
+
+
+def _perf_lookup(results: list[dict]) -> dict[int, dict]:
+    return {res["signal"]["id"]: res["perf"] for res in results}
+
+
+def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
     rows_html = []
     for r in week["rows"]:
         top = "🏆 Top" if r["is_top_signal"] else "–"
         konflikt = f"⚠️ {html.escape(r['conflict_note'])}" if r["in_conflict"] else "–"
         fq = r["final_quality"]
         fq_str = f"{fq:.1f}" if fq is not None else "–"
+        perf = perf_by_id.get(r["id"])
+        sig_badge = _status_badge(perf["sig_status"] if perf else None,
+                                   perf.get("sig_direction_correct") if perf else None)
+        entry_badge = _status_badge(perf["entry_status"] if perf else None,
+                                     perf.get("entry_direction_correct") if perf else None)
         rows_html.append(
             "      <tr>"
             f"<td>{html.escape(r['engine'])}</td>"
@@ -92,12 +123,16 @@ def _week_table(week: dict) -> str:
             f"<td>{fq_str}</td>"
             f"<td>{top}</td>"
             f"<td>{konflikt}</td>"
+            f"<td>{sig_badge}</td>"
+            f"<td>{entry_badge}</td>"
             "</tr>"
         )
     return "\n".join(rows_html)
 
 
-def render_html(weeks: list[dict]) -> str:
+def render_html(weeks: list[dict], results: list[dict]) -> str:
+    perf_by_id = _perf_lookup(results)
+
     if not weeks:
         body = "<p>Noch keine Wochen-Engine-Daten vorhanden.</p>"
     else:
@@ -108,12 +143,32 @@ def render_html(weeks: list[dict]) -> str:
                 f"    <h2>KW {w['iso_week']}/{w['iso_year']} — {html.escape(w['date'])}</h2>\n"
                 f"    <table>\n"
                 f"      <tr><th>Engine</th><th>Paar</th><th>Bias</th>"
-                f"<th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th></tr>\n"
-                f"{_week_table(w)}\n"
+                f"<th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th>"
+                f"<th>Signal-Status</th><th>Entry-Status</th></tr>\n"
+                f"{_week_table(w, perf_by_id)}\n"
                 f"    </table>\n"
                 f"  </section>"
             )
         body = "\n\n".join(blocks)
+
+    # Gesamt-Status ueber ALLE bisher ausgewerteten Faelle - dieselbe
+    # Berechnung/Formulierung wie im woechentlichen Telegram-Bericht
+    # (evaluate_signals.build_weekly_report), nicht nur die letzten
+    # MAX_WEEKS Karten oben. <b>-Tags aus der Telegram-Formatierung
+    # funktionieren als echtes HTML auch innerhalb von <pre>.
+    # build_weekly_report() liefert dieselben, intern erzeugten Werte
+    # (Paar/Bias/Zahlen), die an anderer Stelle in dieser Datei ebenfalls
+    # ungefiltert verwendet werden - kein externer/Nutzereingabe-Text,
+    # daher hier ohne zusaetzliches Escaping eingebettet (die <b>-Tags aus
+    # der Telegram-Formatierung sollen als echtes Bold-HTML wirken).
+    status_text = (evaluate_signals.build_weekly_report(results) if results
+                   else "Noch keine signal_performance-Daten vorhanden.")
+    footer = (
+        "  <section class=\"status-footer\">\n"
+        "    <h2>Gesamt-Status (signal_performance)</h2>\n"
+        f"    <pre>{status_text}</pre>\n"
+        "  </section>"
+    )
 
     generiert = datetime.now().strftime("%Y-%m-%d %H:%M")
     return f"""<!doctype html>
@@ -133,19 +188,23 @@ def render_html(weeks: list[dict]) -> str:
   th, td {{ text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }}
   th {{ background: #f2f2f2; }}
   tr:hover {{ background: #fafafa; }}
+  .status-footer pre {{ white-space: pre-wrap; font-family: inherit; font-size: 0.95rem;
+                         background: #f7f7f7; padding: 1rem; border-radius: 6px; }}
 </style>
 </head>
 <body>
   <h1>5MG Analyzer — Wochen-Engines</h1>
   <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert {generiert}</p>
 {body}
+
+{footer}
 </body>
 </html>
 """
 
 
 def build_index_html() -> str:
-    return render_html(load_recent_weeks(MAX_WEEKS))
+    return render_html(load_recent_weeks(MAX_WEEKS), evaluate_signals.load_stored_results())
 
 
 def _git(*args: str) -> subprocess.CompletedProcess:
