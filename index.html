@@ -5,77 +5,133 @@
 <title>5MG Analyzer — Wochen-Engines</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  :root { --accent: #2563eb; --accent-dark: #1e3a8a; }
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
           margin: 2rem auto; padding: 0 1rem; color: #222; }
   h1 { margin-bottom: 0.2rem; }
   .sub { color: #666; margin-top: 0; margin-bottom: 2rem; font-size: 0.9rem; }
   section { margin-bottom: 2.5rem; }
-  h2 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+  h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); }
+  h3 { color: var(--accent-dark); font-size: 1.05rem; margin-bottom: 0.4rem; }
   table { border-collapse: collapse; width: 100%; }
   th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
-  th { background: #f2f2f2; }
+  th { background: #eef2ff; color: var(--accent-dark); font-weight: 600; }
   tr:hover { background: #fafafa; }
-  .status-footer pre { white-space: pre-wrap; font-family: inherit; font-size: 0.95rem;
-                         background: #f7f7f7; padding: 1rem; border-radius: 6px; }
+
+  /* WIN/LOSS/OPEN-Badges (Fix 30.08.2026) - dezente Akzentfarben */
+  .badge { display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
+            border-radius: 4px; font-size: 0.92em; white-space: nowrap; }
+  .badge.win   { color: #1a7f37; background: #e6f4ea; }
+  .badge.loss  { color: #cf222e; background: #fde8e8; }
+  .badge.open  { color: #9a6700; background: #fff6e0; }
+  .badge.none  { color: #666;    background: #f2f2f2; }
+  .badge.error { color: #cf222e; background: #fde8e8; }
+  .badge.muted { color: #666;    background: #f2f2f2; font-weight: 500; }
+
+  /* Gesamt-Status-Block als strukturiertes HTML (Fix 30.08.2026) */
+  .layer-status { margin-bottom: 1.5rem; }
+  .layer-status:last-of-type { margin-bottom: 1rem; }
+  .counts { margin: 0.2rem 0; }
+  .hitrate { margin: 0.2rem 0 0.6rem 0; }
+  .pair-table { width: 100%; max-width: 320px; }
+  .pair-table th, .pair-table td { padding: 0.3rem 0.6rem; }
+  .correlation-note { background: #fff8e6; border-left: 4px solid #b58105;
+                        padding: 0.75rem 1rem; border-radius: 4px; margin-top: 1rem; }
+
+  /* Gestapelte Karten statt gequetschter Tabelle unter 600px (Fix 30.08.2026) */
+  @media (max-width: 600px) {
+    .week-table thead { display: none; }
+    .week-table, .week-table tbody, .week-table tr, .week-table td { display: block; width: 100%; }
+    .week-table { border: none; }
+    .week-table tr {
+      margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
+      padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .week-table td {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+    }
+    .week-table td:last-child { border-bottom: none; }
+    .week-table td::before {
+      content: attr(data-label); font-weight: 600; color: #555;
+      text-align: left; flex-shrink: 0;
+    }
+    .pair-table { max-width: 100%; }
+  }
 </style>
 </head>
 <body>
   <h1>5MG Analyzer — Wochen-Engines</h1>
-  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-30 07:58</p>
+  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-30 08:21</p>
   <section>
     <h2>KW 35/2026 — 2026-08-28</h2>
-    <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
-      <tr><td>Basis-Signal</td><td>NZD/USD</td><td>SHORT</td><td>31.0</td><td>–</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
-      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>63.0</td><td>🏆 Top</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
-      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>58.5</td><td>–</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
+    <table class="week-table">
+      <thead>
+        <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="Paar">NZD/USD</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">31.0</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge open">⏳ OPEN</span></td><td data-label="Entry-Status"><span class="badge none">– kein Entry</span></td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="Paar">USD/JPY</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">63.0</td><td data-label="Top-Signal">🏆 Top</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge open">⏳ OPEN</span></td><td data-label="Entry-Status"><span class="badge none">– kein Entry</span></td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="Paar">GBP/USD</td><td data-label="Bias">LONG</td><td data-label="Final Quality">58.5</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge open">⏳ OPEN</span></td><td data-label="Entry-Status"><span class="badge none">– kein Entry</span></td></tr>
+      </tbody>
     </table>
   </section>
 
   <section>
     <h2>KW 34/2026 — 2026-08-21</h2>
-    <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
-      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>69.0</td><td>🏆 Top</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
-      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>61.3</td><td>–</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
-      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>60.4</td><td>–</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
+    <table class="week-table">
+      <thead>
+        <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="Paar">USD/CAD</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">69.0</td><td data-label="Top-Signal">🏆 Top</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge loss">❌ LOSS</span></td><td data-label="Entry-Status"><span class="badge open">⏳ OPEN</span></td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="Paar">USD/JPY</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">61.3</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge loss">❌ LOSS</span></td><td data-label="Entry-Status"><span class="badge open">⏳ OPEN</span></td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="Paar">GBP/USD</td><td data-label="Bias">LONG</td><td data-label="Final Quality">60.4</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge loss">❌ LOSS</span></td><td data-label="Entry-Status"><span class="badge open">⏳ OPEN</span></td></tr>
+      </tbody>
     </table>
   </section>
 
   <section>
     <h2>KW 33/2026 — 2026-08-15</h2>
-    <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
-      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>80.0</td><td>🏆 Top</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
-      <tr><td>Fluss-Signal</td><td>NZD/USD</td><td>LONG</td><td>65.8</td><td>–</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
-      <tr><td>Kombi-Signal</td><td>USD/CHF</td><td>SHORT</td><td>66.4</td><td>–</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
+    <table class="week-table">
+      <thead>
+        <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="Paar">USD/CAD</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">80.0</td><td data-label="Top-Signal">🏆 Top</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge win">✅ WIN</span></td><td data-label="Entry-Status"><span class="badge win">✅ WIN</span></td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="Paar">NZD/USD</td><td data-label="Bias">LONG</td><td data-label="Final Quality">65.8</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge win">✅ WIN</span></td><td data-label="Entry-Status"><span class="badge win">✅ WIN</span></td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="Paar">USD/CHF</td><td data-label="Bias">SHORT</td><td data-label="Final Quality">66.4</td><td data-label="Top-Signal">–</td><td data-label="Konflikt">–</td><td data-label="Signal-Status"><span class="badge win">✅ WIN</span></td><td data-label="Entry-Status"><span class="badge win">✅ WIN</span></td></tr>
+      </tbody>
     </table>
   </section>
 
   <section class="status-footer">
     <h2>Gesamt-Status (signal_performance)</h2>
-    <pre>📊 <b>Wöchentlicher Signal-Statusbericht — 30.08.2026</b>
-
-<b>Ebene 1 — Signal-Zeitpunkt</b>
-  DONE: 21 | OPEN: 3
-  Trefferquote: 12/21 (57.1%, NICHT BELASTBAR)
-    GBP/USD: 0/1
-    NZD/USD: 3/6
-    USD/CAD: 6/7
-    USD/CHF: 3/6
-    USD/JPY: 0/1
-
-<b>Ebene 2 — Erster Entry</b>
-  DONE: 6 | OPEN: 3 | NO_ENTRY: 15
-  Trefferquote: 6 von 6 (absolute Zahl, kein Prozent bei n<10)
-    NZD/USD: 2/2
-    USD/CAD: 2/2
-    USD/CHF: 2/2
-
-<b>⚠️ Korrelations-Hinweis</b>
-  Ebene 1: 21 Fälle, aber nur 5 unterschiedliche Paar/Bias-Kombination(en) (GBP/USD LONG, NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT, USD/JPY SHORT).
-  Ebene 2: 6 Fälle, aber nur 3 unterschiedliche Paar/Bias-Kombination(en) (NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT).
-  → Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine 18/6 unabhängigen Beweise.</pre>
+    <div class="layer-status">
+      <h3>Ebene 1 — Signal-Zeitpunkt</h3>
+      <p class="counts">DONE: 21 &nbsp;|&nbsp; OPEN: 3</p>
+      <p class="hitrate">Trefferquote: <strong>12/21 (57.1%) <span class="badge muted">NICHT BELASTBAR</span></strong></p>
+      <table class="pair-table">
+        <tr><th>Paar</th><th>Win/Total</th></tr>
+          <tr><td>GBP/USD</td><td>0/1</td></tr>
+          <tr><td>NZD/USD</td><td>3/6</td></tr>
+          <tr><td>USD/CAD</td><td>6/7</td></tr>
+          <tr><td>USD/CHF</td><td>3/6</td></tr>
+          <tr><td>USD/JPY</td><td>0/1</td></tr>
+      </table>
+    </div>
+    <div class="layer-status">
+      <h3>Ebene 2 — Erster Entry</h3>
+      <p class="counts">DONE: 6 &nbsp;|&nbsp; OPEN: 3 &nbsp;|&nbsp; NO_ENTRY: 15</p>
+      <p class="hitrate">Trefferquote: <strong>6 von 6 <span class="badge muted">kein Prozent bei n&lt;10</span></strong></p>
+      <table class="pair-table">
+        <tr><th>Paar</th><th>Win/Total</th></tr>
+          <tr><td>NZD/USD</td><td>2/2</td></tr>
+          <tr><td>USD/CAD</td><td>2/2</td></tr>
+          <tr><td>USD/CHF</td><td>2/2</td></tr>
+      </table>
+    </div>
+    <p class="correlation-note">⚠️ <strong>Korrelations-Hinweis:</strong> Ebene 1: 21 Fälle, aber nur 5 unterschiedliche Paar/Bias-Kombination(en) (GBP/USD LONG, NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT, USD/JPY SHORT). Ebene 2: 6 Fälle, aber nur 3 unterschiedliche Paar/Bias-Kombination(en) (NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT). Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine unabhängigen Beweise.</p>
   </section>
 </body>
 </html>
