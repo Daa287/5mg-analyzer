@@ -86,17 +86,19 @@ def load_recent_weeks(limit: int = MAX_WEEKS) -> list[dict]:
 
 def _status_badge(status: str | None, correct) -> str:
     """WIN/LOSS/OPEN/kein-Entry-Kennzeichnung fuer eine Ebene (sig_* oder
-    entry_*). status=None (noch keine signal_performance-Zeile fuer dieses
-    Signal, z.B. frisch aus dem Freitagslauf, evaluate_signals noch nicht
+    entry_*), als farbiges <span> (Fix 30.08.2026 - Layout-Ueberarbeitung).
+    status=None (noch keine signal_performance-Zeile fuer dieses Signal,
+    z.B. frisch aus dem Freitagslauf, evaluate_signals noch nicht
     gelaufen) wird wie OPEN behandelt - faktisch korrekt: zu frueh fuer
     eine Aussage."""
     if status == "DONE":
-        return "✅ WIN" if correct == 1 else "❌ LOSS"
+        return ('<span class="badge win">✅ WIN</span>' if correct == 1
+                else '<span class="badge loss">❌ LOSS</span>')
     if status == "NO_ENTRY":
-        return "– kein Entry"
+        return '<span class="badge none">– kein Entry</span>'
     if status == "ERROR":
-        return "⚠️ Fehler"
-    return "⏳ OPEN"
+        return '<span class="badge error">⚠️ Fehler</span>'
+    return '<span class="badge open">⏳ OPEN</span>'
 
 
 def _perf_lookup(results: list[dict]) -> dict[int, dict]:
@@ -104,6 +106,9 @@ def _perf_lookup(results: list[dict]) -> dict[int, dict]:
 
 
 def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
+    """data-label je <td> (Fix 30.08.2026): traegt auf schmalen Bildschirmen
+    die per CSS (td::before) angezeigte Spaltenbeschriftung, wenn die
+    Tabelle unter 600px zu gestapelten Karten wird - siehe <style>."""
     rows_html = []
     for r in week["rows"]:
         top = "🏆 Top" if r["is_top_signal"] else "–"
@@ -116,18 +121,131 @@ def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
         entry_badge = _status_badge(perf["entry_status"] if perf else None,
                                      perf.get("entry_direction_correct") if perf else None)
         rows_html.append(
-            "      <tr>"
-            f"<td>{html.escape(r['engine'])}</td>"
-            f"<td>{html.escape(r['pair'])}</td>"
-            f"<td>{html.escape(r['bias'])}</td>"
-            f"<td>{fq_str}</td>"
-            f"<td>{top}</td>"
-            f"<td>{konflikt}</td>"
-            f"<td>{sig_badge}</td>"
-            f"<td>{entry_badge}</td>"
+            "        <tr>"
+            f'<td data-label="Engine">{html.escape(r["engine"])}</td>'
+            f'<td data-label="Paar">{html.escape(r["pair"])}</td>'
+            f'<td data-label="Bias">{html.escape(r["bias"])}</td>'
+            f'<td data-label="Final Quality">{fq_str}</td>'
+            f'<td data-label="Top-Signal">{top}</td>'
+            f'<td data-label="Konflikt">{konflikt}</td>'
+            f'<td data-label="Signal-Status">{sig_badge}</td>'
+            f'<td data-label="Entry-Status">{entry_badge}</td>'
             "</tr>"
         )
     return "\n".join(rows_html)
+
+
+def _hitrate_html(n_correct: int, n_total: int) -> str:
+    """HTML-Pendant zu evaluate_signals._fmt_pct() (Fix 30.08.2026) -
+    dieselbe MIN_FUER_PROZENT/MIN_STICHPROBE-Logik/Zahlen, aber als
+    Badge statt Klartext-Suffix."""
+    if n_total < evaluate_signals.MIN_FUER_PROZENT:
+        return (f'{n_correct} von {n_total} '
+                f'<span class="badge muted">kein Prozent bei n&lt;{evaluate_signals.MIN_FUER_PROZENT}</span>')
+    pct = 100 * n_correct / n_total
+    out = f'{n_correct}/{n_total} ({pct:.1f}%)'
+    if n_total < evaluate_signals.MIN_STICHPROBE:
+        out += ' <span class="badge muted">NICHT BELASTBAR</span>'
+    return out
+
+
+def _layer_section_html(title: str, counts_line: str, done_rows: list[dict], layer: str) -> str:
+    """Ein <div class="layer-status"> je Ebene: DONE/OPEN(-Zahlen),
+    Trefferquote, Pro-Paar-Tabelle (Fix 30.08.2026 - ersetzt den rohen
+    <pre>-Telegram-Text durch echtes HTML, gleiche zugrundeliegende
+    Berechnung wie build_weekly_report())."""
+    n = len(done_rows)
+    n_correct = sum(1 for r in done_rows if r["perf"][f"{layer}_direction_correct"] == 1)
+
+    pair_rows = []
+    for pair, (w, t) in sorted(evaluate_signals._pair_breakdown(done_rows, layer).items()):
+        pair_rows.append(f"          <tr><td>{html.escape(pair)}</td><td>{w}/{t}</td></tr>")
+
+    body = f'      <p class="counts">{counts_line}</p>\n'
+    if n == 0:
+        body += '      <p class="hitrate">Noch keine abgeschlossenen Fälle.</p>\n'
+    else:
+        body += f'      <p class="hitrate">Trefferquote: <strong>{_hitrate_html(n_correct, n)}</strong></p>\n'
+        if pair_rows:
+            body += (
+                '      <table class="pair-table">\n'
+                '        <tr><th>Paar</th><th>Win/Total</th></tr>\n'
+                + "\n".join(pair_rows) + "\n"
+                '      </table>\n'
+            )
+
+    return (
+        '    <div class="layer-status">\n'
+        f'      <h3>{html.escape(title)}</h3>\n'
+        f'{body}'
+        '    </div>\n'
+    )
+
+
+def _correlation_html(l1_done: list[dict], l2_done: list[dict]) -> str:
+    """Eigener hervorgehobener Absatz (Fix 30.08.2026) statt Teil des
+    rohen Textblocks - Zahlen/Kombinationen identisch zu
+    build_weekly_report()."""
+    combos1 = evaluate_signals._distinct_combos(l1_done)
+    combos2 = evaluate_signals._distinct_combos(l2_done)
+    if not l1_done and not l2_done:
+        return ""
+
+    parts = []
+    if l1_done:
+        combo_list = ", ".join(f"{html.escape(p)} {html.escape(b)}" for p, b in sorted(combos1))
+        parts.append(f"Ebene 1: {len(l1_done)} Fälle, aber nur {len(combos1)} unterschiedliche "
+                      f"Paar/Bias-Kombination(en) ({combo_list}).")
+    if l2_done:
+        combo_list = ", ".join(f"{html.escape(p)} {html.escape(b)}" for p, b in sorted(combos2))
+        parts.append(f"Ebene 2: {len(l2_done)} Fälle, aber nur {len(combos2)} unterschiedliche "
+                      f"Paar/Bias-Kombination(en) ({combo_list}).")
+    parts.append("Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte "
+                 "Wochen-Messungen derselben Markt-These, keine unabhängigen Beweise.")
+
+    return (
+        '    <p class="correlation-note">⚠️ <strong>Korrelations-Hinweis:</strong> '
+        + " ".join(parts) + "</p>\n"
+    )
+
+
+def _status_footer_html(results: list[dict]) -> str:
+    """Gesamt-Status-Sektion als strukturiertes HTML (Fix 30.08.2026,
+    ersetzt den rohen <pre>-Telegram-Text). Gleiche Zahlen/Berechnung wie
+    evaluate_signals.build_weekly_report() (Telegram-Bericht) - nur die
+    Darstellung unterscheidet sich."""
+    if not results:
+        return (
+            '  <section class="status-footer">\n'
+            '    <h2>Gesamt-Status (signal_performance)</h2>\n'
+            '    <p>Noch keine signal_performance-Daten vorhanden.</p>\n'
+            '  </section>'
+        )
+
+    l1_done = [r for r in results if r["perf"]["sig_status"] == "DONE"]
+    l1_open = [r for r in results if r["perf"]["sig_status"] == "OPEN"]
+    l2_done = [r for r in results if r["perf"]["entry_status"] == "DONE"]
+    l2_open = [r for r in results if r["perf"]["entry_status"] == "OPEN"]
+    l2_no_entry = [r for r in results if r["perf"]["entry_status"] == "NO_ENTRY"]
+
+    sec1 = _layer_section_html(
+        "Ebene 1 — Signal-Zeitpunkt",
+        f"DONE: {len(l1_done)} &nbsp;|&nbsp; OPEN: {len(l1_open)}",
+        l1_done, "sig",
+    )
+    sec2 = _layer_section_html(
+        "Ebene 2 — Erster Entry",
+        f"DONE: {len(l2_done)} &nbsp;|&nbsp; OPEN: {len(l2_open)} &nbsp;|&nbsp; NO_ENTRY: {len(l2_no_entry)}",
+        l2_done, "entry",
+    )
+    correlation = _correlation_html(l1_done, l2_done)
+
+    return (
+        '  <section class="status-footer">\n'
+        '    <h2>Gesamt-Status (signal_performance)</h2>\n'
+        f'{sec1}{sec2}{correlation}'
+        '  </section>'
+    )
 
 
 def render_html(weeks: list[dict], results: list[dict]) -> str:
@@ -141,34 +259,26 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
             blocks.append(
                 f"  <section>\n"
                 f"    <h2>KW {w['iso_week']}/{w['iso_year']} — {html.escape(w['date'])}</h2>\n"
-                f"    <table>\n"
-                f"      <tr><th>Engine</th><th>Paar</th><th>Bias</th>"
+                f"    <table class=\"week-table\">\n"
+                f"      <thead>\n"
+                f"        <tr><th>Engine</th><th>Paar</th><th>Bias</th>"
                 f"<th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th>"
                 f"<th>Signal-Status</th><th>Entry-Status</th></tr>\n"
+                f"      </thead>\n"
+                f"      <tbody>\n"
                 f"{_week_table(w, perf_by_id)}\n"
+                f"      </tbody>\n"
                 f"    </table>\n"
                 f"  </section>"
             )
         body = "\n\n".join(blocks)
 
     # Gesamt-Status ueber ALLE bisher ausgewerteten Faelle - dieselbe
-    # Berechnung/Formulierung wie im woechentlichen Telegram-Bericht
+    # Berechnung wie im woechentlichen Telegram-Bericht
     # (evaluate_signals.build_weekly_report), nicht nur die letzten
-    # MAX_WEEKS Karten oben. <b>-Tags aus der Telegram-Formatierung
-    # funktionieren als echtes HTML auch innerhalb von <pre>.
-    # build_weekly_report() liefert dieselben, intern erzeugten Werte
-    # (Paar/Bias/Zahlen), die an anderer Stelle in dieser Datei ebenfalls
-    # ungefiltert verwendet werden - kein externer/Nutzereingabe-Text,
-    # daher hier ohne zusaetzliches Escaping eingebettet (die <b>-Tags aus
-    # der Telegram-Formatierung sollen als echtes Bold-HTML wirken).
-    status_text = (evaluate_signals.build_weekly_report(results) if results
-                   else "Noch keine signal_performance-Daten vorhanden.")
-    footer = (
-        "  <section class=\"status-footer\">\n"
-        "    <h2>Gesamt-Status (signal_performance)</h2>\n"
-        f"    <pre>{status_text}</pre>\n"
-        "  </section>"
-    )
+    # MAX_WEEKS Karten oben. Seit Fix 30.08.2026 als strukturiertes HTML
+    # statt rohem <pre>-Telegram-Text (siehe _status_footer_html()).
+    footer = _status_footer_html(results)
 
     generiert = datetime.now().strftime("%Y-%m-%d %H:%M")
     return f"""<!doctype html>
@@ -178,18 +288,59 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
 <title>5MG Analyzer — Wochen-Engines</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  :root {{ --accent: #2563eb; --accent-dark: #1e3a8a; }}
   body {{ font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
           margin: 2rem auto; padding: 0 1rem; color: #222; }}
   h1 {{ margin-bottom: 0.2rem; }}
   .sub {{ color: #666; margin-top: 0; margin-bottom: 2rem; font-size: 0.9rem; }}
   section {{ margin-bottom: 2.5rem; }}
-  h2 {{ border-bottom: 2px solid #333; padding-bottom: 0.3rem; }}
+  h2 {{ border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); }}
+  h3 {{ color: var(--accent-dark); font-size: 1.05rem; margin-bottom: 0.4rem; }}
   table {{ border-collapse: collapse; width: 100%; }}
   th, td {{ text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }}
-  th {{ background: #f2f2f2; }}
+  th {{ background: #eef2ff; color: var(--accent-dark); font-weight: 600; }}
   tr:hover {{ background: #fafafa; }}
-  .status-footer pre {{ white-space: pre-wrap; font-family: inherit; font-size: 0.95rem;
-                         background: #f7f7f7; padding: 1rem; border-radius: 6px; }}
+
+  /* WIN/LOSS/OPEN-Badges (Fix 30.08.2026) - dezente Akzentfarben */
+  .badge {{ display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
+            border-radius: 4px; font-size: 0.92em; white-space: nowrap; }}
+  .badge.win   {{ color: #1a7f37; background: #e6f4ea; }}
+  .badge.loss  {{ color: #cf222e; background: #fde8e8; }}
+  .badge.open  {{ color: #9a6700; background: #fff6e0; }}
+  .badge.none  {{ color: #666;    background: #f2f2f2; }}
+  .badge.error {{ color: #cf222e; background: #fde8e8; }}
+  .badge.muted {{ color: #666;    background: #f2f2f2; font-weight: 500; }}
+
+  /* Gesamt-Status-Block als strukturiertes HTML (Fix 30.08.2026) */
+  .layer-status {{ margin-bottom: 1.5rem; }}
+  .layer-status:last-of-type {{ margin-bottom: 1rem; }}
+  .counts {{ margin: 0.2rem 0; }}
+  .hitrate {{ margin: 0.2rem 0 0.6rem 0; }}
+  .pair-table {{ width: 100%; max-width: 320px; }}
+  .pair-table th, .pair-table td {{ padding: 0.3rem 0.6rem; }}
+  .correlation-note {{ background: #fff8e6; border-left: 4px solid #b58105;
+                        padding: 0.75rem 1rem; border-radius: 4px; margin-top: 1rem; }}
+
+  /* Gestapelte Karten statt gequetschter Tabelle unter 600px (Fix 30.08.2026) */
+  @media (max-width: 600px) {{
+    .week-table thead {{ display: none; }}
+    .week-table, .week-table tbody, .week-table tr, .week-table td {{ display: block; width: 100%; }}
+    .week-table {{ border: none; }}
+    .week-table tr {{
+      margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
+      padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }}
+    .week-table td {{
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+    }}
+    .week-table td:last-child {{ border-bottom: none; }}
+    .week-table td::before {{
+      content: attr(data-label); font-weight: 600; color: #555;
+      text-align: left; flex-shrink: 0;
+    }}
+    .pair-table {{ max-width: 100%; }}
+  }}
 </style>
 </head>
 <body>
