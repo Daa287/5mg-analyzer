@@ -37,6 +37,11 @@
   .pair-table th, .pair-table td { padding: 0.3rem 0.6rem; }
   .correlation-note { background: #fff8e6; border-left: 4px solid #b58105;
                         padding: 0.75rem 1rem; border-radius: 4px; margin-top: 1rem; }
+  .correlation-title { margin: 0 0 0.5rem 0; }
+  .correlation-note ul { margin: 0 0 0.6rem 0; padding-left: 1.3rem; }
+  .correlation-note li { margin: 0.25rem 0; }
+  .correlation-conclusion { margin: 0.6rem 0 0 0; font-weight: 600;
+                              border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.6rem; }
 
   /* Gestapelte Karten statt gequetschter Tabelle unter 600px (Fix 30.08.2026) */
   @media (max-width: 600px) {
@@ -62,7 +67,7 @@
 </head>
 <body>
   <h1>5MG Analyzer — Wochen-Engines</h1>
-  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-30 08:21</p>
+  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-30 08:30</p>
   <section>
     <h2>KW 35/2026 — 2026-08-28</h2>
     <table class="week-table">
@@ -131,7 +136,14 @@
           <tr><td>USD/CHF</td><td>2/2</td></tr>
       </table>
     </div>
-    <p class="correlation-note">⚠️ <strong>Korrelations-Hinweis:</strong> Ebene 1: 21 Fälle, aber nur 5 unterschiedliche Paar/Bias-Kombination(en) (GBP/USD LONG, NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT, USD/JPY SHORT). Ebene 2: 6 Fälle, aber nur 3 unterschiedliche Paar/Bias-Kombination(en) (NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT). Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine unabhängigen Beweise.</p>
+    <div class="correlation-note">
+      <p class="correlation-title">⚠️ <strong>Korrelations-Hinweis</strong></p>
+      <ul>
+        <li>Ebene 1: 21 Fälle, aber nur 5 unterschiedliche Paar/Bias-Kombination(en) (GBP/USD LONG, NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT, USD/JPY SHORT).</li>
+        <li>Ebene 2: 6 Fälle, aber nur 3 unterschiedliche Paar/Bias-Kombination(en) (NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT).</li>
+      </ul>
+      <p class="correlation-conclusion">Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine unabhängigen Beweise.</p>
+    </div>
   </section>
 </body>
 </html>
