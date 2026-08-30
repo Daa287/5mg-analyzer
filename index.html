@@ -15,39 +15,67 @@
   th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
   th { background: #f2f2f2; }
   tr:hover { background: #fafafa; }
+  .status-footer pre { white-space: pre-wrap; font-family: inherit; font-size: 0.95rem;
+                         background: #f7f7f7; padding: 1rem; border-radius: 6px; }
 </style>
 </head>
 <body>
   <h1>5MG Analyzer — Wochen-Engines</h1>
-  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-28 23:15</p>
+  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert 2026-08-30 07:58</p>
   <section>
     <h2>KW 35/2026 — 2026-08-28</h2>
     <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th></tr>
-      <tr><td>Basis-Signal</td><td>NZD/USD</td><td>SHORT</td><td>31.0</td><td>–</td><td>–</td></tr>
-      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>63.0</td><td>🏆 Top</td><td>–</td></tr>
-      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>58.5</td><td>–</td><td>–</td></tr>
+      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      <tr><td>Basis-Signal</td><td>NZD/USD</td><td>SHORT</td><td>31.0</td><td>–</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
+      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>63.0</td><td>🏆 Top</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
+      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>58.5</td><td>–</td><td>–</td><td>⏳ OPEN</td><td>– kein Entry</td></tr>
     </table>
   </section>
 
   <section>
     <h2>KW 34/2026 — 2026-08-21</h2>
     <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th></tr>
-      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>69.0</td><td>🏆 Top</td><td>–</td></tr>
-      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>61.3</td><td>–</td><td>–</td></tr>
-      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>60.4</td><td>–</td><td>–</td></tr>
+      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>69.0</td><td>🏆 Top</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
+      <tr><td>Fluss-Signal</td><td>USD/JPY</td><td>SHORT</td><td>61.3</td><td>–</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
+      <tr><td>Kombi-Signal</td><td>GBP/USD</td><td>LONG</td><td>60.4</td><td>–</td><td>–</td><td>❌ LOSS</td><td>⏳ OPEN</td></tr>
     </table>
   </section>
 
   <section>
     <h2>KW 33/2026 — 2026-08-15</h2>
     <table>
-      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th></tr>
-      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>80.0</td><td>🏆 Top</td><td>–</td></tr>
-      <tr><td>Fluss-Signal</td><td>NZD/USD</td><td>LONG</td><td>65.8</td><td>–</td><td>–</td></tr>
-      <tr><td>Kombi-Signal</td><td>USD/CHF</td><td>SHORT</td><td>66.4</td><td>–</td><td>–</td></tr>
+      <tr><th>Engine</th><th>Paar</th><th>Bias</th><th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th><th>Signal-Status</th><th>Entry-Status</th></tr>
+      <tr><td>Basis-Signal</td><td>USD/CAD</td><td>SHORT</td><td>80.0</td><td>🏆 Top</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
+      <tr><td>Fluss-Signal</td><td>NZD/USD</td><td>LONG</td><td>65.8</td><td>–</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
+      <tr><td>Kombi-Signal</td><td>USD/CHF</td><td>SHORT</td><td>66.4</td><td>–</td><td>–</td><td>✅ WIN</td><td>✅ WIN</td></tr>
     </table>
+  </section>
+
+  <section class="status-footer">
+    <h2>Gesamt-Status (signal_performance)</h2>
+    <pre>📊 <b>Wöchentlicher Signal-Statusbericht — 30.08.2026</b>
+
+<b>Ebene 1 — Signal-Zeitpunkt</b>
+  DONE: 21 | OPEN: 3
+  Trefferquote: 12/21 (57.1%, NICHT BELASTBAR)
+    GBP/USD: 0/1
+    NZD/USD: 3/6
+    USD/CAD: 6/7
+    USD/CHF: 3/6
+    USD/JPY: 0/1
+
+<b>Ebene 2 — Erster Entry</b>
+  DONE: 6 | OPEN: 3 | NO_ENTRY: 15
+  Trefferquote: 6 von 6 (absolute Zahl, kein Prozent bei n<10)
+    NZD/USD: 2/2
+    USD/CAD: 2/2
+    USD/CHF: 2/2
+
+<b>⚠️ Korrelations-Hinweis</b>
+  Ebene 1: 21 Fälle, aber nur 5 unterschiedliche Paar/Bias-Kombination(en) (GBP/USD LONG, NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT, USD/JPY SHORT).
+  Ebene 2: 6 Fälle, aber nur 3 unterschiedliche Paar/Bias-Kombination(en) (NZD/USD LONG, USD/CAD SHORT, USD/CHF SHORT).
+  → Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine 18/6 unabhängigen Beweise.</pre>
   </section>
 </body>
 </html>
