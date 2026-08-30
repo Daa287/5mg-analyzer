@@ -183,29 +183,33 @@ def _layer_section_html(title: str, counts_line: str, done_rows: list[dict], lay
 
 
 def _correlation_html(l1_done: list[dict], l2_done: list[dict]) -> str:
-    """Eigener hervorgehobener Absatz (Fix 30.08.2026) statt Teil des
-    rohen Textblocks - Zahlen/Kombinationen identisch zu
-    build_weekly_report()."""
+    """Klar strukturierter Block (Fix 30.08.2026, ueberarbeitet): eigene
+    Ueberschriftszeile, Ebene 1/Ebene 2 als getrennte Listenpunkte statt
+    Fliesstext, Merksatz als eigene hervorgehobene Schlusszeile darunter.
+    Inhalt/Zahlen unveraendert identisch zu build_weekly_report()."""
     combos1 = evaluate_signals._distinct_combos(l1_done)
     combos2 = evaluate_signals._distinct_combos(l2_done)
     if not l1_done and not l2_done:
         return ""
 
-    parts = []
+    items = []
     if l1_done:
         combo_list = ", ".join(f"{html.escape(p)} {html.escape(b)}" for p, b in sorted(combos1))
-        parts.append(f"Ebene 1: {len(l1_done)} Fälle, aber nur {len(combos1)} unterschiedliche "
-                      f"Paar/Bias-Kombination(en) ({combo_list}).")
+        items.append(f"        <li>Ebene 1: {len(l1_done)} Fälle, aber nur {len(combos1)} "
+                      f"unterschiedliche Paar/Bias-Kombination(en) ({combo_list}).</li>")
     if l2_done:
         combo_list = ", ".join(f"{html.escape(p)} {html.escape(b)}" for p, b in sorted(combos2))
-        parts.append(f"Ebene 2: {len(l2_done)} Fälle, aber nur {len(combos2)} unterschiedliche "
-                      f"Paar/Bias-Kombination(en) ({combo_list}).")
-    parts.append("Fallzahl ≠ unabhängige Tests. Bei wenigen Kombinationen sind wiederholte "
-                 "Wochen-Messungen derselben Markt-These, keine unabhängigen Beweise.")
+        items.append(f"        <li>Ebene 2: {len(l2_done)} Fälle, aber nur {len(combos2)} "
+                      f"unterschiedliche Paar/Bias-Kombination(en) ({combo_list}).</li>")
 
     return (
-        '    <p class="correlation-note">⚠️ <strong>Korrelations-Hinweis:</strong> '
-        + " ".join(parts) + "</p>\n"
+        '    <div class="correlation-note">\n'
+        '      <p class="correlation-title">⚠️ <strong>Korrelations-Hinweis</strong></p>\n'
+        '      <ul>\n' + "\n".join(items) + '\n      </ul>\n'
+        '      <p class="correlation-conclusion">Fallzahl ≠ unabhängige Tests. Bei wenigen '
+        'Kombinationen sind wiederholte Wochen-Messungen derselben Markt-These, keine '
+        'unabhängigen Beweise.</p>\n'
+        '    </div>\n'
     )
 
 
@@ -320,6 +324,11 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
   .pair-table th, .pair-table td {{ padding: 0.3rem 0.6rem; }}
   .correlation-note {{ background: #fff8e6; border-left: 4px solid #b58105;
                         padding: 0.75rem 1rem; border-radius: 4px; margin-top: 1rem; }}
+  .correlation-title {{ margin: 0 0 0.5rem 0; }}
+  .correlation-note ul {{ margin: 0 0 0.6rem 0; padding-left: 1.3rem; }}
+  .correlation-note li {{ margin: 0.25rem 0; }}
+  .correlation-conclusion {{ margin: 0.6rem 0 0 0; font-weight: 600;
+                              border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.6rem; }}
 
   /* Gestapelte Karten statt gequetschter Tabelle unter 600px (Fix 30.08.2026) */
   @media (max-width: 600px) {{
