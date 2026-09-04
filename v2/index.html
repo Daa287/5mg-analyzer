@@ -25,6 +25,16 @@
   .badge.tier-b { color: #9a6700; background: #fff6e0; }
   .badge.tier-c { color: #666;    background: #f2f2f2; }
 
+  /* Gate als eigener, voller-Breite-Block UNTER der Zeile statt gequetschter
+     Inline-Zelle (Fix: mobile Ansicht zeigte rohen Grund-Code + quetschte
+     alles in eine Zeile). */
+  .gate-block { padding: 0.6rem 0.9rem; border-radius: 6px; font-weight: 600;
+                  font-size: 0.95em; }
+  .gate-block.win  { background: #e6f4ea; color: #1a7f37; border-left: 4px solid #1a7f37; }
+  .gate-block.loss { background: #fde8e8; color: #cf222e; border-left: 4px solid #cf222e; }
+  .gate-block.open { background: #fff6e0; color: #9a6700; border-left: 4px solid #9a6700; }
+  .week-table tr.gate-row td { padding: 0 0 0.7rem 0; border-bottom: none; }
+
   @media (max-width: 600px) {
     .week-table thead { display: none; }
     .week-table, .week-table tbody, .week-table tr, .week-table td { display: block; width: 100%; }
@@ -42,12 +52,21 @@
       content: attr(data-label); font-weight: 600; color: #555;
       text-align: left; flex-shrink: 0;
     }
+    /* Gate-Detailzeile: kein Karten-Rahmen, kein Label-Präfix, volle Breite -
+       reiner Fliesstext-Block direkt unter der zugehörigen Paar-Karte. */
+    .week-table tr.gate-row {
+      border: none; margin: -0.6rem 0 1rem 0; padding: 0; box-shadow: none;
+    }
+    .week-table tr.gate-row td {
+      display: block; text-align: left; padding: 0; border-bottom: none;
+    }
+    .week-table tr.gate-row td::before { content: none; }
   }
 </style>
 </head>
 <body>
   <h1>5MG v2 TEST</h1>
-  <p class="sub">Market Pulse + Entry Gate + Quality Tiers · generiert 2026-09-04 22:26</p>
+  <p class="sub">Market Pulse + Entry Gate + Quality Tiers · generiert 2026-09-04 22:50</p>
   <div class="test-banner">
     🧪 TESTVERSION — komplett parallel zum produktiven 5MG-System, KEINE
     Kauf-/Verkaufssignale, KEINE Positionsgröße, KEIN SL. Eigene, transparent
@@ -55,12 +74,15 @@
   </div>
   <table class="week-table">
     <thead>
-      <tr><th>Paar</th><th>Bias</th><th>Engine</th><th>Final Quality</th><th>Tier</th><th>Market Pulse</th><th>Gate</th></tr>
+      <tr><th>Paar</th><th>Bias</th><th>Engine</th><th>Final Quality</th><th>Tier</th><th>Market Pulse</th></tr>
     </thead>
     <tbody>
-        <tr><td data-label="Paar">USD/JPY</td><td data-label="Bias">SHORT</td><td data-label="Engine">Fluss-Signal</td><td data-label="Final Quality">63.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td><td data-label="Gate"><span class="badge win">✅ bestätigt (Readiness 4/4, Zone: bestätigt)</span></td></tr>
-        <tr><td data-label="Paar">GBP/USD</td><td data-label="Bias">LONG</td><td data-label="Engine">Kombi-Signal</td><td data-label="Final Quality">58.5</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">läuft dagegen</td><td data-label="Gate"><span class="badge loss">❌ market_pulse_nicht_bestaetigt</span></td></tr>
-        <tr><td data-label="Paar">NZD/USD</td><td data-label="Bias">SHORT</td><td data-label="Engine">Basis-Signal</td><td data-label="Final Quality">31.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td><td data-label="Gate"><span class="badge loss">❌ hard_gate_h4_h1_gegen_bias</span></td></tr>
+        <tr><td data-label="Paar">USD/JPY</td><td data-label="Bias">SHORT</td><td data-label="Engine">Fluss-Signal</td><td data-label="Final Quality">63.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td></tr>
+        <tr class="gate-row"><td colspan="6"><div class="gate-block win">Gate: ✅ bestätigt (Readiness 4/4, Zone: bestätigt)</div></td></tr>
+        <tr><td data-label="Paar">GBP/USD</td><td data-label="Bias">LONG</td><td data-label="Engine">Kombi-Signal</td><td data-label="Final Quality">58.5</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">läuft dagegen</td></tr>
+        <tr class="gate-row"><td colspan="6"><div class="gate-block loss">Gate: ❌ Wird noch nicht vom Markt bestätigt</div></td></tr>
+        <tr><td data-label="Paar">NZD/USD</td><td data-label="Bias">SHORT</td><td data-label="Engine">Basis-Signal</td><td data-label="Final Quality">31.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td></tr>
+        <tr class="gate-row"><td colspan="6"><div class="gate-block loss">Gate: ❌ H4/H1-Trend läuft aktuell gegen den Bias</div></td></tr>
     </tbody>
   </table>
 </body>

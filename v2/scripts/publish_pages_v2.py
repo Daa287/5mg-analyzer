@@ -52,14 +52,12 @@ def _tier_badge(tier: str) -> str:
     return f'<span class="badge {cls}">{html.escape(tier)}</span>'
 
 
-def _gate_badge(gate_status_text: str) -> str:
-    if gate_status_text.startswith("✅"):
-        cls = "win"
-    elif gate_status_text.startswith("❌"):
-        cls = "loss"
-    else:
-        cls = "open"
-    return f'<span class="badge {cls}">{html.escape(gate_status_text)}</span>'
+def _gate_class(row: dict) -> str:
+    if row["gate_status"] == "bestaetigt":
+        return "win"
+    if row["gate_status"] == "abgelehnt":
+        return "loss"
+    return "open"
 
 
 def render_html_v2(rows: list[dict]) -> str:
@@ -68,6 +66,8 @@ def render_html_v2(rows: list[dict]) -> str:
     else:
         trs = []
         for r in rows:
+            gate_text = report_v2.format_gate_text(r)  # gemeinsame Quelle mit Telegram, siehe report_v2.py
+            gate_cls = _gate_class(r)
             trs.append(
                 "        <tr>"
                 f'<td data-label="Paar">{html.escape(r["pair"])}</td>'
@@ -76,14 +76,20 @@ def render_html_v2(rows: list[dict]) -> str:
                 f'<td data-label="Final Quality">{r["final_quality"]:.1f}</td>'
                 f'<td data-label="Tier">{_tier_badge(r["tier"])}</td>'
                 f'<td data-label="Market Pulse">{html.escape(r["market_pulse_status"])}</td>'
-                f'<td data-label="Gate">{_gate_badge(r["gate_status_text"])}</td>'
-                "</tr>"
+                "</tr>\n"
+                # Gate als eigene, volle-Breite-Detailzeile UNTER der Haupt-
+                # zeile (colspan-Trick) statt gequetschter Inline-Zelle -
+                # dieselbe Optik auf Desktop (Tabelle) wie Mobile (Card),
+                # siehe .gate-row/.gate-block-CSS unten.
+                f'        <tr class="gate-row"><td colspan="6">'
+                f'<div class="gate-block {gate_cls}">Gate: {html.escape(gate_text)}</div>'
+                "</td></tr>"
             )
         body = (
             '  <table class="week-table">\n'
             '    <thead>\n'
             '      <tr><th>Paar</th><th>Bias</th><th>Engine</th><th>Final Quality</th>'
-            '<th>Tier</th><th>Market Pulse</th><th>Gate</th></tr>\n'
+            '<th>Tier</th><th>Market Pulse</th></tr>\n'
             '    </thead>\n'
             '    <tbody>\n' + "\n".join(trs) + '\n    </tbody>\n'
             '  </table>'
@@ -117,6 +123,16 @@ def render_html_v2(rows: list[dict]) -> str:
   .badge.tier-b {{ color: #9a6700; background: #fff6e0; }}
   .badge.tier-c {{ color: #666;    background: #f2f2f2; }}
 
+  /* Gate als eigener, voller-Breite-Block UNTER der Zeile statt gequetschter
+     Inline-Zelle (Fix: mobile Ansicht zeigte rohen Grund-Code + quetschte
+     alles in eine Zeile). */
+  .gate-block {{ padding: 0.6rem 0.9rem; border-radius: 6px; font-weight: 600;
+                  font-size: 0.95em; }}
+  .gate-block.win  {{ background: #e6f4ea; color: #1a7f37; border-left: 4px solid #1a7f37; }}
+  .gate-block.loss {{ background: #fde8e8; color: #cf222e; border-left: 4px solid #cf222e; }}
+  .gate-block.open {{ background: #fff6e0; color: #9a6700; border-left: 4px solid #9a6700; }}
+  .week-table tr.gate-row td {{ padding: 0 0 0.7rem 0; border-bottom: none; }}
+
   @media (max-width: 600px) {{
     .week-table thead {{ display: none; }}
     .week-table, .week-table tbody, .week-table tr, .week-table td {{ display: block; width: 100%; }}
@@ -134,6 +150,15 @@ def render_html_v2(rows: list[dict]) -> str:
       content: attr(data-label); font-weight: 600; color: #555;
       text-align: left; flex-shrink: 0;
     }}
+    /* Gate-Detailzeile: kein Karten-Rahmen, kein Label-Präfix, volle Breite -
+       reiner Fliesstext-Block direkt unter der zugehörigen Paar-Karte. */
+    .week-table tr.gate-row {{
+      border: none; margin: -0.6rem 0 1rem 0; padding: 0; box-shadow: none;
+    }}
+    .week-table tr.gate-row td {{
+      display: block; text-align: left; padding: 0; border-bottom: none;
+    }}
+    .week-table tr.gate-row td::before {{ content: none; }}
   }}
 </style>
 </head>

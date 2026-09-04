@@ -106,6 +106,29 @@ def _zone_from_readiness(readiness: int | None) -> str | None:
     return "bestätigt"
 
 
+# Klartext-Übersetzung der rohen Gate-Ablehnungsgründe (Fix: mobile Ansicht
+# zeigte bisher den internen Code statt Klartext). EINE gemeinsame Quelle
+# für report_v2.py (Telegram) UND publish_pages_v2.py (Website, importiert
+# report_v2 bereits für build_rows()) - keine Duplikation. Fallback für
+# unbekannte Codes: roh anzeigen statt zu crashen (siehe format_gate_text()).
+GATE_GRUND_TEXT = {
+    "market_pulse_nicht_bestaetigt": "Wird noch nicht vom Markt bestätigt",
+    "hard_gate_h4_h1_gegen_bias": "H4/H1-Trend läuft aktuell gegen den Bias",
+}
+
+
+def format_gate_text(row: dict) -> str:
+    """Menschenlesbarer Gate-Text aus den rohen build_rows()-Feldern -
+    bestätigt-Fall unverändert, Ablehnungsgründe jetzt über
+    GATE_GRUND_TEXT übersetzt statt als Rohcode gezeigt."""
+    if row["gate_status"] == "noch_nicht_geprueft":
+        return "noch nicht geprüft"
+    if row["gate_status"] == "bestaetigt":
+        return f"✅ bestätigt (Readiness {row['gate_readiness']}/4, Zone: {row['gate_zone']})"
+    grund_text = GATE_GRUND_TEXT.get(row["gate_grund_code"], row["gate_grund_code"])
+    return f"❌ {grund_text}"
+
+
 def build_rows() -> list[dict]:
     signals = get_latest_signals()
     pulses = latest_market_pulse_by_pair()
@@ -121,11 +144,16 @@ def build_rows() -> list[dict]:
 
         gate = gates.get(pair)
         if gate is None:
-            gate_status_text = "noch nicht geprüft"
+            gate_status, gate_passed = "noch_nicht_geprueft", None
+            gate_readiness = gate_zone = gate_grund_code = None
         elif gate["gate_passed"]:
-            zone = _zone_from_readiness(gate["readiness"])
-            gate_status_text = f"✅ bestätigt (Readiness {gate['readiness']}/4, Zone: {zone})"
+            gate_status, gate_passed = "bestaetigt", True
+            gate_readiness = gate["readiness"]
+            gate_zone = _zone_from_readiness(gate["readiness"])
+            gate_grund_code = None
         else:
+            gate_status, gate_passed = "abgelehnt", False
+            gate_readiness = gate_zone = None
             # entry_readiness_checks_v2 speichert keine eigene "grund"-Spalte
             # (siehe CONTRACT.md) - der Ablehnungsgrund ist aber aus dem zum
             # Zeitpunkt der Gate-Prüfung GESPEICHERTEN market_pulse_status
@@ -134,15 +162,17 @@ def build_rows() -> list[dict]:
             # (M15/Momentum wird bei "bestätigt sich" + Hard-Gate-Fail nie
             # erreicht, also gibt es keinen dritten Fehlerfall hier).
             if gate["market_pulse_status"] != "bestätigt sich":
-                gate_status_text = "❌ market_pulse_nicht_bestaetigt"
+                gate_grund_code = "market_pulse_nicht_bestaetigt"
             else:
-                gate_status_text = "❌ hard_gate_h4_h1_gegen_bias"
+                gate_grund_code = "hard_gate_h4_h1_gegen_bias"
 
         out.append({
             "pair": pair, "bias": s["bias"], "engine": s["engine"],
             "final_quality": s["final_quality"], "tier": tier,
             "market_pulse_status": market_pulse_status,
-            "gate_status_text": gate_status_text,
+            "gate_status": gate_status, "gate_passed": gate_passed,
+            "gate_readiness": gate_readiness, "gate_zone": gate_zone,
+            "gate_grund_code": gate_grund_code,
         })
     return out
 
@@ -177,7 +207,7 @@ def build_message(rows: list[dict]) -> str:
         lines.append(f"<b>{_esc(r['pair'])}</b> {_esc(r['bias'])} — {_esc(r['engine'])}")
         lines.append(f"  Tier: {_esc(r['tier'])} (final_quality {r['final_quality']:.1f})")
         lines.append(f"  Market Pulse: {_esc(r['market_pulse_status'])}")
-        lines.append(f"  Gate: {_esc(r['gate_status_text'])}")
+        lines.append(f"  Gate: {_esc(format_gate_text(r))}")
         lines.append("")
     lines.extend(performance_summary_lines())
     return "\n".join(lines).rstrip()
