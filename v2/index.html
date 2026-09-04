@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>5MG v2 TEST — Market Pulse / Entry Gate / Quality Tiers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --accent: #b45309; --accent-dark: #7c2d12; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
+          margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin-bottom: 0.2rem; }
+  .sub { color: #666; margin-top: 0; margin-bottom: 1rem; font-size: 0.9rem; }
+  .test-banner { background: #fff3cd; border: 2px solid #b45309; border-radius: 8px;
+                   padding: 0.9rem 1.2rem; margin-bottom: 2rem; font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
+  th { background: #fef3e2; color: var(--accent-dark); font-weight: 600; }
+  tr:hover { background: #fafafa; }
+  .badge { display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
+            border-radius: 4px; font-size: 0.92em; white-space: nowrap; }
+  .badge.win  { color: #1a7f37; background: #e6f4ea; }
+  .badge.loss { color: #cf222e; background: #fde8e8; }
+  .badge.open { color: #9a6700; background: #fff6e0; }
+  .badge.tier-a { color: #1a7f37; background: #e6f4ea; }
+  .badge.tier-b { color: #9a6700; background: #fff6e0; }
+  .badge.tier-c { color: #666;    background: #f2f2f2; }
+
+  @media (max-width: 600px) {
+    .week-table thead { display: none; }
+    .week-table, .week-table tbody, .week-table tr, .week-table td { display: block; width: 100%; }
+    .week-table { border: none; }
+    .week-table tr {
+      margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
+      padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .week-table td {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+    }
+    .week-table td:last-child { border-bottom: none; }
+    .week-table td::before {
+      content: attr(data-label); font-weight: 600; color: #555;
+      text-align: left; flex-shrink: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>5MG v2 TEST</h1>
+  <p class="sub">Market Pulse + Entry Gate + Quality Tiers · generiert 2026-09-04 22:26</p>
+  <div class="test-banner">
+    🧪 TESTVERSION — komplett parallel zum produktiven 5MG-System, KEINE
+    Kauf-/Verkaufssignale, KEINE Positionsgröße, KEIN SL. Eigene, transparent
+    gewählte Schwellen/Skalen, KEIN Nachbau der Original-Formel.
+  </div>
+  <table class="week-table">
+    <thead>
+      <tr><th>Paar</th><th>Bias</th><th>Engine</th><th>Final Quality</th><th>Tier</th><th>Market Pulse</th><th>Gate</th></tr>
+    </thead>
+    <tbody>
+        <tr><td data-label="Paar">USD/JPY</td><td data-label="Bias">SHORT</td><td data-label="Engine">Fluss-Signal</td><td data-label="Final Quality">63.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td><td data-label="Gate"><span class="badge win">✅ bestätigt (Readiness 4/4, Zone: bestätigt)</span></td></tr>
+        <tr><td data-label="Paar">GBP/USD</td><td data-label="Bias">LONG</td><td data-label="Engine">Kombi-Signal</td><td data-label="Final Quality">58.5</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">läuft dagegen</td><td data-label="Gate"><span class="badge loss">❌ market_pulse_nicht_bestaetigt</span></td></tr>
+        <tr><td data-label="Paar">NZD/USD</td><td data-label="Bias">SHORT</td><td data-label="Engine">Basis-Signal</td><td data-label="Final Quality">31.0</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td><td data-label="Gate"><span class="badge loss">❌ hard_gate_h4_h1_gegen_bias</span></td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

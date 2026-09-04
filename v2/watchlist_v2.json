@@ -1,0 +1,33 @@
+{
+  "generated_ts": "2026-09-04 22:26:34",
+  "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
+  "signals": [
+    {
+      "pair": "USD/JPY",
+      "bias": "SHORT",
+      "engine": "Fluss-Signal",
+      "final_quality": 63.0,
+      "tier": "C",
+      "market_pulse_status": "bestätigt sich",
+      "gate_status_text": "✅ bestätigt (Readiness 4/4, Zone: bestätigt)"
+    },
+    {
+      "pair": "GBP/USD",
+      "bias": "LONG",
+      "engine": "Kombi-Signal",
+      "final_quality": 58.5,
+      "tier": "C",
+      "market_pulse_status": "läuft dagegen",
+      "gate_status_text": "❌ market_pulse_nicht_bestaetigt"
+    },
+    {
+      "pair": "NZD/USD",
+      "bias": "SHORT",
+      "engine": "Basis-Signal",
+      "final_quality": 31.0,
+      "tier": "C",
+      "market_pulse_status": "bestätigt sich",
+      "gate_status_text": "❌ hard_gate_h4_h1_gegen_bias"
+    }
+  ]
+}
