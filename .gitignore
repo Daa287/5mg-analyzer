@@ -11,6 +11,11 @@ scripts/entry_monitor.py
 scripts/run_daily_yield_fetch.py
 scripts/evaluate_signals.py
 
+# Lokales Aenderungsprotokoll fuer die 7 sensiblen Module oben - enthaelt
+# selbst keine Formel-/Gewichte-Inhalte, wird aber bewusst mit-ignoriert,
+# damit es nie versehentlich zusammen mit den 7 Dateien gepusht wird.
+scripts/CHANGELOG_5MG_SENSITIVE.md
+
 # Backups/Cache, die ohnehin nicht committet werden sollen.
 *.bak_*
 scripts/__pycache__/
