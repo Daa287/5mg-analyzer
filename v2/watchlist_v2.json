@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-09-04 22:50:34",
+  "generated_ts": "2026-09-06 09:22:08",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -19,7 +19,7 @@
       "pair": "GBP/USD",
       "bias": "LONG",
       "engine": "Kombi-Signal",
-      "final_quality": 58.5,
+      "final_quality": 57.4,
       "tier": "C",
       "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
@@ -32,7 +32,7 @@
       "pair": "NZD/USD",
       "bias": "SHORT",
       "engine": "Basis-Signal",
-      "final_quality": 31.0,
+      "final_quality": 30.8,
       "tier": "C",
       "market_pulse_status": "bestätigt sich",
       "gate_status": "abgelehnt",
