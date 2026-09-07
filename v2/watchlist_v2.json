@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-09-06 20:20:03",
+  "generated_ts": "2026-09-07 20:20:03",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -21,12 +21,12 @@
       "engine": "Kombi-Signal",
       "final_quality": 57.4,
       "tier": "C",
-      "market_pulse_status": "läuft dagegen",
-      "gate_status": "abgelehnt",
-      "gate_passed": false,
-      "gate_readiness": null,
-      "gate_zone": null,
-      "gate_grund_code": "market_pulse_nicht_bestaetigt"
+      "market_pulse_status": "bestätigt sich",
+      "gate_status": "bestaetigt",
+      "gate_passed": true,
+      "gate_readiness": 2,
+      "gate_zone": "setup_möglich",
+      "gate_grund_code": null
     },
     {
       "pair": "NZD/USD",
@@ -34,12 +34,12 @@
       "engine": "Basis-Signal",
       "final_quality": 30.8,
       "tier": "C",
-      "market_pulse_status": "bestätigt sich",
+      "market_pulse_status": "neutral",
       "gate_status": "abgelehnt",
       "gate_passed": false,
       "gate_readiness": null,
       "gate_zone": null,
-      "gate_grund_code": "hard_gate_h4_h1_gegen_bias"
+      "gate_grund_code": "market_pulse_nicht_bestaetigt"
     }
   ]
 }
