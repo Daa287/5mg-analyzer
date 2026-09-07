@@ -78,6 +78,38 @@ CREATE TABLE IF NOT EXISTS signal_performance_v2 (
     UNIQUE(pair, bias, engine)
 );
 CREATE INDEX IF NOT EXISTS idx_spv2_pair ON signal_performance_v2(pair);
+
+-- Isolierter Flow-Momentum-Tracker OHNE change_4w-Komponente (siehe
+-- flow_momentum_v2.py, Rueckfrage/Auftrag 08.09.2026, Backtest-Referenz
+-- reports/backtest_5mg_lauf_2026-09-07.md Abschnitt 6-9). Ein Signal pro
+-- COT-Report-Woche (UNIQUE(stichtag)) - schlanker, eigenstaendiger
+-- Tracker, NICHT ins Market-Pulse-/Gate-/Tier-System eingehaengt.
+-- v1_pair/v1_bias/v1_score = zum Vergleich der zeitgleiche Pick von v1
+-- (altes Gewicht, aus weekly_engine_signals uebernommen) fuer dieselbe
+-- Woche - macht den spaeteren Live-Vergleich direkt ablesbar, ohne
+-- separaten Join.
+CREATE TABLE IF NOT EXISTS flow_momentum_v2_signals (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    stichtag          TEXT NOT NULL,   -- COT-Positions-Stichtag (Dienstag)
+    ts                TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    ccy               TEXT NOT NULL,
+    pair              TEXT NOT NULL,
+    bias              TEXT NOT NULL,
+    score             REAL NOT NULL,   -- mit neuem Gewicht (change_4w entfernt)
+    v1_pair           TEXT,
+    v1_bias           TEXT,
+    v1_score          REAL,
+    kurs_bei_signal   REAL,
+    kurs_5d           REAL,
+    korrekt_5d        INTEGER,         -- 0/1, NULL = noch offen
+    kurs_14d          REAL,
+    korrekt_14d       INTEGER,
+    kurs_28d          REAL,
+    korrekt_28d       INTEGER,
+    ausgewertet_am    TEXT,
+    UNIQUE(stichtag)
+);
+CREATE INDEX IF NOT EXISTS idx_fmv2_stichtag ON flow_momentum_v2_signals(stichtag);
 """
 
 
