@@ -19,13 +19,20 @@ from __future__ import annotations
 import csv
 import io
 import json
-import time
+import sys
 import zipfile
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-MAX_CACHE_AGE_DAYS = 7
+SCRIPTS_DIR = Path(__file__).resolve().parent
+BACKTEST_DIR = SCRIPTS_DIR / "backtest"
+sys.path.insert(0, str(BACKTEST_DIR))
+from cftc_release_calendar import veroeffentlichungsdatum  # Auftrag 13.09.2026, siehe download_year()
+
+MAX_CACHE_AGE_DAYS = 7  # NICHT mehr fuer den Refresh-Trigger genutzt (siehe download_year()) -
+                         # nur noch als Fallback-Obergrenze belassen, falls veroeffentlichungsdatum()
+                         # je eine Ausnahme werfen sollte (siehe unten).
 
 # CFTC-Kontraktnamen -> unsere Kürzel (Legacy "Futures Only" Report)
 CONTRACT_MAP = {
@@ -52,15 +59,51 @@ def _cache_dir() -> Path:
     return DEFAULT_CACHE_DIR
 
 
+def _juengster_dienstag(bezug: "datetime.date") -> "datetime.date":
+    """Aktueller/juengster Dienstag <= bezug (weekday(): Montag=0, Dienstag=1)."""
+    return bezug - timedelta(days=(bezug.weekday() - 1) % 7)
+
+
+def _neuester_veroeffentlichter_stichtag(jetzt: "datetime.date") -> "datetime.date":
+    """Waelzt vom aktuellen Datum rueckwaerts zum juengsten Dienstags-
+    Stichtag (bzw. Ausnahme-Stichtag), dessen Report laut
+    cftc_release_calendar.veroeffentlichungsdatum() zum Zeitpunkt `jetzt`
+    bereits veroeffentlicht sein sollte. Wiederverwendet dieselbe
+    Ausnahmeliste wie der Backtest (Feiertage/Montags-Substitution),
+    keine zweite, separate Kalenderlogik (Auftrag 13.09.2026)."""
+    kandidat = _juengster_dienstag(jetzt)
+    while veroeffentlichungsdatum(kandidat) > jetzt:
+        kandidat -= timedelta(days=7)
+    return kandidat
+
+
 def download_year(year: int, force: bool = False) -> Path:
-    """Lädt/aktualisiert den Jahres-Report als CSV im lokalen Cache.
-    Lädt neu, wenn die Datei fehlt ODER älter als MAX_CACHE_AGE_DAYS ist -
-    reine Existenzprüfung ließ den Cache seit 10.07. einfrieren, obwohl
-    CFTC wöchentlich neue Reports veröffentlicht."""
+    """Laedt/aktualisiert den Jahres-Report als CSV im lokalen Cache.
+
+    Refresh-Trigger (Auftrag 13.09.2026, ersetzt die reine
+    MAX_CACHE_AGE_DAYS-Alters-Schwelle): der Cache gilt als veraltet,
+    wenn sein Datei-Datum VOR dem Veroeffentlichungsdatum des juengsten
+    laut CFTC-Kalender bereits erschienenen Reports liegt - also am
+    tatsaechlichen woechentlichen CFTC-Rhythmus ausgerichtet (freitags
+    ca. 15:30 ET fuer den Dienstag davor, Ausnahmen siehe
+    cftc_release_calendar.py) statt an einer festen Tage-Schwelle.
+    Die alte Alters-Schwelle (MAX_CACHE_AGE_DAYS=7) fing "seit 10.07.
+    eingefrorene" Daten ab, war aber selbst nicht an den Freitag-
+    Rhythmus gekoppelt: ein Zugriff kurz VOR dem naechsten Freitags-
+    Release liess den Cache bis zu 6 Tage laenger stehen als noetig,
+    und weil der naechste tatsaechliche Refresh dadurch selten exakt
+    auf einen Freitag fiel, blieb der produktive Freitags-Lauf
+    strukturell fast immer genau einen CFTC-Report hinter dem bereits
+    veroeffentlichten Stand zurueck (siehe Untersuchung 13.09.2026,
+    belegt fuer die Laeufe vom 14.08. und 11.09.2026 ueber die
+    watchlist.json-Report-Feld-Historie)."""
     dest = _cache_dir() / f"deacot{year}.csv"
     if dest.exists() and not force:
-        age_days = (time.time() - dest.stat().st_mtime) / 86400
-        if age_days < MAX_CACHE_AGE_DAYS:
+        jetzt = datetime.now().date()
+        erwarteter_stichtag = _neuester_veroeffentlichter_stichtag(jetzt)
+        erwartete_veroeffentlichung = veroeffentlichungsdatum(erwarteter_stichtag)
+        cache_datum = datetime.fromtimestamp(dest.stat().st_mtime).date()
+        if cache_datum >= erwartete_veroeffentlichung:
             return dest
     url = f"https://www.cftc.gov/files/dea/history/deacot{year}.zip"
     req = urllib.request.Request(url, headers={
