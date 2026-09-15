@@ -19,6 +19,7 @@ Aufruf:
 from __future__ import annotations
 
 import html
+import json
 import subprocess
 import sys
 from datetime import datetime
@@ -37,6 +38,17 @@ import evaluate_signals  # signal_performance-Status/Trefferquote (Fix 29.08.202
 REPO_DIR = Path.home() / "hermes2" / "scripts" / "5mg_analyzer_repo"
 OUTPUT_HTML = REPO_DIR / "index.html"
 PREVIEW_PATH = Path.home() / "hermes2" / "reports" / "index_preview.html"
+
+# Dienstags-Bestaetigungs-Snapshot (Auftrag 15.09.2026), geschrieben von
+# confirmation_update.py NACH jedem --send-Lauf - reines JSON, KEIN DB-
+# Zugriff hier, siehe _load_confirmation_status().
+CONFIRMATION_JSON_PATH = Path.home() / "hermes2" / "data" / "confirmation_status.json"
+CONFIRMATION_BADGE = {
+    "bestätigt sich": '<span class="badge win">✅ bestätigt sich</span>',
+    "läuft dagegen": '<span class="badge loss">❌ läuft dagegen</span>',
+    "neutral": '<span class="badge open">➖ neutral</span>',
+}
+CONFIRMATION_PLACEHOLDER = '<span class="badge muted">Bestätigung folgt Dienstag</span>'
 
 MAX_WEEKS = 3
 ENGINE_ORDER = ["Basis-Signal", "Fluss-Signal", "Kombi-Signal"]
@@ -105,7 +117,34 @@ def _perf_lookup(results: list[dict]) -> dict[int, dict]:
     return {res["signal"]["id"]: res["perf"] for res in results}
 
 
-def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
+def _load_confirmation_status() -> dict | None:
+    """Liest den juengsten Dienstags-Bestaetigungs-Snapshot (JSON, von
+    confirmation_update.py geschrieben) - rein lesend, KEIN DB-Zugriff.
+    None falls die Datei fehlt/kaputt ist (z.B. vor dem allerersten
+    Dienstagslauf) - dann zeigt die Seite ueberall den Platzhalter."""
+    try:
+        return json.loads(CONFIRMATION_JSON_PATH.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def _confirmation_cell(engine: str, confirmation: dict | None) -> str:
+    """confirmation=None (Snapshot fehlt ODER gehoert zu einer aelteren
+    Woche, siehe render_html()) -> neutraler Platzhalter."""
+    if confirmation is None:
+        return CONFIRMATION_PLACEHOLDER
+    for r in confirmation.get("results", []):
+        if r.get("engine") == engine:
+            if r.get("fehler"):
+                return f'<span class="badge error">⚠️ {html.escape(str(r["fehler"]))}</span>'
+            badge = CONFIRMATION_BADGE.get(r.get("einordnung"), CONFIRMATION_PLACEHOLDER)
+            bewegung = r.get("bewegung_pct")
+            bewegung_txt = f" ({bewegung:+.2f}%)" if bewegung is not None else ""
+            return f"{badge}{bewegung_txt}"
+    return CONFIRMATION_PLACEHOLDER
+
+
+def _week_table(week: dict, perf_by_id: dict[int, dict], confirmation: dict | None = None) -> str:
     """data-label je <td> (Fix 30.08.2026): traegt auf schmalen Bildschirmen
     die per CSS (td::before) angezeigte Spaltenbeschriftung, wenn die
     Tabelle unter 600px zu gestapelten Karten wird - siehe <style>."""
@@ -120,6 +159,7 @@ def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
                                    perf.get("sig_direction_correct") if perf else None)
         entry_badge = _status_badge(perf["entry_status"] if perf else None,
                                      perf.get("entry_direction_correct") if perf else None)
+        conf_cell = _confirmation_cell(r["engine"], confirmation)
         rows_html.append(
             "        <tr>"
             f'<td data-label="Engine">{html.escape(r["engine"])}</td>'
@@ -130,6 +170,7 @@ def _week_table(week: dict, perf_by_id: dict[int, dict]) -> str:
             f'<td data-label="Konflikt">{konflikt}</td>'
             f'<td data-label="Signal-Status">{sig_badge}</td>'
             f'<td data-label="Entry-Status">{entry_badge}</td>'
+            f'<td data-label="Bestätigung (Di)">{conf_cell}</td>'
             "</tr>"
         )
     return "\n".join(rows_html)
@@ -254,12 +295,23 @@ def _status_footer_html(results: list[dict]) -> str:
 
 def render_html(weeks: list[dict], results: list[dict]) -> str:
     perf_by_id = _perf_lookup(results)
+    confirmation = _load_confirmation_status()
 
     if not weeks:
         body = "<p>Noch keine Wochen-Engine-Daten vorhanden.</p>"
     else:
         blocks = []
-        for w in weeks:
+        for i, w in enumerate(weeks):
+            # Bestaetigungs-Snapshot NUR der aktuellsten Woche (i==0)
+            # zuordnen, UND nur falls sein signal_ts tatsaechlich zu
+            # dieser Woche gehoert (sonst ist es ein veralteter Snapshot
+            # vom letzten Dienstag, bevor Freitag ein neues Signal
+            # erzeugt hat - dann Platzhalter statt falscher Zuordnung).
+            week_ts = w["rows"][0]["ts"] if w["rows"] else None
+            week_confirmation = (
+                confirmation if i == 0 and confirmation and confirmation.get("signal_ts") == week_ts
+                else None
+            )
             blocks.append(
                 f"  <section>\n"
                 f"    <h2>KW {w['iso_week']}/{w['iso_year']} — {html.escape(w['date'])}</h2>\n"
@@ -267,10 +319,10 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
                 f"      <thead>\n"
                 f"        <tr><th>Engine</th><th>Paar</th><th>Bias</th>"
                 f"<th>Final Quality</th><th>Top-Signal</th><th>Konflikt</th>"
-                f"<th>Signal-Status</th><th>Entry-Status</th></tr>\n"
+                f"<th>Signal-Status</th><th>Entry-Status</th><th>Bestätigung (Di)</th></tr>\n"
                 f"      </thead>\n"
                 f"      <tbody>\n"
-                f"{_week_table(w, perf_by_id)}\n"
+                f"{_week_table(w, perf_by_id, week_confirmation)}\n"
                 f"      </tbody>\n"
                 f"    </table>\n"
                 f"  </section>"
@@ -297,6 +349,7 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
           margin: 2rem auto; padding: 0 1rem; color: #222; }}
   h1 {{ margin-bottom: 0.2rem; }}
   .sub {{ color: #666; margin-top: 0; margin-bottom: 2rem; font-size: 0.9rem; }}
+  .sub a {{ color: var(--accent); }}
   section {{ margin-bottom: 2.5rem; }}
   h2 {{ border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); }}
   h3 {{ color: var(--accent-dark); font-size: 1.05rem; margin-bottom: 0.4rem; }}
@@ -354,7 +407,7 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
 </head>
 <body>
   <h1>5MG Analyzer — Wochen-Engines</h1>
-  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · generiert {generiert}</p>
+  <p class="sub">Basis-/Fluss-/Kombi-Signal je Kalenderwoche · <a href="verlauf/">Verlauf ansehen</a> · generiert {generiert}</p>
 {body}
 
 {footer}
@@ -379,17 +432,31 @@ def _git(*args: str) -> subprocess.CompletedProcess:
 
 
 def publish(push: bool = True) -> Path:
-    """Schreibt index.html im Repo-Root und committet/pusht (echter Lauf,
-    aus weekly_engine_report.py nach dem Telegram-Versand aufgerufen)."""
+    """Schreibt index.html + verlauf/index.html im Repo und committet/
+    pusht BEIDE zusammen in einem Commit (echter Lauf - aus
+    weekly_engine_report.py nach dem Telegram-Versand, aus
+    evaluate_signals.py bei neu abgeschlossenen Faellen, und seit
+    15.09.2026 auch aus confirmation_update.py nach dem Dienstagslauf
+    aufgerufen). Lokaler Import von publish_verlauf (nicht auf
+    Modulebene) - vermeidet einen Zirkelimport, da publish_verlauf.py
+    selbst `import publish_pages` nutzt (dieselbe Loesung wie
+    evaluate_signals.py's lokaler `import publish_pages` in main())."""
+    import publish_verlauf
+
     html_out = build_index_html()
     OUTPUT_HTML.write_text(html_out, encoding="utf-8")
     print(f"Geschrieben: {OUTPUT_HTML}")
 
+    verlauf_html = publish_verlauf.build_verlauf_html()
+    publish_verlauf.OUTPUT_HTML.parent.mkdir(parents=True, exist_ok=True)
+    publish_verlauf.OUTPUT_HTML.write_text(verlauf_html, encoding="utf-8")
+    print(f"Geschrieben: {publish_verlauf.OUTPUT_HTML}")
+
     if not push:
         return OUTPUT_HTML
 
-    _git("add", "index.html")
-    commit = _git("commit", "-m", f"Wochen-Engines Update {datetime.now().strftime('%Y-%m-%d')}")
+    _git("add", "index.html", "verlauf/index.html")
+    commit = _git("commit", "-m", f"Wochen-Engines + Verlauf Update {datetime.now().strftime('%Y-%m-%d')}")
     if commit.returncode != 0 and "nothing to commit" in (commit.stdout + commit.stderr):
         return OUTPUT_HTML
     _git("push")
