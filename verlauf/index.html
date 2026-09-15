@@ -5,6 +5,9 @@
 <title>5MG Analyzer — Verlauf</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  /* 1:1 identisch zu publish_pages.py (Fix 15.09.2026 - exakte optische
+     Parität zur Hauptseite: gleiche Schriftgrößen/Abstände/Kartenbreite/
+     Farbgebung, inkl. Flex-Wrap-Fix gegen horizontales Scrollen). */
   :root { --accent: #2563eb; --accent-dark: #1e3a8a; }
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
           margin: 2rem auto; padding: 0 1rem; color: #222; }
@@ -13,10 +16,12 @@
   .sub a { color: var(--accent); }
   section { margin-bottom: 2.5rem; }
   h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); }
+  h3 { color: var(--accent-dark); font-size: 1.05rem; margin-bottom: 0.4rem; }
   table { border-collapse: collapse; width: 100%; }
   th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
   th { background: #eef2ff; color: var(--accent-dark); font-weight: 600; }
   tr:hover { background: #fafafa; }
+
   .badge { display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
             border-radius: 4px; font-size: 0.92em; white-space: nowrap; }
   .badge.win   { color: #1a7f37; background: #e6f4ea; }
@@ -24,7 +29,13 @@
   .badge.open  { color: #9a6700; background: #fff6e0; }
   .badge.error { color: #cf222e; background: #fde8e8; }
   .badge.muted { color: #666;    background: #f2f2f2; font-weight: 500; }
+
+  .layer-status { margin-bottom: 1.5rem; }
+  .layer-status:last-of-type { margin-bottom: 1rem; }
+  .counts { margin: 0.2rem 0; }
+  .hitrate { margin: 0.2rem 0 0.6rem 0; }
   .hinweis { color: #666; font-size: 0.88rem; margin-top: 0.8rem; }
+
   @media (max-width: 600px) {
     .week-table thead { display: none; }
     .week-table, .week-table tbody, .week-table tr, .week-table td { display: block; width: 100%; }
@@ -34,8 +45,8 @@
       padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .week-table td {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 0.3rem 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
     }
     .week-table td:last-child { border-bottom: none; }
     .week-table td::before {
@@ -47,7 +58,7 @@
 </head>
 <body>
   <h1>5MG Analyzer — Verlauf</h1>
-  <p class="sub">Wochen-Zeitreihe je Engine (Signal-Zeitpunkt-Performance) · <a href="../">zurück zur Übersicht</a> · generiert 2026-09-15 06:54</p>
+  <p class="sub">Wochen-Zeitreihe je Engine (Signal-Zeitpunkt-Performance) · <a href="../">zurück zur Übersicht</a> · generiert 2026-09-15 07:04</p>
   <section>
     <h2>KW 37/2026 — 2026-09-11</h2>
     <table class="week-table">
@@ -119,13 +130,22 @@
   </section>
 
   <section class="status-footer">
-    <h2>Gesamt-Trefferquote je Engine (alle Wochen, Ebene 1 — Signal-Zeitpunkt)</h2>
-    <table class="pair-table" style="max-width:520px">
-      <tr><th>Engine</th><th>Trefferquote (DONE)</th><th>Open</th><th>Fehler</th></tr>
-      <tr><td>Basis-Signal</td><td>3 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></td><td>1</td><td>0</td></tr>
-      <tr><td>Fluss-Signal</td><td>3 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></td><td>1</td><td>0</td></tr>
-      <tr><td>Kombi-Signal</td><td>2 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></td><td>1</td><td>0</td></tr>
-    </table>
+    <h2>Gesamt-Trefferquote je Engine (alle Wochen, Signal-Zeitpunkt-Performance)</h2>
+    <div class="layer-status">
+      <h3>Basis-Signal</h3>
+      <p class="counts">Wochen gesamt: 5 &nbsp;|&nbsp; Open: 1</p>
+      <p class="hitrate">Trefferquote: <strong>3 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></strong></p>
+    </div>
+    <div class="layer-status">
+      <h3>Fluss-Signal</h3>
+      <p class="counts">Wochen gesamt: 5 &nbsp;|&nbsp; Open: 1</p>
+      <p class="hitrate">Trefferquote: <strong>3 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></strong></p>
+    </div>
+    <div class="layer-status">
+      <h3>Kombi-Signal</h3>
+      <p class="counts">Wochen gesamt: 5 &nbsp;|&nbsp; Open: 1</p>
+      <p class="hitrate">Trefferquote: <strong>2 von 4 <span class="badge muted">kein Prozent bei n&lt;10</span></strong></p>
+    </div>
     <p class="hinweis">Mindest-Stichprobengröße-Konvention: unter n=10 keine Prozentangabe, unter n=30 als "NICHT BELASTBAR" gekennzeichnet (dieselbe Konvention wie in allen Backtest-Reports).</p>
   </section>
 </body>

@@ -393,8 +393,8 @@ def render_html(weeks: list[dict], results: list[dict]) -> str:
       padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }}
     .week-table td {{
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 0.3rem 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
     }}
     .week-table td:last-child {{ border-bottom: none; }}
     .week-table td::before {{

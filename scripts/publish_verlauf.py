@@ -115,7 +115,13 @@ def load_all_weeks_with_perf() -> tuple[list[dict], dict]:
 def _engine_summary_html(weeks: list[dict], perf_by_id: dict) -> str:
     """Gesamt-Trefferquote je Engine ueber ALLE deduplizierten Wochen
     (nur DONE-Faelle), mit MIN_STICHPROBE/MIN_FUER_PROZENT-Kennzeichnung -
-    dieselbe Konvention wie in allen bisherigen Reports dieser Session."""
+    dieselbe Konvention wie in allen bisherigen Reports dieser Session.
+    Struktur (Fix 15.09.2026 - mobile Ueberarbeitung): dieselben
+    '.layer-status'/'.counts'/'.hitrate'-Bloecke wie im Gesamt-Status der
+    Hauptseite (_layer_section_html() in publish_pages.py), NICHT mehr
+    eine eigene breite Tabelle - fuegt sich optisch nahtlos ein UND ist
+    auf schmalen Bildschirmen von Natur aus unproblematisch (Fliesstext
+    statt Tabelle mit vier Spalten)."""
     by_engine: dict[str, list[str]] = {}
     for w in weeks:
         for row in w["rows"]:
@@ -123,30 +129,38 @@ def _engine_summary_html(weeks: list[dict], perf_by_id: dict) -> str:
             label = _sig_status_label(perf)
             by_engine.setdefault(row["engine"], []).append(label)
 
-    rows_html = []
+    sections = []
     for engine in publish_pages.ENGINE_ORDER:
         labels = by_engine.get(engine, [])
         n_done = sum(1 for l in labels if l in ("WIN", "LOSS"))
         n_win = sum(1 for l in labels if l == "WIN")
         n_open = sum(1 for l in labels if l == "OPEN")
         n_error = sum(1 for l in labels if l == "ERROR")
-        rows_html.append(
-            "      <tr>"
-            f"<td>{html.escape(engine)}</td>"
-            f"<td>{_hitrate_html(n_win, n_done) if n_done else f'0 von 0 (noch keine abgeschlossenen Wochen)'}</td>"
-            f"<td>{n_open}</td><td>{n_error}</td>"
-            "</tr>"
+
+        counts_line = f"Wochen gesamt: {len(labels)} &nbsp;|&nbsp; Open: {n_open}"
+        if n_error:
+            counts_line += f" &nbsp;|&nbsp; Fehler: {n_error}"
+
+        body = f'      <p class="counts">{counts_line}</p>\n'
+        if n_done == 0:
+            body += '      <p class="hitrate">Noch keine abgeschlossenen Wochen.</p>\n'
+        else:
+            body += f'      <p class="hitrate">Trefferquote: <strong>{_hitrate_html(n_win, n_done)}</strong></p>\n'
+
+        sections.append(
+            '    <div class="layer-status">\n'
+            f'      <h3>{html.escape(engine)}</h3>\n'
+            f'{body}'
+            '    </div>\n'
         )
+
     return (
         '  <section class="status-footer">\n'
-        '    <h2>Gesamt-Trefferquote je Engine (alle Wochen, Ebene 1 — Signal-Zeitpunkt)</h2>\n'
-        '    <table class="pair-table" style="max-width:520px">\n'
-        '      <tr><th>Engine</th><th>Trefferquote (DONE)</th><th>Open</th><th>Fehler</th></tr>\n'
-        + "\n".join(rows_html) + "\n"
-        '    </table>\n'
-        f'    <p class="hinweis">Mindest-Stichprobengröße-Konvention: unter n={evaluate_signals.MIN_FUER_PROZENT} '
-        f'keine Prozentangabe, unter n={evaluate_signals.MIN_STICHPROBE} als "NICHT BELASTBAR" gekennzeichnet '
-        '(dieselbe Konvention wie in allen Backtest-Reports).</p>\n'
+        '    <h2>Gesamt-Trefferquote je Engine (alle Wochen, Signal-Zeitpunkt-Performance)</h2>\n'
+        + "".join(sections)
+        + f'    <p class="hinweis">Mindest-Stichprobengröße-Konvention: unter n={evaluate_signals.MIN_FUER_PROZENT} '
+          f'keine Prozentangabe, unter n={evaluate_signals.MIN_STICHPROBE} als "NICHT BELASTBAR" gekennzeichnet '
+          '(dieselbe Konvention wie in allen Backtest-Reports).</p>\n'
         '  </section>'
     )
 
@@ -184,6 +198,9 @@ def build_verlauf_html() -> str:
 <title>5MG Analyzer — Verlauf</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  /* 1:1 identisch zu publish_pages.py (Fix 15.09.2026 - exakte optische
+     Parität zur Hauptseite: gleiche Schriftgrößen/Abstände/Kartenbreite/
+     Farbgebung, inkl. Flex-Wrap-Fix gegen horizontales Scrollen). */
   :root {{ --accent: #2563eb; --accent-dark: #1e3a8a; }}
   body {{ font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
           margin: 2rem auto; padding: 0 1rem; color: #222; }}
@@ -192,10 +209,12 @@ def build_verlauf_html() -> str:
   .sub a {{ color: var(--accent); }}
   section {{ margin-bottom: 2.5rem; }}
   h2 {{ border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); }}
+  h3 {{ color: var(--accent-dark); font-size: 1.05rem; margin-bottom: 0.4rem; }}
   table {{ border-collapse: collapse; width: 100%; }}
   th, td {{ text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }}
   th {{ background: #eef2ff; color: var(--accent-dark); font-weight: 600; }}
   tr:hover {{ background: #fafafa; }}
+
   .badge {{ display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
             border-radius: 4px; font-size: 0.92em; white-space: nowrap; }}
   .badge.win   {{ color: #1a7f37; background: #e6f4ea; }}
@@ -203,7 +222,13 @@ def build_verlauf_html() -> str:
   .badge.open  {{ color: #9a6700; background: #fff6e0; }}
   .badge.error {{ color: #cf222e; background: #fde8e8; }}
   .badge.muted {{ color: #666;    background: #f2f2f2; font-weight: 500; }}
+
+  .layer-status {{ margin-bottom: 1.5rem; }}
+  .layer-status:last-of-type {{ margin-bottom: 1rem; }}
+  .counts {{ margin: 0.2rem 0; }}
+  .hitrate {{ margin: 0.2rem 0 0.6rem 0; }}
   .hinweis {{ color: #666; font-size: 0.88rem; margin-top: 0.8rem; }}
+
   @media (max-width: 600px) {{
     .week-table thead {{ display: none; }}
     .week-table, .week-table tbody, .week-table tr, .week-table td {{ display: block; width: 100%; }}
@@ -213,8 +238,8 @@ def build_verlauf_html() -> str:
       padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }}
     .week-table td {{
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 0.3rem 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee;
     }}
     .week-table td:last-child {{ border-bottom: none; }}
     .week-table td::before {{
