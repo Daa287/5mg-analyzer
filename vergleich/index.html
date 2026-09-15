@@ -1,0 +1,1228 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>5MG Analyzer — v1 vs. v2-Pairing (Test)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --accent: #2563eb; --accent-dark: #1e3a8a; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px;
+          margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin-bottom: 0.2rem; }
+  .sub { color: #666; margin-top: 0; margin-bottom: 2rem; font-size: 0.9rem; }
+  .warn { background: #fff8e6; border-left: 4px solid #b58105; padding: 0.75rem 1rem;
+           border-radius: 4px; margin-bottom: 2rem; }
+  section { margin-bottom: 2rem; }
+  h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); font-size: 1.1rem; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
+  th { background: #eef2ff; color: var(--accent-dark); font-weight: 600; }
+  tr:hover { background: #fafafa; }
+  .badge { display: inline-block; font-weight: 600; padding: 0.1rem 0.55rem;
+            border-radius: 4px; font-size: 0.92em; white-space: nowrap; }
+  .badge.win   { color: #1a7f37; background: #e6f4ea; }
+  .badge.loss  { color: #cf222e; background: #fde8e8; }
+  .badge.open  { color: #9a6700; background: #fff6e0; }
+  .badge.muted { color: #666;    background: #f2f2f2; font-weight: 500; }
+  @media (max-width: 600px) {
+    .week-table thead { display: none; }
+    .week-table, .week-table tbody, .week-table tr, .week-table td { display: block; width: 100%; }
+    .week-table { border: none; }
+    .week-table tr { margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
+      padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .week-table td { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 0.3rem 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee; }
+    .week-table td:last-child { border-bottom: none; }
+    .week-table td::before { content: attr(data-label); font-weight: 600; color: #555;
+      text-align: left; flex-shrink: 0; }
+  }
+</style>
+</head>
+<body>
+  <h1>5MG Analyzer — v1 vs. v2-Pairing (TEST)</h1>
+  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-08 · generiert 2026-09-15 10:10</p>
+  <div class="warn">
+    ⚠️ <b>Testseite, isoliert, nicht produktiv.</b> v2-Pairing-Engine ist eine
+    Nachbildung von Meridians compute_pairs()-Logik (eigene ESTIMATED
+    Position/Flow/Momentum-Zuordnung, siehe pairing_engine_v2.py). Diese
+    Seite ist bewusst NICHT von der Hauptseite/Verlauf-Seite verlinkt.
+    Gesamt-Trefferquote OOS: v1 gemischt 155/291 (53.3%), v2-Pairing gemischt 153/291 (52.6%)
+    (alle 3 Engines zusammen - Details je Engine siehe backtest_pairing_v2.py-Report).
+  </div>
+  <section>
+    <h2>Stichtag 2024-10-29</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=92.5) — <span class="badge win">✅ WIN</span> (+0.49%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.03%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=38.6) — <span class="badge loss">❌ LOSS</span> (-0.49%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+1.63%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=68.3) — <span class="badge win">✅ WIN</span> (+0.49%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.03%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-11-05</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=87.2) — <span class="badge loss">❌ LOSS</span> (-1.40%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge win">✅ WIN</span> (+1.97%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=39.1) — <span class="badge win">✅ WIN</span> (+1.40%)</td><td data-label="v2 (confidence)">EUR/USD SHORT — <span class="badge win">✅ WIN</span> (+2.46%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=65.8) — <span class="badge loss">❌ LOSS</span> (-1.40%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.40%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-11-12</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=89.4) — <span class="badge win">✅ WIN</span> (+0.58%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.27%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=41.3) — <span class="badge loss">❌ LOSS</span> (-1.44%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.01%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=70.0) — <span class="badge win">✅ WIN</span> (+0.40%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.40%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-11-19</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=94.0) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.55%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=62.1) — <span class="badge win">✅ WIN</span> (+0.90%)</td><td data-label="v2 (confidence)">EUR/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.11%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=73.4) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.51%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-11-26</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=82.1) — <span class="badge loss">❌ LOSS</span> (-1.15%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge win">✅ WIN</span> (+0.43%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=59.1) — <span class="badge win">✅ WIN</span> (+0.19%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge win">✅ WIN</span> (+0.19%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=63.8) — <span class="badge loss">❌ LOSS</span> (-1.15%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-1.36%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-12-03</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=82.3) — <span class="badge loss">❌ LOSS</span> (-1.40%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.16%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=44.0) — <span class="badge win">✅ WIN</span> (+1.55%)</td><td data-label="v2 (confidence)">CAD/CHF LONG — <span class="badge win">✅ WIN</span> (+0.14%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=34.2) — <span class="badge win">✅ WIN</span> (+1.16%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.40%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-12-10</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=96.0) — <span class="badge loss">❌ LOSS</span> (-1.31%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+2.02%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=68.7) — <span class="badge loss">❌ LOSS</span> (-3.31%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.31%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=80.9) — <span class="badge loss">❌ LOSS</span> (-0.78%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+2.60%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-12-17</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=86.1) — <span class="badge loss">❌ LOSS</span> (-0.03%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.03%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=31.8) — <span class="badge win">✅ WIN</span> (+0.18%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.09%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=65.9) — <span class="badge win">✅ WIN</span> (+0.01%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.02%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-12-24</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=80.5) — <span class="badge loss">❌ LOSS</span> (-0.25%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.25%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=32.1) — <span class="badge win">✅ WIN</span> (+0.08%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.75%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=62.9) — <span class="badge loss">❌ LOSS</span> (-0.25%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.52%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2024-12-31</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=83.3) — <span class="badge win">✅ WIN</span> (+0.17%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.17%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=33.8) — <span class="badge win">✅ WIN</span> (+1.05%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.23%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=71.0) — <span class="badge win">✅ WIN</span> (+0.17%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.17%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-01-07</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=81.3) — <span class="badge win">✅ WIN</span> (+0.26%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.04%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=39.6) — <span class="badge loss">❌ LOSS</span> (-0.33%)</td><td data-label="v2 (confidence)">EUR/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.28%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=62.9) — <span class="badge win">✅ WIN</span> (+0.04%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.04%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-01-14</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=85.0) — <span class="badge win">✅ WIN</span> (+0.40%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.40%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=42.1) — <span class="badge loss">❌ LOSS</span> (-0.40%)</td><td data-label="v2 (confidence)">EUR/CHF LONG — <span class="badge win">✅ WIN</span> (+0.69%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=70.0) — <span class="badge win">✅ WIN</span> (+0.40%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.40%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-01-21</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=85.2) — <span class="badge loss">❌ LOSS</span> (-0.21%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.54%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=42.5) — <span class="badge win">✅ WIN</span> (+0.21%)</td><td data-label="v2 (confidence)">AUD/CHF LONG — <span class="badge loss">❌ LOSS</span> (-0.86%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=68.6) — <span class="badge loss">❌ LOSS</span> (-0.21%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.21%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-01-28</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=79.5) — <span class="badge win">✅ WIN</span> (+0.47%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.40%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=42.2) — <span class="badge loss">❌ LOSS</span> (-0.47%)</td><td data-label="v2 (confidence)">CAD/CHF LONG — <span class="badge win">✅ WIN</span> (+0.81%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=62.2) — <span class="badge win">✅ WIN</span> (+0.68%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.47%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-02-04</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=81.1) — <span class="badge win">✅ WIN</span> (+0.80%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+2.00%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=60.3) — <span class="badge win">✅ WIN</span> (+0.09%)</td><td data-label="v2 (confidence)">GBP/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.93%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=65.0) — <span class="badge win">✅ WIN</span> (+0.20%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+1.39%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-02-11</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=20.5) — <span class="badge loss">❌ LOSS</span> (-2.34%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.78%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=63.3) — <span class="badge win">✅ WIN</span> (+2.34%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge win">✅ WIN</span> (+2.34%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=70.6) — <span class="badge win">✅ WIN</span> (+0.57%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.78%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-02-18</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=76.9) — <span class="badge loss">❌ LOSS</span> (-2.38%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.99%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=63.9) — <span class="badge loss">❌ LOSS</span> (-0.40%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.40%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=69.5) — <span class="badge loss">❌ LOSS</span> (-0.21%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+0.20%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-02-25</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=21.6) — <span class="badge loss">❌ LOSS</span> (-1.27%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.65%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=59.5) — <span class="badge win">✅ WIN</span> (+3.78%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+2.27%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=68.2) — <span class="badge win">✅ WIN</span> (+1.84%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+0.59%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-03-04</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=83.0) — <span class="badge loss">❌ LOSS</span> (-0.58%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.69%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=61.5) — <span class="badge win">✅ WIN</span> (+0.63%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge win">✅ WIN</span> (+0.63%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=70.1) — <span class="badge win">✅ WIN</span> (+0.08%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.08%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-03-11</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=77.2) — <span class="badge win">✅ WIN</span> (+0.71%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+1.16%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=67.1) — <span class="badge win">✅ WIN</span> (+0.01%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge win">✅ WIN</span> (+0.01%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=67.5) — <span class="badge win">✅ WIN</span> (+1.03%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+1.03%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-03-18</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=26.0) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.62%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=62.1) — <span class="badge loss">❌ LOSS</span> (-0.51%)</td><td data-label="v2 (confidence)">EUR/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.48%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=64.4) — <span class="badge win">✅ WIN</span> (+0.11%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.62%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-03-25</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=77.2) — <span class="badge win">✅ WIN</span> (+2.52%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.54%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=64.1) — <span class="badge win">✅ WIN</span> (+2.25%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge win">✅ WIN</span> (+2.25%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=62.0) — <span class="badge win">✅ WIN</span> (+1.58%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.64%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-04-01</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=80.7) — <span class="badge win">✅ WIN</span> (+4.47%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+2.89%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=60.5) — <span class="badge win">✅ WIN</span> (+1.94%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-2.35%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=60.1) — <span class="badge win">✅ WIN</span> (+0.92%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+2.89%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-04-08</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=27.9) — <span class="badge loss">❌ LOSS</span> (-2.00%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-1.16%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=57.4) — <span class="badge win">✅ WIN</span> (+4.39%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+2.28%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=68.5) — <span class="badge win">✅ WIN</span> (+1.43%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+1.43%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-04-15</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=24.9) — <span class="badge win">✅ WIN</span> (+0.67%)</td><td data-label="v2 (confidence)">USD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.67%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=40.8) — <span class="badge win">✅ WIN</span> (+0.22%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge win">✅ WIN</span> (+0.70%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=57.4) — <span class="badge win">✅ WIN</span> (+0.89%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+0.89%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-04-22</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=30.2) — <span class="badge win">✅ WIN</span> (+1.80%)</td><td data-label="v2 (confidence)">USD/JPY LONG — <span class="badge win">✅ WIN</span> (+1.80%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=61.7) — <span class="badge win">✅ WIN</span> (+0.08%)</td><td data-label="v2 (confidence)">GBP/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.38%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=50.0) — <span class="badge win">✅ WIN</span> (+1.80%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.53%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-04-29</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=33.5) — <span class="badge win">✅ WIN</span> (+0.39%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.17%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=67.2) — <span class="badge loss">❌ LOSS</span> (-0.34%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.34%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=50.2) — <span class="badge win">✅ WIN</span> (+0.39%)</td><td data-label="v2 (confidence)">GBP/JPY LONG — <span class="badge win">✅ WIN</span> (+0.01%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-05-06</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=35.6) — <span class="badge loss">❌ LOSS</span> (-0.28%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.49%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=60.3) — <span class="badge loss">❌ LOSS</span> (-0.43%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.43%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=49.6) — <span class="badge loss">❌ LOSS</span> (-0.28%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.63%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-05-13</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=68.9) — <span class="badge win">✅ WIN</span> (+0.69%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.52%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/MXN SHORT (FQ=58.5) — <span class="badge win">✅ WIN</span> (+0.77%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+0.41%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=49.0) — <span class="badge loss">❌ LOSS</span> (-1.21%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.43%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-05-20</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=74.8) — <span class="badge win">✅ WIN</span> (+0.38%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.32%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/MXN SHORT (FQ=56.2) — <span class="badge win">✅ WIN</span> (+0.11%)</td><td data-label="v2 (confidence)">NZD/CAD LONG — <span class="badge win">✅ WIN</span> (+0.99%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=42.4) — <span class="badge loss">❌ LOSS</span> (-0.11%)</td><td data-label="v2 (confidence)">GBP/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.18%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-05-27</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=37.9) — <span class="badge loss">❌ LOSS</span> (-0.17%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.85%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=41.5) — <span class="badge loss">❌ LOSS</span> (-1.01%)</td><td data-label="v2 (confidence)">USD/CAD LONG — <span class="badge loss">❌ LOSS</span> (-1.01%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=44.0) — <span class="badge loss">❌ LOSS</span> (-0.77%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+0.17%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-06-03</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=69.2) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.27%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=47.6) — <span class="badge loss">❌ LOSS</span> (-0.24%)</td><td data-label="v2 (confidence)">GBP/JPY LONG — <span class="badge win">✅ WIN</span> (+0.08%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=47.8) — <span class="badge loss">❌ LOSS</span> (-0.24%)</td><td data-label="v2 (confidence)">EUR/JPY LONG — <span class="badge win">✅ WIN</span> (+1.03%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-06-10</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=39.4) — <span class="badge win">✅ WIN</span> (+1.41%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge win">✅ WIN</span> (+0.12%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=55.4) — <span class="badge loss">❌ LOSS</span> (-1.11%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.35%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=44.6) — <span class="badge win">✅ WIN</span> (+1.41%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+0.51%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-06-17</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=27.2) — <span class="badge loss">❌ LOSS</span> (-1.71%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge loss">❌ LOSS</span> (-1.71%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=58.0) — <span class="badge win">✅ WIN</span> (+0.42%)</td><td data-label="v2 (confidence)">CAD/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.76%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=42.6) — <span class="badge loss">❌ LOSS</span> (-1.17%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge loss">❌ LOSS</span> (-1.71%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-06-24</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=31.0) — <span class="badge loss">❌ LOSS</span> (-0.68%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge loss">❌ LOSS</span> (-0.20%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=66.0) — <span class="badge win">✅ WIN</span> (+0.35%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.36%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=42.2) — <span class="badge loss">❌ LOSS</span> (-0.35%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge loss">❌ LOSS</span> (-0.35%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-07-01</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=36.0) — <span class="badge win">✅ WIN</span> (+1.94%)</td><td data-label="v2 (confidence)">EUR/USD SHORT — <span class="badge win">✅ WIN</span> (+0.84%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=66.4) — <span class="badge loss">❌ LOSS</span> (-0.73%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+1.19%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=42.3) — <span class="badge win">✅ WIN</span> (+1.94%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge win">✅ WIN</span> (+0.73%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-07-08</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=27.5) — <span class="badge win">✅ WIN</span> (+0.75%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.15%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=65.8) — <span class="badge loss">❌ LOSS</span> (-1.61%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-1.61%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=42.0) — <span class="badge win">✅ WIN</span> (+0.58%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge win">✅ WIN</span> (+1.61%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-07-15</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=30.6) — <span class="badge loss">❌ LOSS</span> (-1.21%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.47%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=55.2) — <span class="badge win">✅ WIN</span> (+1.56%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+1.56%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=43.3) — <span class="badge loss">❌ LOSS</span> (-1.56%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.55%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-07-22</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=35.5) — <span class="badge win">✅ WIN</span> (+2.83%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.63%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=48.0) — <span class="badge win">✅ WIN</span> (+2.56%)</td><td data-label="v2 (confidence)">EUR/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.34%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=43.3) — <span class="badge win">✅ WIN</span> (+2.46%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge win">✅ WIN</span> (+0.17%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-07-29</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=34.1) — <span class="badge loss">❌ LOSS</span> (-2.21%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.37%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/MXN SHORT (FQ=53.0) — <span class="badge win">✅ WIN</span> (+1.36%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.36%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=63.3) — <span class="badge win">✅ WIN</span> (+1.01%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-1.19%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-08-05</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=67.4) — <span class="badge win">✅ WIN</span> (+0.59%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.02%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD SHORT (FQ=42.7) — <span class="badge loss">❌ LOSS</span> (-0.59%)</td><td data-label="v2 (confidence)">GBP/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.18%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=43.0) — <span class="badge win">✅ WIN</span> (+0.22%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.02%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-08-12</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=66.1) — <span class="badge loss">❌ LOSS</span> (-0.82%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.51%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD SHORT (FQ=42.9) — <span class="badge win">✅ WIN</span> (+0.82%)</td><td data-label="v2 (confidence)">GBP/USD SHORT — <span class="badge win">✅ WIN</span> (+0.82%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=42.3) — <span class="badge win">✅ WIN</span> (+0.33%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge win">✅ WIN</span> (+1.54%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-08-19</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=66.3) — <span class="badge win">✅ WIN</span> (+1.66%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge win">✅ WIN</span> (+1.06%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=48.6) — <span class="badge loss">❌ LOSS</span> (-1.08%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.21%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=42.3) — <span class="badge loss">❌ LOSS</span> (-1.08%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.21%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-08-26</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=67.7) — <span class="badge loss">❌ LOSS</span> (-0.16%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge win">✅ WIN</span> (+0.05%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=54.7) — <span class="badge loss">❌ LOSS</span> (-0.58%)</td><td data-label="v2 (confidence)">NZD/JPY LONG — <span class="badge win">✅ WIN</span> (+0.49%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=64.0) — <span class="badge loss">❌ LOSS</span> (-0.44%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.15%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-09-02</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=66.1) — <span class="badge loss">❌ LOSS</span> (-0.14%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.80%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=57.4) — <span class="badge win">✅ WIN</span> (+0.98%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+0.98%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=41.6) — <span class="badge loss">❌ LOSS</span> (-2.17%)</td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-1.01%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-09-09</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=31.3) — <span class="badge loss">❌ LOSS</span> (-0.48%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.62%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=59.7) — <span class="badge loss">❌ LOSS</span> (-0.15%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.15%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=55.9) — <span class="badge loss">❌ LOSS</span> (-0.75%)</td><td data-label="v2 (confidence)">AUD/NZD LONG — <span class="badge win">✅ WIN</span> (+0.65%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-09-16</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=34.3) — <span class="badge win">✅ WIN</span> (+0.65%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (-0.00%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=53.7) — <span class="badge loss">❌ LOSS</span> (-1.22%)</td><td data-label="v2 (confidence)">AUD/CHF LONG — <span class="badge loss">❌ LOSS</span> (-0.28%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=37.5) — <span class="badge win">✅ WIN</span> (+1.09%)</td><td data-label="v2 (confidence)">EUR/USD SHORT — <span class="badge win">✅ WIN</span> (+1.09%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-09-23</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=31.5) — <span class="badge loss">❌ LOSS</span> (-0.39%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.65%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=63.6) — <span class="badge win">✅ WIN</span> (+0.93%)</td><td data-label="v2 (confidence)">AUD/USD LONG — <span class="badge win">✅ WIN</span> (+0.93%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=38.0) — <span class="badge loss">❌ LOSS</span> (-0.54%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.29%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-09-30</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=29.3) — <span class="badge loss">❌ LOSS</span> (-0.15%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.92%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=59.2) — <span class="badge loss">❌ LOSS</span> (-1.05%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge loss">❌ LOSS</span> (-1.05%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=40.9) — <span class="badge win">✅ WIN</span> (+1.35%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.30%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-10-07</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=78.1) — <span class="badge loss">❌ LOSS</span> (-0.19%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-1.34%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=45.7) — <span class="badge loss">❌ LOSS</span> (-1.86%)</td><td data-label="v2 (confidence)">GBP/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.82%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=58.7) — <span class="badge win">✅ WIN</span> (+1.06%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge win">✅ WIN</span> (+2.29%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-10-14</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=73.7) — <span class="badge win">✅ WIN</span> (+0.42%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.42%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=56.9) — <span class="badge win">✅ WIN</span> (+0.49%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+0.49%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=40.3) — <span class="badge win">✅ WIN</span> (+0.70%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.18%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-10-21</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=76.3) — <span class="badge win">✅ WIN</span> (+0.04%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.45%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=47.3) — <span class="badge win">✅ WIN</span> (+0.82%)</td><td data-label="v2 (confidence)">NZD/CHF LONG — <span class="badge win">✅ WIN</span> (+0.65%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=42.1) — <span class="badge win">✅ WIN</span> (+0.39%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.88%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-10-28</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=76.7) — <span class="badge loss">❌ LOSS</span> (-0.94%)</td><td data-label="v2 (confidence)">EUR/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.74%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=49.5) — <span class="badge win">✅ WIN</span> (+0.94%)</td><td data-label="v2 (confidence)">GBP/CAD LONG — <span class="badge win">✅ WIN</span> (+0.78%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=40.0) — <span class="badge win">✅ WIN</span> (+0.20%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.06%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-11-04</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=94.9) — <span class="badge win">✅ WIN</span> (+0.09%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+0.09%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD SHORT (FQ=45.8) — <span class="badge loss">❌ LOSS</span> (-0.09%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+1.57%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=65.9) — <span class="badge win">✅ WIN</span> (+0.09%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.61%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-11-10</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=89.2) — <span class="badge loss">❌ LOSS</span> (-0.51%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.51%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD SHORT (FQ=41.6) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.22%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=62.7) — <span class="badge loss">❌ LOSS</span> (-0.51%)</td><td data-label="v2 (confidence)">GBP/JPY LONG — <span class="badge win">✅ WIN</span> (+1.25%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-11-18</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=81.9) — <span class="badge win">✅ WIN</span> (+1.19%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.62%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CHF LONG (FQ=44.1) — <span class="badge loss">❌ LOSS</span> (-0.11%)</td><td data-label="v2 (confidence)">NZD/CHF LONG — <span class="badge win">✅ WIN</span> (+2.36%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=65.0) — <span class="badge win">✅ WIN</span> (+1.19%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+1.19%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-11-25</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=85.9) — <span class="badge win">✅ WIN</span> (+0.64%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+0.64%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD SHORT (FQ=41.4) — <span class="badge loss">❌ LOSS</span> (-0.64%)</td><td data-label="v2 (confidence)">GBP/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.32%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=64.5) — <span class="badge win">✅ WIN</span> (+0.64%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+0.64%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-12-02</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=75.9) — <span class="badge win">✅ WIN</span> (+0.86%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge win">✅ WIN</span> (+0.01%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/MXN SHORT (FQ=56.3) — <span class="badge win">✅ WIN</span> (+1.03%)</td><td data-label="v2 (confidence)">CAD/CHF LONG — <span class="badge win">✅ WIN</span> (+0.20%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=66.4) — <span class="badge win">✅ WIN</span> (+0.52%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge loss">❌ LOSS</span> (-0.30%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-12-09</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=80.9) — <span class="badge loss">❌ LOSS</span> (-0.57%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.45%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=64.5) — <span class="badge loss">❌ LOSS</span> (-0.12%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.12%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=66.3) — <span class="badge loss">❌ LOSS</span> (-0.04%)</td><td data-label="v2 (confidence)">EUR/GBP SHORT — <span class="badge win">✅ WIN</span> (+0.07%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-12-16</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=27.7) — <span class="badge loss">❌ LOSS</span> (-0.51%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.34%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=60.9) — <span class="badge win">✅ WIN</span> (+0.51%)</td><td data-label="v2 (confidence)">EUR/JPY LONG — <span class="badge win">✅ WIN</span> (+0.82%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=64.0) — <span class="badge win">✅ WIN</span> (+1.04%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge win">✅ WIN</span> (+0.54%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-12-23</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=20.8) — <span class="badge win">✅ WIN</span> (+0.58%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.04%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=63.9) — <span class="badge loss">❌ LOSS</span> (-0.45%)</td><td data-label="v2 (confidence)">AUD/CHF LONG — <span class="badge win">✅ WIN</span> (+0.07%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=38.9) — <span class="badge win">✅ WIN</span> (+0.58%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.65%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2025-12-30</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=24.8) — <span class="badge win">✅ WIN</span> (+0.69%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge win">✅ WIN</span> (+0.24%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=68.0) — <span class="badge loss">❌ LOSS</span> (-1.22%)</td><td data-label="v2 (confidence)">AUD/USD LONG — <span class="badge win">✅ WIN</span> (+0.03%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=41.1) — <span class="badge win">✅ WIN</span> (+1.22%)</td><td data-label="v2 (confidence)">NZD/CAD LONG — <span class="badge win">✅ WIN</span> (+0.76%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-01-06</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=25.2) — <span class="badge win">✅ WIN</span> (+0.42%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge win">✅ WIN</span> (+0.27%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=66.7) — <span class="badge loss">❌ LOSS</span> (-0.17%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.13%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=65.0) — <span class="badge loss">❌ LOSS</span> (-0.55%)</td><td data-label="v2 (confidence)">CAD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.38%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-01-13</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=84.8) — <span class="badge win">✅ WIN</span> (+1.79%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.25%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=59.6) — <span class="badge win">✅ WIN</span> (+0.75%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+3.01%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=65.2) — <span class="badge win">✅ WIN</span> (+1.79%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.56%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-01-20</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=79.0) — <span class="badge win">✅ WIN</span> (+2.69%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.33%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=44.0) — <span class="badge loss">❌ LOSS</span> (-3.37%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.26%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=67.7) — <span class="badge win">✅ WIN</span> (+3.12%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+3.12%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-01-27</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=75.1) — <span class="badge loss">❌ LOSS</span> (-2.25%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.40%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=42.8) — <span class="badge win">✅ WIN</span> (+2.37%)</td><td data-label="v2 (confidence)">USD/JPY LONG — <span class="badge win">✅ WIN</span> (+2.37%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=38.5) — <span class="badge win">✅ WIN</span> (+1.62%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-2.25%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-02-03</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=15.6) — <span class="badge loss">❌ LOSS</span> (-0.77%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.29%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=46.1) — <span class="badge loss">❌ LOSS</span> (-2.53%)</td><td data-label="v2 (confidence)">EUR/AUD SHORT — <span class="badge win">✅ WIN</span> (+1.66%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=64.6) — <span class="badge win">✅ WIN</span> (+1.05%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-1.40%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-02-10</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=17.4) — <span class="badge win">✅ WIN</span> (+0.84%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.08%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=62.6) — <span class="badge loss">❌ LOSS</span> (-0.44%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-1.02%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=42.1) — <span class="badge win">✅ WIN</span> (+0.56%)</td><td data-label="v2 (confidence)">USD/CAD LONG — <span class="badge win">✅ WIN</span> (+0.56%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-02-17</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=22.4) — <span class="badge loss">❌ LOSS</span> (-0.65%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.43%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=65.4) — <span class="badge win">✅ WIN</span> (+0.29%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge win">✅ WIN</span> (+0.29%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=36.2) — <span class="badge loss">❌ LOSS</span> (-0.29%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.01%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-02-24</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=80.1) — <span class="badge loss">❌ LOSS</span> (-0.99%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge win">✅ WIN</span> (+0.28%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=61.9) — <span class="badge loss">❌ LOSS</span> (-1.38%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-1.38%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=32.2) — <span class="badge win">✅ WIN</span> (+1.65%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.70%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-03-03</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=86.1) — <span class="badge loss">❌ LOSS</span> (-0.04%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.94%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=59.8) — <span class="badge win">✅ WIN</span> (+0.91%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.76%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=71.4) — <span class="badge loss">❌ LOSS</span> (-0.60%)</td><td data-label="v2 (confidence)">CAD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.87%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-03-10</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=87.7) — <span class="badge win">✅ WIN</span> (+0.55%)</td><td data-label="v2 (confidence)">GBP/CAD LONG — <span class="badge win">✅ WIN</span> (+1.31%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=41.6) — <span class="badge loss">❌ LOSS</span> (-0.48%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.93%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=75.4) — <span class="badge loss">❌ LOSS</span> (-0.43%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.43%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-03-17</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=20.9) — <span class="badge win">✅ WIN</span> (+2.73%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge win">✅ WIN</span> (+1.64%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=29.8) — <span class="badge win">✅ WIN</span> (+0.37%)</td><td data-label="v2 (confidence)">EUR/USD SHORT — <span class="badge win">✅ WIN</span> (+0.37%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/MXN LONG (FQ=39.9) — <span class="badge win">✅ WIN</span> (+0.99%)</td><td data-label="v2 (confidence)">CAD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.28%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-03-24</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=22.7) — <span class="badge loss">❌ LOSS</span> (-0.35%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-1.13%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY LONG (FQ=36.8) — <span class="badge loss">❌ LOSS</span> (-0.13%)</td><td data-label="v2 (confidence)">CHF/JPY LONG — <span class="badge loss">❌ LOSS</span> (-0.65%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=39.8) — <span class="badge win">✅ WIN</span> (+0.47%)</td><td data-label="v2 (confidence)">CAD/JPY SHORT — <span class="badge win">✅ WIN</span> (+0.60%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-03-31</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=19.4) — <span class="badge loss">❌ LOSS</span> (-2.38%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-2.15%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD SHORT (FQ=38.1) — <span class="badge loss">❌ LOSS</span> (-1.29%)</td><td data-label="v2 (confidence)">EUR/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.31%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=44.7) — <span class="badge loss">❌ LOSS</span> (-0.68%)</td><td data-label="v2 (confidence)">GBP/CAD LONG — <span class="badge win">✅ WIN</span> (+0.83%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-04-07</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=76.1) — <span class="badge loss">❌ LOSS</span> (-0.05%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-1.24%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=40.0) — <span class="badge loss">❌ LOSS</span> (-0.89%)</td><td data-label="v2 (confidence)">CAD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.08%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=40.1) — <span class="badge loss">❌ LOSS</span> (-1.18%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-1.24%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-04-14</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=28.1) — <span class="badge win">✅ WIN</span> (+0.41%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.14%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=59.0) — <span class="badge loss">❌ LOSS</span> (-0.84%)</td><td data-label="v2 (confidence)">EUR/CAD LONG — <span class="badge loss">❌ LOSS</span> (-0.83%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=40.5) — <span class="badge win">✅ WIN</span> (+0.41%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.01%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-04-21</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=25.5) — <span class="badge loss">❌ LOSS</span> (-1.00%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.08%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=60.3) — <span class="badge win">✅ WIN</span> (+0.39%)</td><td data-label="v2 (confidence)">EUR/CAD LONG — <span class="badge loss">❌ LOSS</span> (-0.48%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=39.6) — <span class="badge loss">❌ LOSS</span> (-1.00%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.41%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-04-28</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=23.9) — <span class="badge loss">❌ LOSS</span> (-0.11%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.45%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=64.0) — <span class="badge win">✅ WIN</span> (+0.02%)</td><td data-label="v2 (confidence)">EUR/CHF LONG — <span class="badge loss">❌ LOSS</span> (-0.14%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=57.7) — <span class="badge win">✅ WIN</span> (+0.53%)</td><td data-label="v2 (confidence)">NZD/CAD LONG — <span class="badge win">✅ WIN</span> (+1.13%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-05-05</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=21.6) — <span class="badge loss">❌ LOSS</span> (-0.08%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-1.29%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">EUR/USD LONG (FQ=62.6) — <span class="badge loss">❌ LOSS</span> (-0.59%)</td><td data-label="v2 (confidence)">EUR/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.59%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=42.0) — <span class="badge win">✅ WIN</span> (+0.46%)</td><td data-label="v2 (confidence)">CAD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.02%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-05-12</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=21.3) — <span class="badge win">✅ WIN</span> (+0.92%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge win">✅ WIN</span> (+0.48%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=67.4) — <span class="badge loss">❌ LOSS</span> (-0.38%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.38%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=41.8) — <span class="badge win">✅ WIN</span> (+0.38%)</td><td data-label="v2 (confidence)">CAD/JPY SHORT — <span class="badge win">✅ WIN</span> (-0.00%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-05-19</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=81.0) — <span class="badge win">✅ WIN</span> (+0.09%)</td><td data-label="v2 (confidence)">GBP/AUD LONG — <span class="badge loss">❌ LOSS</span> (-0.12%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=65.9) — <span class="badge loss">❌ LOSS</span> (-0.05%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+1.14%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD LONG (FQ=42.4) — <span class="badge win">✅ WIN</span> (+0.05%)</td><td data-label="v2 (confidence)">NZD/CAD LONG — <span class="badge win">✅ WIN</span> (+1.19%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-05-26</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=78.4) — <span class="badge loss">❌ LOSS</span> (-0.45%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge win">✅ WIN</span> (+0.00%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=60.6) — <span class="badge loss">❌ LOSS</span> (-1.27%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge loss">❌ LOSS</span> (-1.27%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=70.0) — <span class="badge loss">❌ LOSS</span> (-0.67%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.14%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-06-02</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=85.2) — <span class="badge loss">❌ LOSS</span> (-0.09%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.09%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=67.7) — <span class="badge loss">❌ LOSS</span> (-0.63%)</td><td data-label="v2 (confidence)">NZD/CAD LONG — <span class="badge loss">❌ LOSS</span> (-0.11%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=74.8) — <span class="badge loss">❌ LOSS</span> (-0.78%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.78%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-06-09</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=85.3) — <span class="badge loss">❌ LOSS</span> (-0.72%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.72%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=39.0) — <span class="badge win">✅ WIN</span> (+0.49%)</td><td data-label="v2 (confidence)">AUD/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.84%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=65.9) — <span class="badge loss">❌ LOSS</span> (-0.72%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.72%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-06-16</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=86.1) — <span class="badge loss">❌ LOSS</span> (-0.22%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.22%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=32.7) — <span class="badge win">✅ WIN</span> (+1.52%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge win">✅ WIN</span> (+1.29%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=67.9) — <span class="badge loss">❌ LOSS</span> (-0.22%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.22%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-06-23</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=89.5) — <span class="badge win">✅ WIN</span> (+1.14%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+1.14%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">AUD/USD SHORT (FQ=35.0) — <span class="badge loss">❌ LOSS</span> (-0.23%)</td><td data-label="v2 (confidence)">AUD/USD SHORT — <span class="badge loss">❌ LOSS</span> (-0.23%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=68.1) — <span class="badge win">✅ WIN</span> (+0.75%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.75%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-06-30</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=84.4) — <span class="badge win">✅ WIN</span> (+0.92%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+0.92%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=38.5) — <span class="badge loss">❌ LOSS</span> (-0.92%)</td><td data-label="v2 (confidence)">NZD/USD SHORT — <span class="badge loss">❌ LOSS</span> (-0.92%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=64.9) — <span class="badge win">✅ WIN</span> (+0.92%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+0.92%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-07-07</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=86.6) — <span class="badge win">✅ WIN</span> (+0.89%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.89%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=36.4) — <span class="badge loss">❌ LOSS</span> (-1.38%)</td><td data-label="v2 (confidence)">NZD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.47%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=71.6) — <span class="badge loss">❌ LOSS</span> (-0.22%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-1.04%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-07-14</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=82.0) — <span class="badge loss">❌ LOSS</span> (-0.34%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.34%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=45.4) — <span class="badge win">✅ WIN</span> (+1.16%)</td><td data-label="v2 (confidence)">EUR/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.30%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=69.5) — <span class="badge loss">❌ LOSS</span> (-1.06%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.58%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-07-21</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=85.4) — <span class="badge win">✅ WIN</span> (+2.23%)</td><td data-label="v2 (confidence)">AUD/JPY SHORT — <span class="badge win">✅ WIN</span> (+1.43%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=59.3) — <span class="badge win">✅ WIN</span> (+1.11%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge win">✅ WIN</span> (+1.11%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=65.7) — <span class="badge win">✅ WIN</span> (+1.36%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge win">✅ WIN</span> (+0.54%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-07-28</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=82.3) — <span class="badge loss">❌ LOSS</span> (-0.02%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge loss">❌ LOSS</span> (-0.02%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=64.8) — <span class="badge loss">❌ LOSS</span> (-0.04%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.04%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=67.4) — <span class="badge loss">❌ LOSS</span> (-0.82%)</td><td data-label="v2 (confidence)">AUD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.93%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-08-04</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=79.9) — <span class="badge win">✅ WIN</span> (+0.62%)</td><td data-label="v2 (confidence)">AUD/CAD SHORT — <span class="badge win">✅ WIN</span> (+0.19%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=66.1) — <span class="badge loss">❌ LOSS</span> (-0.23%)</td><td data-label="v2 (confidence)">EUR/NZD SHORT — <span class="badge loss">❌ LOSS</span> (-0.32%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=66.6) — <span class="badge loss">❌ LOSS</span> (-0.21%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.21%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-08-11</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=77.1) — <span class="badge win">✅ WIN</span> (+1.05%)</td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge win">✅ WIN</span> (+1.05%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=63.4) — <span class="badge win">✅ WIN</span> (+1.70%)</td><td data-label="v2 (confidence)">NZD/USD LONG — <span class="badge win">✅ WIN</span> (+1.70%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=64.0) — <span class="badge win">✅ WIN</span> (+1.05%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge win">✅ WIN</span> (+1.78%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-08-18</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CAD SHORT (FQ=70.4) — <span class="badge loss">❌ LOSS</span> (-0.51%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.28%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=63.4) — <span class="badge loss">❌ LOSS</span> (-0.28%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge loss">❌ LOSS</span> (-0.28%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=60.7) — <span class="badge loss">❌ LOSS</span> (-0.34%)</td><td data-label="v2 (confidence)">GBP/USD LONG — <span class="badge loss">❌ LOSS</span> (-0.34%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-08-25</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">NZD/USD SHORT (FQ=31.2) — <span class="badge win">✅ WIN</span> (+1.16%)</td><td data-label="v2 (confidence)">NZD/JPY SHORT — <span class="badge win">✅ WIN</span> (+3.42%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=62.5) — <span class="badge win">✅ WIN</span> (+2.30%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge win">✅ WIN</span> (+2.30%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">GBP/USD LONG (FQ=56.6) — <span class="badge loss">❌ LOSS</span> (-0.48%)</td><td data-label="v2 (confidence)">GBP/NZD LONG — <span class="badge win">✅ WIN</span> (+0.68%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-09-01</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/JPY SHORT (FQ=80.2) — <span class="badge win">✅ WIN</span> (+0.76%)</td><td data-label="v2 (confidence)">NZD/JPY SHORT — <span class="badge win">✅ WIN</span> (+2.11%)</td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=62.0) — <span class="badge loss">❌ LOSS</span> (-1.36%)</td><td data-label="v2 (confidence)">USD/CHF SHORT — <span class="badge loss">❌ LOSS</span> (-0.71%)</td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=62.4) — <span class="badge loss">❌ LOSS</span> (-0.63%)</td><td data-label="v2 (confidence)">USD/JPY SHORT — <span class="badge win">✅ WIN</span> (+0.76%)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Stichtag 2026-09-08</h2>
+    <table class="week-table">
+      <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=80.7) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=61.9) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=62.2) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">AUD/NZD LONG — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+</body>
+</html>
