@@ -55,6 +55,17 @@ def season_score(pair: str, richtung: str, window_weeks: int = WINDOW_WEEKS,
         return {"score": 50.0, "label": "NEUTRAL", "hist_text": "keine Saisondaten (yfinance fehlt)"}
 
     ticker = YF_TICKERS.get(pair)
+    if ticker is None and "/" in pair:
+        # Auftrag 15.09.2026 (Cross-Pairs): YF_TICKERS deckte bisher nur
+        # die 8 bestehenden USD-Paare + Rohstoffe/Indizes ab - jede neue
+        # FX-Kombination (z.B. EUR/GBP, CHF/JPY) fiel sonst dauerhaft auf
+        # NEUTRAL (50.0) zurueck, obwohl echte Kursdaten via Yahoo
+        # verfuegbar sind (dieselbe Namenskonvention wie die bestehenden
+        # Paare). Generischer Fallback NUR fuer "XXX/YYY"-Paare (die
+        # Rohstoff-/Index-Eintraege wie "Gold"/"Nasdaq 100" haben kein
+        # "/" im Namen und bleiben unveraendert auf den festen Dict-
+        # Eintrag angewiesen).
+        ticker = pair.replace("/", "") + "=X"
     if ticker is None:
         return {"score": 50.0, "label": "NEUTRAL", "hist_text": "kein Ticker hinterlegt"}
 
