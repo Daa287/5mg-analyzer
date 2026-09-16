@@ -23,6 +23,9 @@
   .jahres-stats h3 { margin: 0 0 0.6rem 0; color: var(--accent-dark); font-size: 1.05rem; }
   .jahres-table { font-size: 0.92rem; }
   .jahres-table th, .jahres-table td { padding: 0.35rem 0.6rem; }
+  .perf-line { display: inline-block; margin-top: 0.15rem; color: #555; font-size: 0.9em; font-weight: 500; }
+  .perf-disclaimer { margin: 0.8rem 0 0 0; padding-top: 0.6rem; border-top: 1px solid #dbe3fb;
+                       font-size: 0.82rem; color: #555; line-height: 1.4; }
   .back-to-nav { display: block; margin: 0 0 1.5rem 0; font-size: 0.85rem; }
   .back-to-nav a { color: var(--accent); text-decoration: none; }
   .back-to-nav a:hover { text-decoration: underline; }
@@ -60,7 +63,7 @@
 </head>
 <body>
   <h1>5MG Analyzer — v1 vs. v2-Pairing (TEST)</h1>
-  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 20:47</p>
+  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 21:03</p>
   <span id="jahresnav"></span>
   <nav class="year-nav">Springe zu Jahr: <a href="#y2026">2026</a> · <a href="#y2025">2025</a> · <a href="#y2024">2024</a></nav>
   <div class="warn">
@@ -71,14 +74,26 @@
     Gesamt-Trefferquote OOS: v1 gemischt 155/291 (53.3%), v2-Pairing gemischt 153/291 (52.6%)
     (alle 3 Engines zusammen - Details je Engine siehe backtest_pairing_v2.py-Report).
   </div>
+  <div class="jahres-stats">
+    <h3>Gesamt-Übersicht (alle Jahre)</h3>
+    <table class="jahres-table">
+      <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
+      <tr><td>Basis-Signal</td><td>50 Win / 47 Loss (51.5%)<br><span class="perf-line">Σ +13.4%, Ø +0.14%/Signal</span></td><td>49 Win / 48 Loss (50.5%)<br><span class="perf-line">Σ +7.2%, Ø +0.07%/Signal</span></td></tr>
+      <tr><td>Fluss-Signal</td><td>47 Win / 50 Loss (48.5%)<br><span class="perf-line">Σ +7.9%, Ø +0.08%/Signal</span></td><td>48 Win / 49 Loss (49.5%)<br><span class="perf-line">Σ +16.2%, Ø +0.17%/Signal</span></td></tr>
+      <tr><td>Kombi-Signal</td><td>58 Win / 39 Loss (59.8%)<br><span class="perf-line">Σ +23.8%, Ø +0.25%/Signal</span></td><td>56 Win / 41 Loss (57.7%)<br><span class="perf-line">Σ +15.3%, Ø +0.16%/Signal</span></td></tr>
+    </table>
+    <p class="perf-disclaimer">ℹ️ Reine, richtungsbereinigte Kursbewegung (einfache Summe/Durchschnitt der Einzel-%-Werte je Signal, KEINE Zinseszins-Simulation) — OHNE Positionsgröße, Hebel, Spread/Gebühren. Bildet NICHT die reale Kontoentwicklung ab, macht nur die relative Signal-Qualität zwischen v1 und v2-Pairing vergleichbar.</p>
+  </div>
+
   <div class="jahres-stats" id="y2026">
     <h3>Jahres-Übersicht 2026</h3>
     <table class="jahres-table">
       <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
-      <tr><td>Basis-Signal</td><td>17 Win / 18 Loss (48.6%)</td><td>16 Win / 19 Loss (45.7%)</td></tr>
-      <tr><td>Fluss-Signal</td><td>13 Win / 22 Loss (37.1%)</td><td>11 Win / 24 Loss (31.4%)</td></tr>
-      <tr><td>Kombi-Signal</td><td>17 Win / 18 Loss (48.6%)</td><td>16 Win / 19 Loss (45.7%)</td></tr>
+      <tr><td>Basis-Signal</td><td>17 Win / 18 Loss (48.6%)<br><span class="perf-line">Σ +8.2%, Ø +0.23%/Signal</span></td><td>16 Win / 19 Loss (45.7%)<br><span class="perf-line">Σ +4.9%, Ø +0.14%/Signal</span></td></tr>
+      <tr><td>Fluss-Signal</td><td>13 Win / 22 Loss (37.1%)<br><span class="perf-line">Σ -5.5%, Ø -0.16%/Signal</span></td><td>11 Win / 24 Loss (31.4%)<br><span class="perf-line">Σ +2.0%, Ø +0.06%/Signal</span></td></tr>
+      <tr><td>Kombi-Signal</td><td>17 Win / 18 Loss (48.6%)<br><span class="perf-line">Σ +6.3%, Ø +0.18%/Signal</span></td><td>16 Win / 19 Loss (45.7%)<br><span class="perf-line">Σ +1.9%, Ø +0.05%/Signal</span></td></tr>
     </table>
+    <p class="perf-disclaimer">ℹ️ Reine, richtungsbereinigte Kursbewegung (einfache Summe/Durchschnitt der Einzel-%-Werte je Signal, KEINE Zinseszins-Simulation) — OHNE Positionsgröße, Hebel, Spread/Gebühren. Bildet NICHT die reale Kontoentwicklung ab, macht nur die relative Signal-Qualität zwischen v1 und v2-Pairing vergleichbar.</p>
   </div>
 
   <a class="back-to-nav" href="#jahresnav">↑ zur Jahres-Navigation</a>
@@ -519,10 +534,11 @@
     <h3>Jahres-Übersicht 2025</h3>
     <table class="jahres-table">
       <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
-      <tr><td>Basis-Signal</td><td>29 Win / 23 Loss (55.8%)</td><td>28 Win / 24 Loss (53.8%)</td></tr>
-      <tr><td>Fluss-Signal</td><td>27 Win / 25 Loss (51.9%)</td><td>31 Win / 21 Loss (59.6%)</td></tr>
-      <tr><td>Kombi-Signal</td><td>35 Win / 17 Loss (67.3%)</td><td>35 Win / 17 Loss (67.3%)</td></tr>
+      <tr><td>Basis-Signal</td><td>29 Win / 23 Loss (55.8%)<br><span class="perf-line">Σ +9.0%, Ø +0.17%/Signal</span></td><td>28 Win / 24 Loss (53.8%)<br><span class="perf-line">Σ -1.1%, Ø -0.02%/Signal</span></td></tr>
+      <tr><td>Fluss-Signal</td><td>27 Win / 25 Loss (51.9%)<br><span class="perf-line">Σ +13.4%, Ø +0.26%/Signal</span></td><td>31 Win / 21 Loss (59.6%)<br><span class="perf-line">Σ +13.6%, Ø +0.26%/Signal</span></td></tr>
+      <tr><td>Kombi-Signal</td><td>35 Win / 17 Loss (67.3%)<br><span class="perf-line">Σ +18.4%, Ø +0.35%/Signal</span></td><td>35 Win / 17 Loss (67.3%)<br><span class="perf-line">Σ +14.4%, Ø +0.28%/Signal</span></td></tr>
     </table>
+    <p class="perf-disclaimer">ℹ️ Reine, richtungsbereinigte Kursbewegung (einfache Summe/Durchschnitt der Einzel-%-Werte je Signal, KEINE Zinseszins-Simulation) — OHNE Positionsgröße, Hebel, Spread/Gebühren. Bildet NICHT die reale Kontoentwicklung ab, macht nur die relative Signal-Qualität zwischen v1 und v2-Pairing vergleichbar.</p>
   </div>
 
   <a class="back-to-nav" href="#jahresnav">↑ zur Jahres-Navigation</a>
@@ -1155,10 +1171,11 @@
     <h3>Jahres-Übersicht 2024</h3>
     <table class="jahres-table">
       <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
-      <tr><td>Basis-Signal</td><td>4 Win / 6 Loss (40.0%, NICHT BELASTBAR)</td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)</td></tr>
-      <tr><td>Fluss-Signal</td><td>7 Win / 3 Loss (70.0%, NICHT BELASTBAR)</td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)</td></tr>
-      <tr><td>Kombi-Signal</td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)</td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)</td></tr>
+      <tr><td>Basis-Signal</td><td>4 Win / 6 Loss (40.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ -3.8%, Ø -0.38%/Signal, NICHT BELASTBAR</span></td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ +3.4%, Ø +0.34%/Signal, NICHT BELASTBAR</span></td></tr>
+      <tr><td>Fluss-Signal</td><td>7 Win / 3 Loss (70.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ +0.1%, Ø +0.01%/Signal, NICHT BELASTBAR</span></td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ +0.6%, Ø +0.06%/Signal, NICHT BELASTBAR</span></td></tr>
+      <tr><td>Kombi-Signal</td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ -0.8%, Ø -0.08%/Signal, NICHT BELASTBAR</span></td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)<br><span class="perf-line">Σ -1.0%, Ø -0.10%/Signal, NICHT BELASTBAR</span></td></tr>
     </table>
+    <p class="perf-disclaimer">ℹ️ Reine, richtungsbereinigte Kursbewegung (einfache Summe/Durchschnitt der Einzel-%-Werte je Signal, KEINE Zinseszins-Simulation) — OHNE Positionsgröße, Hebel, Spread/Gebühren. Bildet NICHT die reale Kontoentwicklung ab, macht nur die relative Signal-Qualität zwischen v1 und v2-Pairing vergleichbar.</p>
   </div>
 
   <a class="back-to-nav" href="#jahresnav">↑ zur Jahres-Navigation</a>
