@@ -16,6 +16,11 @@
                background: #eef2ff; border-radius: 4px; }
   .year-nav a { color: var(--accent-dark); font-weight: 600; text-decoration: none; }
   .year-nav a:hover { text-decoration: underline; }
+  .jahres-stats { margin: 1.5rem 0 1.5rem 0; padding: 0.9rem 1rem; background: #f6f8ff;
+                    border: 1px solid #dbe3fb; border-radius: 6px; scroll-margin-top: 1rem; }
+  .jahres-stats h3 { margin: 0 0 0.6rem 0; color: var(--accent-dark); font-size: 1.05rem; }
+  .jahres-table { font-size: 0.92rem; }
+  .jahres-table th, .jahres-table td { padding: 0.35rem 0.6rem; }
   section { margin-bottom: 2rem; }
   h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; color: var(--accent-dark); font-size: 1.1rem; }
   table { border-collapse: collapse; width: 100%; }
@@ -44,7 +49,7 @@
 </head>
 <body>
   <h1>5MG Analyzer — v1 vs. v2-Pairing (TEST)</h1>
-  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 20:23</p>
+  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 20:33</p>
   <nav class="year-nav">Springe zu Jahr: <a href="#y2026">2026</a> · <a href="#y2025">2025</a> · <a href="#y2024">2024</a></nav>
   <div class="warn">
     ⚠️ <b>Testseite, isoliert, nicht produktiv.</b> v2-Pairing-Engine ist ein
@@ -54,14 +59,24 @@
     Gesamt-Trefferquote OOS: v1 gemischt 155/291 (53.3%), v2-Pairing gemischt 153/291 (52.6%)
     (alle 3 Engines zusammen - Details je Engine siehe backtest_pairing_v2.py-Report).
   </div>
-  <section id="y2026">
+  <div class="jahres-stats" id="y2026">
+    <h3>Jahres-Übersicht 2026</h3>
+    <table class="jahres-table">
+      <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
+      <tr><td>Basis-Signal</td><td>17 Win / 18 Loss (48.6%)</td><td>16 Win / 19 Loss (45.7%)</td></tr>
+      <tr><td>Fluss-Signal</td><td>13 Win / 22 Loss (37.1%)</td><td>11 Win / 24 Loss (31.4%)</td></tr>
+      <tr><td>Kombi-Signal</td><td>17 Win / 18 Loss (48.6%)</td><td>16 Win / 19 Loss (45.7%)</td></tr>
+    </table>
+  </div>
+
+  <section>
     <h2>Stichtag 2026-09-08</h2>
     <table class="week-table">
       <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
       <tbody>
-        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=80.7) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
-        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=61.9) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
-        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=62.2) — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td><td data-label="v2 (confidence)">AUD/NZD LONG — <span class="badge open">⏳ noch keine 7-Tage-Kerze verfuegbar (zu neu)</span></td></tr>
+        <tr><td data-label="Engine">Basis-Signal</td><td data-label="v1 (final_quality)">USD/CHF SHORT (FQ=80.7) — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td><td data-label="v2 (confidence)">NZD/CHF SHORT — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td></tr>
+        <tr><td data-label="Engine">Fluss-Signal</td><td data-label="v1 (final_quality)">NZD/USD LONG (FQ=61.9) — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td><td data-label="v2 (confidence)">USD/CAD SHORT — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td></tr>
+        <tr><td data-label="Engine">Kombi-Signal</td><td data-label="v1 (final_quality)">AUD/USD LONG (FQ=62.2) — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td><td data-label="v2 (confidence)">AUD/NZD LONG — <span class="badge open">⏳ 7-Tage-Auswertung ab 2026-09-18 verfügbar (Cutoff 2026-09-11 + 7 Tage)</span></td></tr>
       </tbody>
     </table>
   </section>
@@ -486,7 +501,17 @@
     </table>
   </section>
 
-  <section id="y2025">
+  <div class="jahres-stats" id="y2025">
+    <h3>Jahres-Übersicht 2025</h3>
+    <table class="jahres-table">
+      <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
+      <tr><td>Basis-Signal</td><td>29 Win / 23 Loss (55.8%)</td><td>28 Win / 24 Loss (53.8%)</td></tr>
+      <tr><td>Fluss-Signal</td><td>27 Win / 25 Loss (51.9%)</td><td>31 Win / 21 Loss (59.6%)</td></tr>
+      <tr><td>Kombi-Signal</td><td>35 Win / 17 Loss (67.3%)</td><td>35 Win / 17 Loss (67.3%)</td></tr>
+    </table>
+  </div>
+
+  <section>
     <h2>Stichtag 2025-12-30</h2>
     <table class="week-table">
       <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
@@ -1110,7 +1135,17 @@
     </table>
   </section>
 
-  <section id="y2024">
+  <div class="jahres-stats" id="y2024">
+    <h3>Jahres-Übersicht 2024</h3>
+    <table class="jahres-table">
+      <tr><th>Engine</th><th>v1</th><th>v2-Pairing</th></tr>
+      <tr><td>Basis-Signal</td><td>4 Win / 6 Loss (40.0%, NICHT BELASTBAR)</td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)</td></tr>
+      <tr><td>Fluss-Signal</td><td>7 Win / 3 Loss (70.0%, NICHT BELASTBAR)</td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)</td></tr>
+      <tr><td>Kombi-Signal</td><td>6 Win / 4 Loss (60.0%, NICHT BELASTBAR)</td><td>5 Win / 5 Loss (50.0%, NICHT BELASTBAR)</td></tr>
+    </table>
+  </div>
+
+  <section>
     <h2>Stichtag 2024-12-31</h2>
     <table class="week-table">
       <thead><tr><th>Engine</th><th>v1 Top-Pick</th><th>v2-Pairing Top-Pick</th></tr></thead>
