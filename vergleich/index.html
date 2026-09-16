@@ -52,22 +52,28 @@
     .week-table, .week-table tbody, .week-table tr, .week-table td,
     .jahres-table, .jahres-table tbody, .jahres-table tr, .jahres-table td { display: block; width: 100%; }
     .week-table, .jahres-table { border: none; }
-    .week-table tr, .jahres-table tr { margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
+    .week-table tr { margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px;
       padding: 0.4rem 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
     .week-table td { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
       gap: 0.3rem 1rem; text-align: right; padding: 0.4rem 0; border-bottom: 1px solid #eee; }
-    .jahres-table td { text-align: left; padding: 0.4rem 0; border-bottom: 1px solid #eee; }
-    .week-table td:last-child, .jahres-table td:last-child { border-bottom: none; }
-    .week-table td::before, .jahres-table td::before { content: attr(data-label); font-weight: 600; color: #555;
+    .week-table td:last-child { border-bottom: none; }
+    .week-table td::before { content: attr(data-label); font-weight: 600; color: #555;
       text-align: left; flex-shrink: 0; }
-    .jahres-table td::before { display: block; margin-bottom: 0.15rem; }
+    /* .jahres-table steckt bereits in der umrandeten .jahres-stats-Box (siehe unten) -
+       KEINE eigene Karten-Umrandung pro Zeile, sonst Box-in-Box und die Zeile wird
+       schmaler als die .week-table-Karten darunter (siehe Breiten-Bugreport 16.09.2026). */
+    .jahres-table tr { padding: 0.5rem 0; border-bottom: 1px solid #dbe3fb; }
+    .jahres-table tr:last-child { border-bottom: none; }
+    .jahres-table td { text-align: left; padding: 0.15rem 0; }
+    .jahres-table td::before { content: attr(data-label); font-weight: 600; color: #555;
+      display: block; margin-bottom: 0.15rem; }
     .jahres-stats { padding: 0.9rem 0.8rem; }
   }
 </style>
 </head>
 <body>
   <h1>5MG Analyzer — v1 vs. v2-Pairing (TEST)</h1>
-  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 21:11</p>
+  <p class="sub">Out-of-Sample-Vergleich 2024-10-29 bis 2026-09-16 · generiert 2026-09-16 21:16</p>
   <span id="jahresnav"></span>
   <nav class="year-nav">Springe zu Jahr: <a href="#y2026">2026</a> · <a href="#y2025">2025</a> · <a href="#y2024">2024</a></nav>
   <div class="warn">
