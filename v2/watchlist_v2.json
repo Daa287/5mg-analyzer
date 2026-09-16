@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-09-15 20:20:04",
+  "generated_ts": "2026-09-16 20:20:04",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -34,7 +34,7 @@
       "engine": "Fluss-Signal",
       "final_quality": 59.38,
       "tier": "C",
-      "market_pulse_status": "neutral",
+      "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
       "gate_passed": false,
       "gate_readiness": null,
