@@ -12,6 +12,10 @@
   .sub { color: #666; margin-top: 0; margin-bottom: 1rem; font-size: 0.9rem; }
   .test-banner { background: #fff3cd; border: 2px solid #b45309; border-radius: 8px;
                    padding: 0.9rem 1.2rem; margin-bottom: 2rem; font-weight: 600; }
+  h2 { margin-top: 2.5rem; border-top: 2px dashed #ccc; padding-top: 1.5rem; }
+  .experiment-banner { background: #eef2ff; border: 2px dashed #6366f1; border-radius: 8px;
+                         padding: 0.9rem 1.2rem; margin-bottom: 1rem; color: #3730a3; }
+  .reversal-stat { font-size: 0.95rem; color: #333; }
   table { border-collapse: collapse; width: 100%; }
   th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }
   th { background: #fef3e2; color: var(--accent-dark); font-weight: 600; }
@@ -66,7 +70,7 @@
 </head>
 <body>
   <h1>5MG v2 TEST</h1>
-  <p class="sub">Market Pulse + Entry Gate + Quality Tiers · generiert 2026-09-16 20:20</p>
+  <p class="sub">Market Pulse + Entry Gate + Quality Tiers · generiert 2026-09-17 14:11</p>
   <div class="test-banner">
     🧪 TESTVERSION — komplett parallel zum produktiven 5MG-System, KEINE
     Kauf-/Verkaufssignale, KEINE Positionsgröße, KEIN SL. Eigene, transparent
@@ -77,7 +81,7 @@
       <tr><th>Paar</th><th>Bias</th><th>Engine</th><th>Final Quality</th><th>Tier</th><th>Market Pulse</th></tr>
     </thead>
     <tbody>
-        <tr><td data-label="Paar">NZD/CHF</td><td data-label="Bias">SHORT</td><td data-label="Engine">Basis-Signal</td><td data-label="Final Quality">75.6</td><td data-label="Tier"><span class="badge tier-b">B</span></td><td data-label="Market Pulse">neutral</td></tr>
+        <tr><td data-label="Paar">NZD/CHF</td><td data-label="Bias">SHORT</td><td data-label="Engine">Basis-Signal</td><td data-label="Final Quality">75.6</td><td data-label="Tier"><span class="badge tier-b">B</span></td><td data-label="Market Pulse">läuft dagegen</td></tr>
         <tr class="gate-row"><td colspan="6"><div class="gate-block loss">Gate: ❌ Wird noch nicht vom Markt bestätigt</div></td></tr>
         <tr><td data-label="Paar">AUD/NZD</td><td data-label="Bias">LONG</td><td data-label="Engine">Kombi-Signal</td><td data-label="Final Quality">62.6</td><td data-label="Tier"><span class="badge tier-c">C</span></td><td data-label="Market Pulse">bestätigt sich</td></tr>
         <tr class="gate-row"><td colspan="6"><div class="gate-block win">Gate: ✅ bestätigt (Readiness 3/4, Zone: setup_möglich)</div></td></tr>
@@ -85,5 +89,18 @@
         <tr class="gate-row"><td colspan="6"><div class="gate-block loss">Gate: ❌ Wird noch nicht vom Markt bestätigt</div></td></tr>
     </tbody>
   </table>
+
+  <h2>Reversal-Engine (Experiment)</h2>
+  <div class="experiment-banner">
+    🧪 <b>Frühes, isoliertes Experiment</b> — NICHT Teil der drei Haupt-Engines
+    (Basis-/Fluss-/Kombi-Signal) oben. Testet eine <b>Contrarian-/Reversal-Logik</b>
+    (Wette auf eine bevorstehende Trendumkehr bei COT-Extremwerten, angelehnt an
+    Stephen Briese's COT-Index-Extremwert-Grundprinzip) statt der Fortsetzungs-Logik
+    der anderen Engines.
+  </div>
+  <p class="reversal-stat">3-Jahres-Backtest + laufender Live-Tracker (seit 17.09.2026):
+    <strong>20W/15L (57.1%, NICHT BELASTBAR)</strong>, n=14 unabhängige Episoden
+    (Mindest-Stichprobengröße für eine belastbare Aussage: 30).</p>
+
 </body>
 </html>
