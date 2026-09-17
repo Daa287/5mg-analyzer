@@ -16,9 +16,10 @@ v2/index.html tatsächlich abhängt.
 
 Datenquelle: report_v2.build_rows() (kein Duplikat der Aggregations-
 Logik - Market-Pulse-Status/Gate-Status/Quality-Tier werden 1:1 wie in
-der Telegram-Testnachricht zusammengeführt). weekly_engine_signals (v1)
-NUR LESEND, market_pulse_checks_v2/entry_readiness_checks_v2 (v2) NUR
-LESEND - diese Datei schreibt NIRGENDWO in hermes.db.
+der Telegram-Testnachricht zusammengeführt). pairing_v2_signals (seit
+Auftrag 15.09.2026, vorher weekly_engine_signals/v1)/market_pulse_checks_v2/
+entry_readiness_checks_v2 (alle v2) NUR LESEND - diese Datei schreibt
+NIRGENDWO in hermes.db.
 
 --no-push ist STANDARD (schreibt nur lokal v2/index.html +
 v2/watchlist_v2.json, KEIN git add/commit/push). Nur bei explizitem
@@ -39,7 +40,13 @@ from pathlib import Path
 
 V2_SCRIPTS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(V2_SCRIPTS_DIR.parent.parent / "scripts" / "v2"))
+sys.path.insert(0, "/home/pi/hermes2/scripts")  # db.py liegt hier, siehe reversal_v2.py
 import report_v2  # v2, build_rows() - liefert pair/bias/engine/tier/market_pulse/gate
+import db  # NUR LESEND hier (reversal_v2_signals), siehe build_reversal_section()
+# Auftrag 17.09.2026: reines Auslesen der isolierten reversal_v2_signals-Tabelle
+# fuer den separaten Experiment-Abschnitt unten - KEINE Aenderung an
+# reversal_v2.py, KEIN Einfluss auf pairing_v2_signals/report_v2.build_rows().
+from reversal_v2 import zaehle_episoden, MIN_STICHPROBE, MIN_FUER_PROZENT
 
 REPO_DIR = Path.home() / "hermes2" / "scripts" / "5mg_analyzer_repo"
 V2_DIR = REPO_DIR / "v2"
@@ -60,9 +67,50 @@ def _gate_class(row: dict) -> str:
     return "open"
 
 
+def build_reversal_section() -> str:
+    """Auftrag 17.09.2026: eigener, klar abgegrenzter Abschnitt fuer das
+    Reversal-Experiment (scripts/v2/reversal_v2.py) - liest NUR die
+    isolierte reversal_v2_signals-Tabelle, KEIN Einfluss auf die drei
+    Haupt-Engines oben. Trefferquote/Episoden-Zahl werden bei JEDEM
+    Lauf frisch aus der DB berechnet (nicht fest verdrahtet), damit die
+    Seite nicht veraltet, sobald neue Signale/Auswertungen dazukommen."""
+    rows = db.query("SELECT * FROM reversal_v2_signals")
+    if not rows:
+        return ""
+
+    geschlossen = [r for r in rows if r["korrekt"] is not None]
+    win = sum(1 for r in geschlossen if r["korrekt"] == 1)
+    loss = sum(1 for r in geschlossen if r["korrekt"] == 0)
+    n_wochen = win + loss
+    episoden = zaehle_episoden(rows)
+
+    if n_wochen == 0:
+        tref_html = "noch keine ausgewerteten Signale"
+    elif episoden < MIN_FUER_PROZENT:
+        tref_html = f"{win}W/{loss}L (n&lt;{MIN_FUER_PROZENT} Episoden, keine Prozentangabe)"
+    else:
+        pct = 100 * win / n_wochen
+        suffix = ", NICHT BELASTBAR" if episoden < MIN_STICHPROBE else ""
+        tref_html = f"{win}W/{loss}L ({pct:.1f}%{suffix})"
+
+    return f"""
+  <h2>Reversal-Engine (Experiment)</h2>
+  <div class="experiment-banner">
+    🧪 <b>Frühes, isoliertes Experiment</b> — NICHT Teil der drei Haupt-Engines
+    (Basis-/Fluss-/Kombi-Signal) oben. Testet eine <b>Contrarian-/Reversal-Logik</b>
+    (Wette auf eine bevorstehende Trendumkehr bei COT-Extremwerten, angelehnt an
+    Stephen Briese's COT-Index-Extremwert-Grundprinzip) statt der Fortsetzungs-Logik
+    der anderen Engines.
+  </div>
+  <p class="reversal-stat">3-Jahres-Backtest + laufender Live-Tracker (seit 17.09.2026):
+    <strong>{tref_html}</strong>, n={episoden} unabhängige Episoden
+    (Mindest-Stichprobengröße für eine belastbare Aussage: {MIN_STICHPROBE}).</p>
+"""
+
+
 def render_html_v2(rows: list[dict]) -> str:
     if not rows:
-        body = "<p>Noch keine Signale in weekly_engine_signals gefunden.</p>"
+        body = "<p>Noch keine Signale in pairing_v2_signals gefunden.</p>"
     else:
         trs = []
         for r in rows:
@@ -110,6 +158,10 @@ def render_html_v2(rows: list[dict]) -> str:
   .sub {{ color: #666; margin-top: 0; margin-bottom: 1rem; font-size: 0.9rem; }}
   .test-banner {{ background: #fff3cd; border: 2px solid #b45309; border-radius: 8px;
                    padding: 0.9rem 1.2rem; margin-bottom: 2rem; font-weight: 600; }}
+  h2 {{ margin-top: 2.5rem; border-top: 2px dashed #ccc; padding-top: 1.5rem; }}
+  .experiment-banner {{ background: #eef2ff; border: 2px dashed #6366f1; border-radius: 8px;
+                         padding: 0.9rem 1.2rem; margin-bottom: 1rem; color: #3730a3; }}
+  .reversal-stat {{ font-size: 0.95rem; color: #333; }}
   table {{ border-collapse: collapse; width: 100%; }}
   th, td {{ text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; }}
   th {{ background: #fef3e2; color: var(--accent-dark); font-weight: 600; }}
@@ -171,6 +223,7 @@ def render_html_v2(rows: list[dict]) -> str:
     gewählte Schwellen/Skalen, KEIN Nachbau der Original-Formel.
   </div>
 {body}
+{build_reversal_section()}
 </body>
 </html>
 """
