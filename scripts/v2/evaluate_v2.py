@@ -39,6 +39,7 @@ eigentlichen SQL-Call.
 from __future__ import annotations
 
 import argparse
+import logging
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -50,6 +51,9 @@ SCRIPTS_DIR = Path("/home/pi/hermes2/scripts")
 sys.path.insert(0, str(SCRIPTS_DIR))
 sys.path.insert(0, str(Path(__file__).parent))
 import db_v2  # v2, NUR v2-Tabellen (market_pulse_checks_v2, entry_readiness_checks_v2 lesend, signal_performance_v2 schreibend)
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+log = logging.getLogger("evaluate_v2")
 
 EVAL_WINDOW_DAYS = 7
 MIN_STICHPROBE = 30  # Projektweite Konvention (siehe evaluate_signals.py)
@@ -73,13 +77,39 @@ def _current_price(ticker: str) -> float | None:
         return None
 
 
+def _next_business_day(d):
+    """Naechster Wochentag (Mo-Fr) ab d (inkl. d selbst, falls d schon
+    Wochentag ist) - die einzige Verschiebung, die OHNE Warnung toleriert
+    wird (siehe _price_on_or_after). 1:1 aus evaluate_signals.py (v1)
+    portiert, siehe dortiges Original fuer die Herkunft."""
+    while d.weekday() >= 5:  # 5=Samstag, 6=Sonntag
+        d += timedelta(days=1)
+    return d
+
+
 def _price_on_or_after(ticker: str, target_dt: datetime) -> float | None:
     """Erster verfügbarer Tages-Schlusskurs AM ODER NACH target_dt - für
     Ebene 2 (Kurs zum historischen Gate-Bestätigungszeitpunkt), da dieser
-    Preis nirgendwo gespeichert ist. Schlankere v2-Fassung von
-    evaluate_signals._price_on_or_after() (eigener Codepfad, ohne die
-    dortige Wochenend-/Feiertags-Abweichungs-Detailwarnung - v2 bewusst
-    einfacher gehalten)."""
+    Preis nirgendwo gespeichert ist.
+
+    Fix 19.09.2026 (Befund B2, Systemanalyse-Report 2026-09-19): diese
+    Funktion war zuvor bewusst OHNE die Datumsvalidierung aus v1s
+    evaluate_signals._price_on_or_after() gehalten ("v2 bewusst einfacher
+    gehalten") - genau das Fehlermuster, das dort am 30.08.2026 behoben
+    wurde (siehe reports/signal_performance_datumsbug_2026-08-30.md):
+    frueher wurde blind die erste Zeile des Abfragefensters akzeptiert;
+    liefert Yahoo Finance zum Abfragezeitpunkt die Kerze fuer target_dt
+    noch nicht (z.B. kurz nach Handelsschluss), kam still die naechste
+    (spaetere) Kerze zurueck - das hat in v1 6 signal_performance-Zeilen
+    dauerhaft mit falschem Tag eingefroren und WIN in LOSS verwandelt
+    (bzw. umgekehrt), unbemerkt, weil einmal gesetzte ebeneN_ergebnis-
+    Werte nie erneut geprueft werden (dasselbe Idempotenz-Prinzip gilt
+    hier in v2, siehe Modul-Docstring).
+
+    Validierung jetzt 1:1 wie in v1 uebernommen: erwartetes Datum =
+    naechster Wochentag ab target_dt. Jede Abweichung wird geloggt
+    (Kurs wird trotzdem verwendet, kein Abbruch) - macht ein kuenftiges
+    stilles Einfrieren wie in v1 sichtbar, statt es erneut zu riskieren."""
     start = target_dt.date()
     end = start + timedelta(days=6)
     try:
@@ -91,6 +121,19 @@ def _price_on_or_after(ticker: str, target_dt: datetime) -> float | None:
         df.columns = df.columns.get_level_values(0)
     if df.empty:
         return None
+
+    returned_date = df.index[0].date()
+    expected_date = _next_business_day(start)
+    if returned_date != expected_date:
+        gap = (returned_date - expected_date).days
+        log.warning(
+            "_price_on_or_after(%s, target=%s): erwartete Kerze fuer %s, "
+            "erhalten aber %s (%+d Tage Abweichung) - evtl. Yahoo-"
+            "Publikationsverzug zum Abfragezeitpunkt oder echter Feiertag. "
+            "Kurs wird trotzdem verwendet (%.5f), bei Bedarf spaeter "
+            "manuell pruefen.",
+            ticker, start, expected_date, returned_date, gap, float(df["Close"].iloc[0]),
+        )
     return float(df["Close"].iloc[0])
 
 
