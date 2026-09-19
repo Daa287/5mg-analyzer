@@ -23,10 +23,19 @@ NIRGENDWO in hermes.db.
 
 --no-push ist STANDARD (schreibt nur lokal v2/index.html +
 v2/watchlist_v2.json, KEIN git add/commit/push). Nur bei explizitem
---push würde gepusht - HEUTE NICHT verwendet, nur lokal testen.
+--push wird committet/gepusht.
+
+STATUS-KORREKTUR (19.09.2026, Befund W1/Systemanalyse-Report
+2026-09-19): der obige Satz "HEUTE NICHT verwendet, nur lokal testen"
+war seit dem 15.09.2026 veraltet. Crontab-Kommentar von diesem Tag:
+"Reaktiviert 15.09.2026: v2-GitHub-Pages-Push wieder aktiv (Auftrag
+Rene)" - lief seitdem taeglich um 20:20 Uhr MIT --push (siehe Cron:
+`20 20 * * * ... publish_pages_v2.py --push`). Bewusste, vom Nutzer
+angeordnete Reaktivierung, kein vergessenes Umschalten - der Docstring
+wurde nur nicht mitaktualisiert.
 
     python3 publish_pages_v2.py            # --no-push (Standard), nur lokal
-    python3 publish_pages_v2.py --push     # würde committen/pushen (heute NICHT nutzen)
+    python3 publish_pages_v2.py --push     # committet + pusht wirklich (seit 15.09.2026 taeglich im Cron)
 """
 from __future__ import annotations
 
