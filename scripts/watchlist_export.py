@@ -4,6 +4,23 @@ watchlist_export.py — Hauptskript, orchestriert die 3-Stufen-Engine
 und schreibt watchlist.json ins Dashboard-Repo (analog zu
 segelwetter_html_export.py bei adriawetter).
 
+⚠️ KLARSTELLUNG (19.09.2026, Befund W2/Systemanalyse-Report 2026-09-19):
+finale_qualitaet() (die "0.5*COT + 0.2*Saison + 0.3*Bond - 0.67*Vola"-
+Formel unten) ist NICHT die live versendete/ueberwachte Quelle - dafuer
+ist ausschliesslich final_quality.py ueber weekly_engine_report.py
+zustaendig (23:15-Freitagscron, sendet an Telegram, speist
+weekly_engine_signals -> entry_monitor.py/entry_readiness_checks/
+entry_alerts). Konkret belegt am USD/JPY-Fall vom 18.09.2026: diese
+Formel lieferte SHORT/44.0, tatsaechlich verschickt+ueberwacht wurde
+LONG/24.2 aus final_quality.py - watchlist.json taucht in
+entry_readiness_checks/entry_alerts kein einziges Mal auf.
+
+finale_qualitaet()/watchlist.json bleiben trotzdem bestehen (nicht
+entfernt), weil zwei andere Verbraucher tatsaechlich davon abhaengen:
+  - 5mg_shadow_log.py (liest watchlist.json direkt)
+  - systemcheck_5mg.py (ruft watchlist_export.run() fuer den Health-Check)
+Beide sind reine Anzeige-/Diagnose-Verbraucher, kein Telegram-Bezug.
+
 Ablauf:
   1. COT-Scores laden (cot_loader)
   2. Top-3-Paare + 4 Zusatzmärkte bilden (Extremwerte, Paarbildung vs. USD)
@@ -114,6 +131,10 @@ def zwischen_score(cot: float, saison: float) -> float:
 
 
 def finale_qualitaet(cot: float, saison: float, bond: float, vola: int) -> dict:
+    """NUR fuer watchlist.json / 5mg_shadow_log.py / systemcheck_5mg.py -
+    NICHT Telegram-relevant. Die live versendete/ueberwachte Formel ist
+    final_quality.py (via weekly_engine_report.py) - siehe Modul-Docstring
+    oben, Abschnitt "KLARSTELLUNG 19.09.2026"."""
     roh = WEIGHTS["cot"] * cot + WEIGHTS["saison"] * saison + WEIGHTS["bond"] * bond
     final = round(roh - VOLA_FAKTOR * vola, 1)
     kat = "GUT" if final >= 60 else ("GEMISCHT" if final >= 40 else "SCHWACH")
