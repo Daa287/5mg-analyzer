@@ -110,6 +110,55 @@ CREATE TABLE IF NOT EXISTS flow_momentum_v2_signals (
     UNIQUE(stichtag)
 );
 CREATE INDEX IF NOT EXISTS idx_fmv2_stichtag ON flow_momentum_v2_signals(stichtag);
+
+-- Auftrag 15.09.2026: v2-Pairing-Engine (Meridian-Style compute_pairs()-
+-- Nachbildung, siehe pairing_engine_v2.py) - EIGENE Tabelle, ERSETZT ab
+-- jetzt weekly_engine_signals als Lesequelle fuer market_pulse_v2.py/
+-- entry_gate_v2.py/quality_tiers_v2.py (siehe dortige Aenderungen).
+-- 'confidence' uebernimmt die Rolle von v1s final_quality (Spaltenname
+-- bewusst verschieden gehalten, damit nie versehentlich verwechselt
+-- wird, welche Formel eine Zahl erzeugt hat). is_proxy_involved=1
+-- markiert Paare, bei denen USD beteiligt ist (kein direktes COT-
+-- Kontrakt fuer USD in cot_loader.py - einzige Proxy-Situation im
+-- System, siehe pairing_engine_v2.py-Docstring). KEIN Proxy-Penalty
+-- auf confidence selbst (siehe Auftrag: bewusst weggelassen).
+CREATE TABLE IF NOT EXISTS pairing_v2_signals (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts                TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    engine            TEXT NOT NULL,   -- Basis-Signal / Fluss-Signal / Kombi-Signal
+    pair              TEXT NOT NULL,
+    direction         TEXT NOT NULL,   -- LONG / SHORT
+    confidence        REAL NOT NULL,   -- 50-95, Meridian-Style Confidence (siehe pairing_engine_v2.py)
+    signed_diff       REAL,
+    polarity_bonus    REAL,
+    confluence_bonus  REAL,
+    is_proxy_involved INTEGER DEFAULT 0  -- 0/1, USD (kein COT-Kontrakt) an diesem Paar beteiligt
+);
+CREATE INDEX IF NOT EXISTS idx_pv2_ts   ON pairing_v2_signals(ts);
+CREATE INDEX IF NOT EXISTS idx_pv2_pair ON pairing_v2_signals(pair);
+
+-- Fix 19.09.2026 (Befund B1, Systemanalyse-Report 2026-09-19): pairing_v2_signals
+-- hatte als einzige v2-Signaltabelle KEINEN UNIQUE-Constraint (anders als
+-- flow_momentum_v2_signals/signal_performance_v2/reversal_v2_signals). Ein
+-- doppelter --write-Lauf am selben Tag (real passiert: 15.09.2026, 10:04:48 +
+-- 11:41:45 Uhr, identische Picks) erzeugte einen zweiten Zeilensatz mit
+-- spaeterem ts - alle Verbraucher (get_latest_signals()/get_latest_signals_
+-- with_tier()) selektieren ueber MAX(ts) und lasen dadurch den Nachzuegler
+-- als "das" Signal. market_pulse_checks_v2 hat den Referenz-Kurs dieser Woche
+-- dadurch nachweislich still auf den spaeteren Zeitpunkt umgestellt (NZD/CHF:
+-- 0.47071 -> 0.47148). UNIQUE auf (engine, date(ts)) statt auf einen
+-- stichtag (den es hier nicht gibt, anders als bei flow_momentum_v2_signals/
+-- reversal_v2_signals) - ein zweiter Lauf am selben Kalendertag fuer dieselbe
+-- Engine gilt als Duplikat, unabhaengig davon, ob er zufaellig denselben
+-- Pick oder (bei zwischenzeitlich neuen COT-Daten) einen anderen Pick liefert
+-- - "aeltester Eintrag gewinnt" (siehe pairing_engine_v2.py::save_picks(),
+-- dort auf INSERT OR IGNORE umgestellt). Bestehende Duplikate (obiger Fall,
+-- IDs 7/8/9 vom 11:41:45-Nachlauf) wurden vor Anlage dieses Index einmalig
+-- manuell bereinigt (aeltester Eintrag behalten) - CREATE UNIQUE INDEX
+-- schlaegt sonst bei vorhandenen Duplikaten fehl, das war das eingebaute
+-- Sicherheitsnetz fuer die Migration.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pv2_unique_engine_day
+    ON pairing_v2_signals(engine, date(ts));
 """
 
 
