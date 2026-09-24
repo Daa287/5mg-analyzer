@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-09-23 20:20:05",
+  "generated_ts": "2026-09-24 20:20:06",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -22,11 +22,11 @@
       "final_quality": 63.23,
       "tier": "C",
       "market_pulse_status": "bestätigt sich",
-      "gate_status": "bestaetigt",
-      "gate_passed": true,
-      "gate_readiness": 4,
-      "gate_zone": "bestätigt",
-      "gate_grund_code": null
+      "gate_status": "abgelehnt",
+      "gate_passed": false,
+      "gate_readiness": null,
+      "gate_zone": null,
+      "gate_grund_code": "hard_gate_h4_h1_gegen_bias"
     },
     {
       "pair": "USD/CAD",
