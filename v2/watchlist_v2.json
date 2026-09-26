@@ -1,14 +1,14 @@
 {
-  "generated_ts": "2026-09-25 20:20:06",
+  "generated_ts": "2026-09-26 20:20:06",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
-      "pair": "CHF/JPY",
+      "pair": "GBP/USD",
       "bias": "LONG",
       "engine": "Basis-Signal",
-      "final_quality": 78.77,
+      "final_quality": 73.51,
       "tier": "B",
-      "market_pulse_status": "läuft dagegen",
+      "market_pulse_status": "neutral",
       "gate_status": "abgelehnt",
       "gate_passed": false,
       "gate_readiness": null,
@@ -19,7 +19,7 @@
       "pair": "NZD/CHF",
       "bias": "SHORT",
       "engine": "Kombi-Signal",
-      "final_quality": 63.23,
+      "final_quality": 62.59,
       "tier": "C",
       "market_pulse_status": "bestätigt sich",
       "gate_status": "abgelehnt",
@@ -29,10 +29,10 @@
       "gate_grund_code": "hard_gate_h4_h1_gegen_bias"
     },
     {
-      "pair": "USD/CAD",
+      "pair": "CHF/JPY",
       "bias": "SHORT",
       "engine": "Fluss-Signal",
-      "final_quality": 62.18,
+      "final_quality": 60.91,
       "tier": "C",
       "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
