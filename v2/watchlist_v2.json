@@ -1,12 +1,12 @@
 {
-  "generated_ts": "2026-10-02 20:20:06",
+  "generated_ts": "2026-10-03 20:20:06",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
       "pair": "GBP/USD",
       "bias": "LONG",
       "engine": "Basis-Signal",
-      "final_quality": 73.51,
+      "final_quality": 71.99,
       "tier": "B",
       "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
@@ -16,23 +16,23 @@
       "gate_grund_code": "market_pulse_nicht_bestaetigt"
     },
     {
-      "pair": "NZD/CHF",
-      "bias": "SHORT",
+      "pair": "CHF/JPY",
+      "bias": "LONG",
       "engine": "Kombi-Signal",
-      "final_quality": 62.59,
+      "final_quality": 64.71,
       "tier": "C",
-      "market_pulse_status": "bestätigt sich",
-      "gate_status": "bestaetigt",
-      "gate_passed": true,
-      "gate_readiness": 4,
-      "gate_zone": "bestätigt",
-      "gate_grund_code": null
+      "market_pulse_status": "läuft dagegen",
+      "gate_status": "abgelehnt",
+      "gate_passed": false,
+      "gate_readiness": null,
+      "gate_zone": null,
+      "gate_grund_code": "market_pulse_nicht_bestaetigt"
     },
     {
       "pair": "CHF/JPY",
       "bias": "SHORT",
       "engine": "Fluss-Signal",
-      "final_quality": 60.91,
+      "final_quality": 62.78,
       "tier": "C",
       "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
