@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-10-06 20:20:06",
+  "generated_ts": "2026-10-07 20:20:06",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -8,6 +8,19 @@
       "engine": "Basis-Signal",
       "final_quality": 71.99,
       "tier": "B",
+      "market_pulse_status": "läuft dagegen",
+      "gate_status": "abgelehnt",
+      "gate_passed": false,
+      "gate_readiness": null,
+      "gate_zone": null,
+      "gate_grund_code": "market_pulse_nicht_bestaetigt"
+    },
+    {
+      "pair": "CHF/JPY",
+      "bias": "LONG",
+      "engine": "Kombi-Signal",
+      "final_quality": 64.71,
+      "tier": "C",
       "market_pulse_status": "bestätigt sich",
       "gate_status": "bestaetigt",
       "gate_passed": true,
@@ -17,29 +30,16 @@
     },
     {
       "pair": "CHF/JPY",
-      "bias": "LONG",
-      "engine": "Kombi-Signal",
-      "final_quality": 64.71,
-      "tier": "C",
-      "market_pulse_status": "neutral",
-      "gate_status": "abgelehnt",
-      "gate_passed": false,
-      "gate_readiness": null,
-      "gate_zone": null,
-      "gate_grund_code": "market_pulse_nicht_bestaetigt"
-    },
-    {
-      "pair": "CHF/JPY",
       "bias": "SHORT",
       "engine": "Fluss-Signal",
       "final_quality": 62.78,
       "tier": "C",
-      "market_pulse_status": "neutral",
-      "gate_status": "abgelehnt",
-      "gate_passed": false,
-      "gate_readiness": null,
-      "gate_zone": null,
-      "gate_grund_code": "market_pulse_nicht_bestaetigt"
+      "market_pulse_status": "bestätigt sich",
+      "gate_status": "bestaetigt",
+      "gate_passed": true,
+      "gate_readiness": 2,
+      "gate_zone": "setup_möglich",
+      "gate_grund_code": null
     }
   ]
 }
