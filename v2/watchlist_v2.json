@@ -1,25 +1,25 @@
 {
-  "generated_ts": "2026-10-23 20:20:05",
+  "generated_ts": "2026-10-24 20:20:06",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
-      "pair": "EUR/USD",
+      "pair": "AUD/JPY",
       "bias": "LONG",
       "engine": "Basis-Signal",
-      "final_quality": 76.92,
+      "final_quality": 70.26,
       "tier": "B",
-      "market_pulse_status": "läuft dagegen",
-      "gate_status": "abgelehnt",
-      "gate_passed": false,
+      "market_pulse_status": "noch nicht geprüft",
+      "gate_status": "noch_nicht_geprueft",
+      "gate_passed": null,
       "gate_readiness": null,
       "gate_zone": null,
-      "gate_grund_code": "market_pulse_nicht_bestaetigt"
+      "gate_grund_code": null
     },
     {
       "pair": "NZD/USD",
       "bias": "LONG",
       "engine": "Kombi-Signal",
-      "final_quality": 63.71,
+      "final_quality": 63.07,
       "tier": "C",
       "market_pulse_status": "läuft dagegen",
       "gate_status": "abgelehnt",
@@ -29,17 +29,17 @@
       "gate_grund_code": "market_pulse_nicht_bestaetigt"
     },
     {
-      "pair": "NZD/USD",
+      "pair": "AUD/CHF",
       "bias": "SHORT",
       "engine": "Fluss-Signal",
-      "final_quality": 62.12,
+      "final_quality": 60.76,
       "tier": "C",
-      "market_pulse_status": "läuft dagegen",
-      "gate_status": "abgelehnt",
-      "gate_passed": false,
+      "market_pulse_status": "noch nicht geprüft",
+      "gate_status": "noch_nicht_geprueft",
+      "gate_passed": null,
       "gate_readiness": null,
       "gate_zone": null,
-      "gate_grund_code": "market_pulse_nicht_bestaetigt"
+      "gate_grund_code": null
     }
   ]
 }
