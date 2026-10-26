@@ -1,5 +1,5 @@
 {
-  "generated_ts": "2026-10-25 20:20:05",
+  "generated_ts": "2026-10-26 20:20:05",
   "hinweis": "5MG v2 TESTVERSION - kein Nachbau der Original-Formel, keine Kauf-/Verkaufssignale.",
   "signals": [
     {
@@ -8,11 +8,11 @@
       "engine": "Basis-Signal",
       "final_quality": 70.26,
       "tier": "B",
-      "market_pulse_status": "noch nicht geprüft",
-      "gate_status": "noch_nicht_geprueft",
-      "gate_passed": null,
-      "gate_readiness": null,
-      "gate_zone": null,
+      "market_pulse_status": "bestätigt sich",
+      "gate_status": "bestaetigt",
+      "gate_passed": true,
+      "gate_readiness": 2,
+      "gate_zone": "setup_möglich",
       "gate_grund_code": null
     },
     {
@@ -34,12 +34,12 @@
       "engine": "Fluss-Signal",
       "final_quality": 60.76,
       "tier": "C",
-      "market_pulse_status": "noch nicht geprüft",
-      "gate_status": "noch_nicht_geprueft",
-      "gate_passed": null,
+      "market_pulse_status": "neutral",
+      "gate_status": "abgelehnt",
+      "gate_passed": false,
       "gate_readiness": null,
       "gate_zone": null,
-      "gate_grund_code": null
+      "gate_grund_code": "market_pulse_nicht_bestaetigt"
     }
   ]
 }
